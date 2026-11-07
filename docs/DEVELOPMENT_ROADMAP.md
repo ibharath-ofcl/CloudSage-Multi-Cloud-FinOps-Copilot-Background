@@ -14,11 +14,11 @@ PHASE 1: FOUNDATION & DATA ARCHITECTURE (Stages 1 - 4)
 PHASE 2: RESOURCE INTELLIGENCE & ANALYTICAL ENGINES (Stages 5 - 7)
   Stage 5: Multi-Cloud Resource Discovery & Inventory Intelligence [COMPLETED]
   Stage 6: Cloud Waste Detection Engine [COMPLETED]
-  Stage 7: Cost Anomaly Detection Engine [NEXT]
+  Stage 7: Cost Anomaly Detection Engine [COMPLETED]
 
 PHASE 3: ADVISORY RECOMMENDATIONS & BACKEND SERVICES (Stages 8 - 9)
-  Stage 8: Advisory Recommendation Engine & Savings Optimization
-  Stage 9: Core REST API & Backend Service Layer
+  Stage 8: Advisory Recommendation Engine & Savings Optimization [COMPLETED]
+  Stage 9: Core REST API & Backend Service Layer [NEXT]
 
 PHASE 4: AI COPILOT & FRONTEND INTERFACE (Stages 10 - 12)
   Stage 10: AI FinOps Copilot & Grounded Query Engine
@@ -150,25 +150,24 @@ PHASE 5: SECURITY, NOTIFICATIONS & PRODUCTION READINESS (Stages 13 - 15)
 
 ---
 
-### Stage 8: Advisory Recommendation Engine & Optimization
-- **Status**: [NEXT]
-
----
-
 ### Stage 8: Advisory Recommendation Engine & Savings Optimization
+- **Status**: [COMPLETED]
+- **Branch**: `stage-8/recommendation-engine`
 - **Focus**: Prioritizing, risk-rating, and cataloging actionable savings proposals.
 - **Key Deliverables**:
-  - Advisory recommendation generator translating detected waste into structured action items.
-  - Savings calculation formulas (projected monthly and annualized cost reductions).
-  - Risk classification model (`NONE`, `LOW`, `MEDIUM`, `HIGH`) with blast-radius explanations.
-  - Priority scoring matrix ($P1$ to $P4$) balancing financial impact against effort.
-  - Audited recommendation lifecycle state machine (`PROPOSED`, `UNDER_REVIEW`, `APPROVED`, `DISMISSED`, `IMPLEMENTED`).
-- **Acceptance Criteria**: Zero automated destructive commands; clear step-by-step manual remediation guides.
+  - Pluggable recommendation strategies (Idle Compute, Rightsizing, Storage, Database, Network, Anomalies, Commitments, Scheduling).
+  - Pure Decimal financial savings calculator enforcing the Zero Float Rule.
+  - Multi-factor prioritization algorithm combining savings, confidence, effort, risk, and urgency.
+  - Cross-stage correlation and anti-double-counting engine with action precedence.
+  - Recommendation lifecycle state machine with mandatory rejection reasons and verified savings.
+  - Full suite of 16 REST API endpoints, Celery tasks, and 20 synthetic multi-cloud benchmark scenarios.
+  - 198 automated unit and integration tests passing with 0 failures.
+- **Acceptance Criteria**: Strictly advisory-only with zero mutating cloud API calls; copy-pasteable manual remediation guides.
 
 ---
 
 ### Stage 9: Core REST API & Backend Service Layer
-- **Focus**: High-throughput FastAPI application exposing secure REST endpoints.
+- **Status**: [NEXT]
 - **Key Deliverables**:
   - REST endpoints for Dashboard KPIs, Spend Trends, Waste Items, Anomalies, and Recommendations.
   - Filterable, paginated query APIs with cursor-based pagination.

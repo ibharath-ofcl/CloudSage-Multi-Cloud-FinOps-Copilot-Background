@@ -75,6 +75,12 @@ class RecommendationAction(StrEnum):
     DELETE_SNAPSHOT = "DELETE_SNAPSHOT"
     RELEASE_IP = "RELEASE_IP"
     CONVERT_STORAGE_TIER = "CONVERT_STORAGE_TIER"
+    PURCHASE_SAVINGS_PLAN = "PURCHASE_SAVINGS_PLAN"
+    RESERVE_CAPACITY = "RESERVE_CAPACITY"
+    INVESTIGATE_ANOMALY = "INVESTIGATE_ANOMALY"
+    CLEANUP_UNATTACHED = "CLEANUP_UNATTACHED"
+    OPTIMIZE_STORAGE = "OPTIMIZE_STORAGE"
+    PAUSE = "PAUSE"
 
 
 class Priority(StrEnum):
@@ -82,6 +88,10 @@ class Priority(StrEnum):
     P2 = "P2"
     P3 = "P3"
     P4 = "P4"
+    CRITICAL = "CRITICAL"
+    HIGH = "HIGH"
+    MEDIUM = "MEDIUM"
+    LOW = "LOW"
 
 
 class RiskLevel(StrEnum):
@@ -89,21 +99,31 @@ class RiskLevel(StrEnum):
     LOW = "LOW"
     MEDIUM = "MEDIUM"
     HIGH = "HIGH"
+    CRITICAL = "CRITICAL"
 
 
 class RecommendationStatus(StrEnum):
+    NEW = "NEW"
     PROPOSED = "PROPOSED"
     UNDER_REVIEW = "UNDER_REVIEW"
     ENDORSED = "ENDORSED"
     APPROVED = "APPROVED"
-    DISMISSED = "DISMISSED"
+    ACCEPTED = "ACCEPTED"
+    IN_PROGRESS = "IN_PROGRESS"
     IMPLEMENTED = "IMPLEMENTED"
+    VERIFIED = "VERIFIED"
+    DISMISSED = "DISMISSED"
+    REJECTED = "REJECTED"
+    EXPIRED = "EXPIRED"
+    REOPENED = "REOPENED"
 
 
 class ImplementationEffort(StrEnum):
+    QUICK_WIN = "QUICK_WIN"
     LOW = "LOW"
     MEDIUM = "MEDIUM"
     HIGH = "HIGH"
+    COMPLEX = "COMPLEX"
 
 
 class WasteType(StrEnum):

@@ -45,6 +45,9 @@ EXPECTED_TABLES = {
     "waste_detection_runs",
     "cost_baselines",
     "anomaly_detection_runs",
+    "recommendation_evidence",
+    "recommendation_history",
+    "recommendation_runs",
 }
 
 FINANCIAL_MONETARY_COLUMNS = {
@@ -76,6 +79,11 @@ FINANCIAL_MONETARY_COLUMNS = {
     "iqr",
     "min_value",
     "max_value",
+    "current_monthly_cost",
+    "projected_monthly_cost",
+    "verified_savings",
+    "total_monthly_savings",
+    "total_annual_savings",
 }
 
 
