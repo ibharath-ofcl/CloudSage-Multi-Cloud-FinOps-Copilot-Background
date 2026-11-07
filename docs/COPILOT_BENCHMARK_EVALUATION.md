@@ -61,3 +61,4 @@ Regressions Observed:        0
 ```
 
 The benchmark test is automated as part of the test suite in `backend/tests/test_copilot_benchmarks.py` and executed on every CI commit.
+

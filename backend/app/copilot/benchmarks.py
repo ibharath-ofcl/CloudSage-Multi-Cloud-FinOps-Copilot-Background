@@ -268,3 +268,4 @@ def run_benchmark_evaluation(db: Session) -> Dict[str, Any]:
         "average_latency_ms": round(total_latency_ms / total_count, 2),
         "details": results,
     }
+

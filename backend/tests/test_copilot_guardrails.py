@@ -89,3 +89,4 @@ def test_enforce_advisory_disclaimer():
 
     text_with = "This advisory recommendation can save $400."
     assert CopilotGuardrails.enforce_advisory_disclaimer(text_with) == text_with
+

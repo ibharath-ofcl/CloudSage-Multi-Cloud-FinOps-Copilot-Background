@@ -102,3 +102,4 @@ def downgrade() -> None:
     op.drop_index('idx_copilot_conv_updated', table_name='copilot_conversations')
     op.drop_index('idx_copilot_conv_user', table_name='copilot_conversations')
     op.drop_table('copilot_conversations')
+

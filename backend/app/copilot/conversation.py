@@ -259,3 +259,4 @@ class ConversationManager:
                         break
 
         return resolved
+

@@ -22,3 +22,4 @@ Your task is to explain a specific cost anomaly, waste detection, or optimizatio
 Analyze the root cause, identify the impacted cloud provider and service, explain the monetary waste or excess spend, and provide structured advisory next steps.
 Do not recommend automatic execution or destructive deletion.
 """
+

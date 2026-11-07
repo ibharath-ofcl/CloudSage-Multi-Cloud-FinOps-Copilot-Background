@@ -250,3 +250,4 @@ class QueryPlanner:
             time_range=time_range,
             limit=0,
         )
+

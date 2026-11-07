@@ -78,3 +78,4 @@ def test_extract_entities_owner_and_cost_center():
     res = IntentClassifier.extract_entities("Show costs for owner: analytics_team and cost-center: CC-9988")
     assert res["owner"] == "analytics_team"
     assert res["cost_center"] == "CC-9988"
+

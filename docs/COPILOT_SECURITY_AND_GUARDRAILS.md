@@ -84,3 +84,4 @@ Inbound queries and outbound generated texts are scrubbed against credential pat
 - **JWT Tokens**: `eyJ[a-zA-Z0-9_-]+\.eyJ[a-zA-Z0-9_-]+\.[a-zA-Z0-9_-]+`
 
 If detected in the input, the query is blocked (`SENSITIVE_DATA_DETECTED`). If present in output, secrets are replaced with `[REDACTED_SECRET]`.
+

@@ -70,3 +70,4 @@ Assistant responses follow a rigorous four-part layout designed for executive cl
 2. **Detailed Breakdown**: Granular distribution by provider, service, category, or dimension.
 3. **Evidence & Citations**: Explicit bulleted list linking the findings back to underlying database tables and record IDs.
 4. **Advisory Next Steps**: Non-destructive, human-in-the-loop recommendations to realize savings or investigate anomalies.
+
