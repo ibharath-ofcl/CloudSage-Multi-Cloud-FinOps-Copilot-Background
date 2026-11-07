@@ -1,6 +1,6 @@
 """
 CloudSage Database Metadata & Schema Verification Unit Tests.
-Asserts that all 10 canonical tables, foreign keys, indexes, and precision constraints exist in metadata.
+Asserts that all 11 canonical tables, foreign keys, indexes, and precision constraints exist in metadata.
 """
 
 from decimal import Decimal
@@ -18,6 +18,7 @@ from backend.app.models import (
     AuditLog,
     AlertRule,
     NotificationLog,
+    IngestionRun,
 )
 
 
@@ -32,6 +33,7 @@ EXPECTED_TABLES = {
     "audit_logs",
     "alert_rules",
     "notification_logs",
+    "ingestion_runs",
 }
 
 FINANCIAL_MONETARY_COLUMNS = {
@@ -47,11 +49,12 @@ FINANCIAL_MONETARY_COLUMNS = {
     "estimated_monthly_savings",
     "estimated_annual_savings",
     "threshold_value",
+    "total_cost",
 }
 
 
 def test_all_tables_registered_in_metadata():
-    """Verify that all 10 required database tables are declared in Base.metadata."""
+    """Verify that all 11 required database tables are declared in Base.metadata."""
     registered_tables = set(Base.metadata.tables.keys())
     assert EXPECTED_TABLES.issubset(registered_tables), (
         f"Missing tables: {EXPECTED_TABLES - registered_tables}"
@@ -109,3 +112,8 @@ def test_indexing_registration():
     index_names = {idx.name for idx in rec_table.indexes}
     assert "idx_rec_status_priority" in index_names
     assert "idx_rec_prov_savings" in index_names
+
+    ingest_table = Base.metadata.tables["ingestion_runs"]
+    index_names = {idx.name for idx in ingest_table.indexes}
+    assert "idx_ingest_prov_status" in index_names
+    assert "idx_ingest_started_at" in index_names

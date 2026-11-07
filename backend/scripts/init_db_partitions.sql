@@ -235,3 +235,24 @@ CREATE TABLE IF NOT EXISTS notification_logs (
     status VARCHAR(16) NOT NULL DEFAULT 'DELIVERED',
     dispatched_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
+
+-- 13. Ingestion Runs & Telemetry Table
+CREATE TABLE IF NOT EXISTS ingestion_runs (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    provider VARCHAR(16) NOT NULL,
+    source_filename VARCHAR(256) NOT NULL,
+    status VARCHAR(32) NOT NULL DEFAULT 'RUNNING',
+    total_records INTEGER NOT NULL DEFAULT 0,
+    ingested_records INTEGER NOT NULL DEFAULT 0,
+    duplicate_records INTEGER NOT NULL DEFAULT 0,
+    failed_records INTEGER NOT NULL DEFAULT 0,
+    total_cost NUMERIC(18, 4) NOT NULL DEFAULT 0.0000,
+    checksum VARCHAR(64),
+    error_summary JSONB,
+    started_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    completed_at TIMESTAMPTZ
+);
+
+CREATE INDEX IF NOT EXISTS idx_ingest_prov_status ON ingestion_runs (provider, status);
+CREATE INDEX IF NOT EXISTS idx_ingest_started_at ON ingestion_runs (started_at);
+

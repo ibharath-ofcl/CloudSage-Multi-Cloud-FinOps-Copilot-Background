@@ -8,6 +8,7 @@ from backend.app.models.alert import AlertRule, NotificationLog
 from backend.app.models.anomaly import CostAnomaly
 from backend.app.models.audit import AuditLog
 from backend.app.models.billing import BillingRecord
+from backend.app.models.ingestion import IngestionRun
 from backend.app.models.recommendation import Recommendation
 from backend.app.models.resource import CloudResource, ResourceMetric
 from backend.app.models.user import User
@@ -25,4 +26,5 @@ __all__ = [
     "AuditLog",
     "AlertRule",
     "NotificationLog",
+    "IngestionRun",
 ]

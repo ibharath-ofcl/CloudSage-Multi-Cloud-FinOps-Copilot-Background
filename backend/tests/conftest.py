@@ -8,6 +8,7 @@ import os
 import pytest
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
+from sqlalchemy.pool import StaticPool
 
 # Append project root to sys.path
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
@@ -17,8 +18,13 @@ from backend.app.core.database import Base
 
 @pytest.fixture(scope="session")
 def engine():
-    """Create in-memory SQLite engine for tests."""
-    return create_engine("sqlite:///:memory:", echo=False)
+    """Create in-memory SQLite engine with thread safety for FastAPI TestClient."""
+    return create_engine(
+        "sqlite:///:memory:",
+        connect_args={"check_same_thread": False},
+        poolclass=StaticPool,
+        echo=False
+    )
 
 
 @pytest.fixture(scope="function")

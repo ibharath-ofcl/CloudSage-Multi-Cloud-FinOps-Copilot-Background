@@ -3,7 +3,7 @@
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
 [![Architecture](https://img.shields.io/badge/Architecture-FOCUS%201.0%20Compliant-green.svg)](docs/FUNCTIONAL_REQUIREMENTS.md)
 [![Safety](https://img.shields.io/badge/Safety-Advisory%20Only-orange.svg)](docs/BUSINESS_REQUIREMENTS.md)
-[![Status](https://img.shields.io/badge/Status-Stage%201%20Complete-brightgreen.svg)](docs/DEVELOPMENT_ROADMAP.md)
+[![Status](https://img.shields.io/badge/Status-Stage%203%20Complete-brightgreen.svg)](docs/DEVELOPMENT_ROADMAP.md)
 
 > **CloudSage** is an enterprise-grade, AI-powered Multi-Cloud Financial Operations (FinOps) platform engineered to unify fragmented cloud billing data, detect unnecessary expenditure, identify cost anomalies, and generate prioritized, evidence-backed savings recommendations across **Amazon Web Services (AWS)**, **Microsoft Azure**, and **Google Cloud Platform (GCP)**.
 
@@ -159,7 +159,7 @@ The development of CloudSage is structured across 15 disciplined stages:
 | :---: | :--- | :---: | :--- |
 | **01** | **Requirement Analysis & Project Foundation** | **Completed** | Requirements, Architecture, Governance & Roadmap Foundation |
 | **02** | **Core Data Models & Database Schema Architecture** | **Completed** | FOCUS 1.0 PostgreSQL schemas, partitioning, and Alembic migrations |
-| **03** | Multi-Cloud Ingestion Engine | *Planned* | AWS CUR, Azure Cost, GCP BigQuery & seed dataset adapters |
+| **03** | **Multi-Cloud Ingestion Engine** | **Completed** | AWS CUR, Azure Cost, GCP BigQuery adapters, deduplication & REST API |
 | **04** | Unified Data Normalization & FOCUS Pipeline | *Planned* | Currency conversion, tag normalization & service taxonomy engine |
 | **05** | Cloud Waste Detection Engine | *Planned* | Heuristics for idle VMs, oversized compute, unattached disks & snapshots |
 | **06** | Cost Anomaly Detection Engine | *Planned* | 30-day statistical baselining, Z-score detection & root-cause attribution |
@@ -177,13 +177,48 @@ The development of CloudSage is structured across 15 disciplined stages:
 
 ## 7. Current Development Status
 
-- **Completed Stages**: Stage 1 (Project Foundation) and Stage 2 (Core Data Models & Database Schema Architecture).
-- **Active Branch**: `stage-2/data-models-schema`.
-- **Next Milestone**: Stage 3 (Multi-Cloud Ingestion Engine) awaits formal review and approval.
+- **Completed Stages**: 
+  - Stage 1: Requirement Analysis & Project Foundation (`stage-1/project-foundation`).
+  - Stage 2: Core Data Models & Database Schema Architecture (`stage-2/data-models-schema`).
+  - Stage 3: Multi-Cloud Ingestion Engine (`stage-3/multicloud-ingestion`).
+- **Active Branch**: `stage-3/multicloud-ingestion`.
+- **Next Milestone**: Stage 4 (Unified Data Normalization & FOCUS Pipeline) awaits formal review and approval.
 
 ---
 
-## 8. Documentation Index
+## 8. Multi-Cloud Ingestion Engine Quickstart
+
+CloudSage provides a multi-cloud billing ingestion engine supporting AWS CUR (CSV), Azure Cost Management (CSV), and GCP BigQuery (JSON/CSV).
+
+### Ingestion REST API
+```bash
+# Start the FastAPI application
+uvicorn backend.app.main:app --host 0.0.0.0 --port 8000
+
+# Ingest an AWS Cost & Usage Report
+curl -X POST "http://localhost:8000/api/v1/ingestion/upload/aws" \
+  -F "file=@backend/sample_data/aws/aws_cur_sample.csv"
+
+# Ingest an Azure Cost Export
+curl -X POST "http://localhost:8000/api/v1/ingestion/upload/azure" \
+  -F "file=@backend/sample_data/azure/azure_cost_sample.csv"
+
+# Ingest a GCP BigQuery Billing Export
+curl -X POST "http://localhost:8000/api/v1/ingestion/upload/gcp" \
+  -F "file=@backend/sample_data/gcp/gcp_billing_sample.json"
+
+# Check Ingestion Summary
+curl "http://localhost:8000/api/v1/ingestion/summary"
+```
+
+### Running Test Suites
+```bash
+python3 -m pytest backend/tests -v
+```
+
+---
+
+## 9. Documentation Index
 
 Detailed architectural and functional specifications are located in the [`docs/`](docs/) directory:
 
@@ -192,6 +227,11 @@ Detailed architectural and functional specifications are located in the [`docs/`
 - [Functional Requirements Document (FRD)](docs/FUNCTIONAL_REQUIREMENTS.md)
 - [Non-Functional Requirements Document (NFR)](docs/NON_FUNCTIONAL_REQUIREMENTS.md)
 - [Database Schema & Relational Data Architecture](docs/DATABASE_SCHEMA.md)
+- [Multi-Cloud Ingestion Engine Architecture](docs/INGESTION_ARCHITECTURE.md)
+- [Cloud Provider Field Mappings & Normalization Taxonomy](docs/CLOUD_PROVIDER_FIELD_MAPPINGS.md)
+- [Data Normalization & FOCUS 1.0 Alignment](docs/DATA_NORMALIZATION.md)
+- [Synthetic Datasets & Seeded FinOps Scenarios](docs/SYNTHETIC_DATASETS.md)
+- [Multi-Cloud Ingestion API Reference](docs/INGESTION_API.md)
 - [User Roles, Personas & Permissions Matrix](docs/USER_ROLES_AND_PERMISSIONS.md)
 - [Technology Stack Evaluation](docs/TECHNOLOGY_STACK.md)
 - [System Architecture & Data Flow](docs/SYSTEM_ARCHITECTURE.md)
@@ -200,7 +240,7 @@ Detailed architectural and functional specifications are located in the [`docs/`
 
 ---
 
-## 9. Non-Destructive Advisory Policy
+## 10. Non-Destructive Advisory Policy
 
 > [!IMPORTANT]
 > **Advisory-Only Safety Guarantee**: CloudSage does **not** perform autonomous destructive changes to cloud infrastructure. All recommendations generated by the platform are strictly advisory. Infrastructure modifications require human review, engineering approval, and manual or CI/CD execution via external infrastructure-as-code tools (Terraform, CloudFormation, Pulumi, or cloud consoles).

@@ -20,6 +20,12 @@ from backend.app.schemas.billing import (
     BillingRecordCreate,
     BillingRecordResponse,
 )
+from backend.app.schemas.ingestion import (
+    IngestionRunResponse,
+    IngestionSummaryResponse,
+    SyntheticGenerateRequest,
+    SyntheticGenerateResponse,
+)
 from backend.app.schemas.recommendation import (
     RecommendationCreate,
     RecommendationResponse,
@@ -68,4 +74,8 @@ __all__ = [
     "AlertRuleUpdate",
     "NotificationLogCreate",
     "NotificationLogResponse",
+    "IngestionRunResponse",
+    "IngestionSummaryResponse",
+    "SyntheticGenerateRequest",
+    "SyntheticGenerateResponse",
 ]
