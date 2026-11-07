@@ -12,6 +12,7 @@ from backend.app.models import (
     CloudResource,
     ResourceMetric,
     WasteDetection,
+    WasteDetectionRun,
     Recommendation,
     CostAnomaly,
     User,
@@ -41,6 +42,7 @@ EXPECTED_TABLES = {
     "resource_relationships",
     "inventory_sync_runs",
     "inventory_quality_reports",
+    "waste_detection_runs",
 }
 
 FINANCIAL_MONETARY_COLUMNS = {
@@ -57,6 +59,8 @@ FINANCIAL_MONETARY_COLUMNS = {
     "estimated_annual_savings",
     "threshold_value",
     "total_cost",
+    "total_estimated_monthly_savings",
+    "original_cost",
 }
 
 

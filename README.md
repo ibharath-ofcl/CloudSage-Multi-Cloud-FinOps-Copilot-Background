@@ -3,7 +3,7 @@
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
 [![Architecture](https://img.shields.io/badge/Architecture-FOCUS%201.0%20Compliant-green.svg)](docs/FUNCTIONAL_REQUIREMENTS.md)
 [![Safety](https://img.shields.io/badge/Safety-Advisory%20Only-orange.svg)](docs/BUSINESS_REQUIREMENTS.md)
-[![Status](https://img.shields.io/badge/Status-Stage%204%20Complete-brightgreen.svg)](docs/DEVELOPMENT_ROADMAP.md)
+[![Status](https://img.shields.io/badge/Status-Stage%206%20Complete-brightgreen.svg)](docs/DEVELOPMENT_ROADMAP.md)
 
 > **CloudSage** is an enterprise-grade, AI-powered Multi-Cloud Financial Operations (FinOps) platform engineered to unify fragmented cloud billing data, detect unnecessary expenditure, identify cost anomalies, and generate prioritized, evidence-backed savings recommendations across **Amazon Web Services (AWS)**, **Microsoft Azure**, and **Google Cloud Platform (GCP)**.
 
@@ -216,6 +216,31 @@ curl "http://localhost:8000/api/v1/normalization/focus-validation"
 curl "http://localhost:8000/api/v1/normalization/tag-quality?limit=10"
 ```
 
+### Waste Detection REST API Quickstart
+```bash
+# 1. Trigger Multi-Cloud Waste Detection Run
+curl -X POST "http://localhost:8000/api/v1/waste-detection/run" \
+  -H "Content-Type: application/json" \
+  -d '{"provider": "ALL", "lookback_days": 7}'
+
+# 2. Query High-Severity Waste Findings
+curl "http://localhost:8000/api/v1/waste-detection/findings?severity=HIGH&limit=10"
+
+# 3. Retrieve Executive Waste Summary
+curl "http://localhost:8000/api/v1/waste-detection/summary"
+
+# 4. Detailed Financial Savings Summary
+curl "http://localhost:8000/api/v1/waste-detection/savings-summary"
+
+# 5. Inspect Finding Evidence Proof
+curl "http://localhost:8000/api/v1/waste-detection/findings/{finding_id}/evidence"
+
+# 6. Human Review: Acknowledge or Dismiss Finding
+curl -X PATCH "http://localhost:8000/api/v1/waste-detection/findings/{finding_id}/status" \
+  -H "Content-Type: application/json" \
+  -d '{"status": "ACKNOWLEDGED", "user": "finops@company.com"}'
+```
+
 ### Running Test Suites
 ```bash
 python3 -m pytest backend/tests -v
@@ -254,6 +279,15 @@ Detailed architectural and functional specifications are located in the [`docs/`
 - [Billing-to-Inventory Financial Correlation](docs/BILLING_INVENTORY_CORRELATION.md)
 - [Inventory Quality & Governance Evaluation Framework](docs/INVENTORY_QUALITY.md)
 - [Resource Inventory & Intelligence REST API Reference](docs/INVENTORY_API.md)
+- [Multi-Cloud Waste Detection Architecture](docs/WASTE_DETECTION_ARCHITECTURE.md)
+- [Waste Detection Rules & Heuristics Catalog](docs/DETECTION_RULES.md)
+- [Idle Compute Detection Specification](docs/IDLE_COMPUTE_DETECTION.md)
+- [Storage & Snapshot Waste Detection Specification](docs/STORAGE_AND_SNAPSHOT_DETECTION.md)
+- [Oversized Resource Detection & Rightsizing Specification](docs/OVERSIZED_RESOURCE_DETECTION.md)
+- [Conservative Financial Savings Estimation Methodology](docs/SAVINGS_ESTIMATION.md)
+- [Waste Finding Lifecycle & Governance Specification](docs/FINDING_LIFECYCLE.md)
+- [Multi-Cloud Waste Detection REST API Reference](docs/WASTE_DETECTION_API.md)
+- [Synthetic Waste Test Scenarios Matrix](docs/DETECTION_TEST_SCENARIOS.md)
 - [15-Stage Enterprise Development Roadmap](docs/DEVELOPMENT_ROADMAP.md)
 
 ---

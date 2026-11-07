@@ -23,7 +23,7 @@ from backend.app.models.normalization import (
 from backend.app.models.recommendation import Recommendation
 from backend.app.models.resource import CloudResource, ResourceMetric
 from backend.app.models.user import User
-from backend.app.models.waste import WasteDetection
+from backend.app.models.waste import WasteDetection, WasteDetectionRun
 
 __all__ = [
     "Base",
@@ -31,6 +31,7 @@ __all__ = [
     "CloudResource",
     "ResourceMetric",
     "WasteDetection",
+    "WasteDetectionRun",
     "Recommendation",
     "CostAnomaly",
     "User",

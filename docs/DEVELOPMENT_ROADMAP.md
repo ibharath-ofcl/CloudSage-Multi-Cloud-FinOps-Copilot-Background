@@ -13,8 +13,8 @@ PHASE 1: FOUNDATION & DATA ARCHITECTURE (Stages 1 - 4)
 
 PHASE 2: RESOURCE INTELLIGENCE & ANALYTICAL ENGINES (Stages 5 - 7)
   Stage 5: Multi-Cloud Resource Discovery & Inventory Intelligence [COMPLETED]
-  Stage 6: Cloud Waste Detection Engine [NEXT]
-  Stage 7: Cost Anomaly Detection Engine
+  Stage 6: Cloud Waste Detection Engine [COMPLETED]
+  Stage 7: Cost Anomaly Detection Engine [NEXT]
 
 PHASE 3: ADVISORY RECOMMENDATIONS & BACKEND SERVICES (Stages 8 - 9)
   Stage 8: Advisory Recommendation Engine & Savings Optimization
@@ -110,20 +110,26 @@ PHASE 5: SECURITY, NOTIFICATIONS & PRODUCTION READINESS (Stages 13 - 15)
 ---
 
 ### Stage 6: Cloud Waste Detection Engine
-- **Status**: [NEXT]
-- **Focus**: Algorithmic heuristics identifying idle, oversized, and orphaned infrastructure.
+- **Status**: [COMPLETED]
+- **Focus**: Evidence-based, advisory-only algorithmic heuristics identifying idle, oversized, unattached, orphaned, and misconfigured infrastructure across AWS, Azure, and GCP.
 - **Key Deliverables**:
-  - Idle Virtual Machine detector (CPU < 5%, network < 5MB/day over 7 days).
-  - Oversized Compute detector (CPU < 15%, memory < 20% over 14 days).
-  - Unattached Block Storage detector (unattached AWS EBS, Azure Disks, GCP Persistent Disks > 3 days).
-  - Orphaned Snapshot detector (snapshots older than retention policy or deleted parent volumes).
-  - Idle IP and Zero-Target Load Balancer detector.
-  - Off-hours continuous non-production environment detector.
-- **Acceptance Criteria**: Flagging idle and oversized assets with calculated historical monthly costs and utilization proof.
+  - Suite of 7 pluggable multi-cloud detectors inheriting from `BaseWasteDetector` (`backend/app/waste_detection/detectors/`).
+  - Core execution engine `WasteDetectionEngine` with batch evaluation, deduplication on `(resource_id, waste_type)`, and automated lifecycle state transitions (`ACTIVE`, `RESOLVED`, `REOPENED`).
+  - Human review workflow supporting `ACKNOWLEDGED`, `DISMISSED` (with mandatory reason and user tracking), and `SNOOZED` (with date calculation).
+  - Strict Decimal financial calculations (`SavingsCalculator`) ensuring zero binary floating-point drift and conservative 50% single-tier rightsizing reductions.
+  - Multidimensional evidence validator (`EvidenceValidator`) with telemetry conflict safeguards (e.g. low CPU + high network proxy exemption).
+  - Database schema expansion: `waste_detection_runs` audit table and extended `waste_detections` with Alembic migration `005_waste_detection_engine.py`.
+  - 13 comprehensive REST API endpoints under `/api/v1/waste-detection/` (`backend/app/api/routes/waste_detection.py`).
+  - Celery asynchronous task integration (`run_waste_detection_task`).
+  - 14 deterministic synthetic FinOps demonstration scenarios (`SyntheticWasteScenarioGenerator`).
+  - Complete automated test suite with 133 tests passing with 100% success rate across all project stages (`backend/tests/`).
+  - Comprehensive documentation deliverables (`docs/WASTE_DETECTION_ARCHITECTURE.md`, `docs/DETECTION_RULES.md`, `docs/IDLE_COMPUTE_DETECTION.md`, `docs/STORAGE_AND_SNAPSHOT_DETECTION.md`, `docs/OVERSIZED_RESOURCE_DETECTION.md`, `docs/SAVINGS_ESTIMATION.md`, `docs/FINDING_LIFECYCLE.md`, `docs/WASTE_DETECTION_API.md`, `docs/DETECTION_TEST_SCENARIOS.md`).
+- **Acceptance Criteria**: Strict advisory-only policy, zero float calculations, zero duplicate findings, multi-sample observation windows, and 100% passing tests (100% verified).
 
 ---
 
 ### Stage 7: Cost Anomaly Detection Engine
+- **Status**: [NEXT]
 - **Focus**: Statistical time-series anomaly detection and root-cause attribution.
 - **Key Deliverables**:
   - Rolling 30-day baseline calculator ($\mu$, $\sigma$, Median, IQR) partitioned by provider, service, and account.

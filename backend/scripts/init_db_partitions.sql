@@ -388,3 +388,22 @@ CREATE TABLE IF NOT EXISTS inventory_quality_reports (
 );
 CREATE INDEX IF NOT EXISTS idx_inv_qual_prov ON inventory_quality_reports (provider);
 
+-- 21. Waste Detection Runs Table
+CREATE TABLE IF NOT EXISTS waste_detection_runs (
+    run_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    provider VARCHAR(16) NOT NULL DEFAULT 'ALL',
+    status VARCHAR(32) NOT NULL DEFAULT 'PENDING',
+    total_resources_evaluated INTEGER NOT NULL DEFAULT 0,
+    findings_created INTEGER NOT NULL DEFAULT 0,
+    findings_updated INTEGER NOT NULL DEFAULT 0,
+    findings_unchanged INTEGER NOT NULL DEFAULT 0,
+    total_estimated_monthly_savings NUMERIC(18, 4) NOT NULL DEFAULT 0.0000,
+    detector_summary JSONB NOT NULL DEFAULT '{}'::jsonb,
+    error_details JSONB NOT NULL DEFAULT '[]'::jsonb,
+    started_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    completed_at TIMESTAMPTZ
+);
+CREATE INDEX IF NOT EXISTS idx_waste_run_prov_status ON waste_detection_runs (provider, status);
+CREATE INDEX IF NOT EXISTS idx_waste_run_started ON waste_detection_runs (started_at);
+
+
