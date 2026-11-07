@@ -1,0 +1,307 @@
+{
+  "resources": [
+    {
+      "resource_id": "/subscriptions/a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d/resourceGroups/rg-enterprise-core/providers/Microsoft.Compute/virtualMachines/az-prod-vm-01",
+      "subscription_id": "a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d",
+      "resource_name": "az-prod-vm-01",
+      "resource_type": "Microsoft.Compute/virtualMachines",
+      "service_name": "VirtualMachines",
+      "region": "eastus",
+      "status": "VM running",
+      "vm_size": "Standard_D4s_v3",
+      "created_at": "2026-09-14T08:09:17.278080+00:00",
+      "tags": {
+        "owner": "azureadmin1@enterprise.com",
+        "environment": "production",
+        "department": "Infrastructure",
+        "cost-center": "CC-4010",
+        "project": "CloudCore"
+      },
+      "attached_disk_ids": [
+        "/subscriptions/a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d/resourceGroups/rg-enterprise-core/providers/Microsoft.Compute/disks/az-os-disk-01"
+      ],
+      "vnet_id": "/subscriptions/a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d/resourceGroups/rg-enterprise-core/providers/Microsoft.Network/virtualNetworks/vnet-enterprise-eastus"
+    },
+    {
+      "resource_id": "/subscriptions/a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d/resourceGroups/rg-enterprise-core/providers/Microsoft.Compute/disks/az-os-disk-01",
+      "subscription_id": "a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d",
+      "resource_name": "az-os-disk-01",
+      "resource_type": "Microsoft.Compute/disks",
+      "service_name": "ManagedDisks",
+      "region": "eastus",
+      "status": "Attached",
+      "disk_size_gb": 128,
+      "sku": "Premium_LRS",
+      "created_at": "2026-09-14T08:09:17.278080+00:00",
+      "tags": {
+        "owner": "azureadmin1@enterprise.com",
+        "environment": "production"
+      }
+    },
+    {
+      "resource_id": "/subscriptions/a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d/resourceGroups/rg-enterprise-core/providers/Microsoft.Compute/snapshots/az-disk-snap-01",
+      "subscription_id": "a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d",
+      "resource_name": "az-disk-snap-01",
+      "resource_type": "Microsoft.Compute/snapshots",
+      "service_name": "ManagedDisks",
+      "region": "eastus",
+      "status": "Succeeded",
+      "created_at": "2026-10-17T08:09:17.278080+00:00",
+      "source_resource_id": "/subscriptions/a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d/resourceGroups/rg-enterprise-core/providers/Microsoft.Compute/disks/az-os-disk-01",
+      "tags": {
+        "environment": "production"
+      }
+    },
+    {
+      "resource_id": "/subscriptions/a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d/resourceGroups/rg-enterprise-core/providers/Microsoft.Compute/virtualMachines/az-prod-vm-02",
+      "subscription_id": "a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d",
+      "resource_name": "az-prod-vm-02",
+      "resource_type": "Microsoft.Compute/virtualMachines",
+      "service_name": "VirtualMachines",
+      "region": "eastus",
+      "status": "VM running",
+      "vm_size": "Standard_D4s_v3",
+      "created_at": "2026-09-10T08:09:17.278080+00:00",
+      "tags": {
+        "owner": "azureadmin2@enterprise.com",
+        "environment": "production",
+        "department": "Infrastructure",
+        "cost-center": "CC-4020",
+        "project": "CloudCore"
+      },
+      "attached_disk_ids": [
+        "/subscriptions/a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d/resourceGroups/rg-enterprise-core/providers/Microsoft.Compute/disks/az-os-disk-02"
+      ],
+      "vnet_id": "/subscriptions/a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d/resourceGroups/rg-enterprise-core/providers/Microsoft.Network/virtualNetworks/vnet-enterprise-eastus"
+    },
+    {
+      "resource_id": "/subscriptions/a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d/resourceGroups/rg-enterprise-core/providers/Microsoft.Compute/disks/az-os-disk-02",
+      "subscription_id": "a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d",
+      "resource_name": "az-os-disk-02",
+      "resource_type": "Microsoft.Compute/disks",
+      "service_name": "ManagedDisks",
+      "region": "eastus",
+      "status": "Attached",
+      "disk_size_gb": 128,
+      "sku": "Premium_LRS",
+      "created_at": "2026-09-10T08:09:17.278080+00:00",
+      "tags": {
+        "owner": "azureadmin2@enterprise.com",
+        "environment": "production"
+      }
+    },
+    {
+      "resource_id": "/subscriptions/a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d/resourceGroups/rg-enterprise-core/providers/Microsoft.Compute/snapshots/az-disk-snap-02",
+      "subscription_id": "a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d",
+      "resource_name": "az-disk-snap-02",
+      "resource_type": "Microsoft.Compute/snapshots",
+      "service_name": "ManagedDisks",
+      "region": "eastus",
+      "status": "Succeeded",
+      "created_at": "2026-10-16T08:09:17.278080+00:00",
+      "source_resource_id": "/subscriptions/a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d/resourceGroups/rg-enterprise-core/providers/Microsoft.Compute/disks/az-os-disk-02",
+      "tags": {
+        "environment": "production"
+      }
+    },
+    {
+      "resource_id": "/subscriptions/a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d/resourceGroups/rg-enterprise-core/providers/Microsoft.Compute/virtualMachines/az-prod-vm-03",
+      "subscription_id": "a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d",
+      "resource_name": "az-prod-vm-03",
+      "resource_type": "Microsoft.Compute/virtualMachines",
+      "service_name": "VirtualMachines",
+      "region": "eastus",
+      "status": "VM running",
+      "vm_size": "Standard_D4s_v3",
+      "created_at": "2026-09-06T08:09:17.278080+00:00",
+      "tags": {
+        "owner": "azureadmin3@enterprise.com",
+        "environment": "production",
+        "department": "Infrastructure",
+        "cost-center": "CC-4030",
+        "project": "CloudCore"
+      },
+      "attached_disk_ids": [
+        "/subscriptions/a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d/resourceGroups/rg-enterprise-core/providers/Microsoft.Compute/disks/az-os-disk-03"
+      ],
+      "vnet_id": "/subscriptions/a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d/resourceGroups/rg-enterprise-core/providers/Microsoft.Network/virtualNetworks/vnet-enterprise-eastus"
+    },
+    {
+      "resource_id": "/subscriptions/a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d/resourceGroups/rg-enterprise-core/providers/Microsoft.Compute/disks/az-os-disk-03",
+      "subscription_id": "a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d",
+      "resource_name": "az-os-disk-03",
+      "resource_type": "Microsoft.Compute/disks",
+      "service_name": "ManagedDisks",
+      "region": "eastus",
+      "status": "Attached",
+      "disk_size_gb": 128,
+      "sku": "Premium_LRS",
+      "created_at": "2026-09-06T08:09:17.278080+00:00",
+      "tags": {
+        "owner": "azureadmin3@enterprise.com",
+        "environment": "production"
+      }
+    },
+    {
+      "resource_id": "/subscriptions/a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d/resourceGroups/rg-enterprise-core/providers/Microsoft.Compute/snapshots/az-disk-snap-03",
+      "subscription_id": "a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d",
+      "resource_name": "az-disk-snap-03",
+      "resource_type": "Microsoft.Compute/snapshots",
+      "service_name": "ManagedDisks",
+      "region": "eastus",
+      "status": "Succeeded",
+      "created_at": "2026-10-15T08:09:17.278080+00:00",
+      "source_resource_id": "/subscriptions/a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d/resourceGroups/rg-enterprise-core/providers/Microsoft.Compute/disks/az-os-disk-03",
+      "tags": {
+        "environment": "production"
+      }
+    },
+    {
+      "resource_id": "/subscriptions/a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d/resourceGroups/rg-enterprise-core/providers/Microsoft.Compute/virtualMachines/az-prod-vm-04",
+      "subscription_id": "a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d",
+      "resource_name": "az-prod-vm-04",
+      "resource_type": "Microsoft.Compute/virtualMachines",
+      "service_name": "VirtualMachines",
+      "region": "eastus",
+      "status": "VM running",
+      "vm_size": "Standard_D4s_v3",
+      "created_at": "2026-09-02T08:09:17.278080+00:00",
+      "tags": {
+        "owner": "azureadmin4@enterprise.com",
+        "environment": "development",
+        "department": "Infrastructure",
+        "cost-center": "CC-4040",
+        "project": "CloudCore"
+      },
+      "attached_disk_ids": [
+        "/subscriptions/a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d/resourceGroups/rg-enterprise-core/providers/Microsoft.Compute/disks/az-os-disk-04"
+      ],
+      "vnet_id": "/subscriptions/a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d/resourceGroups/rg-enterprise-core/providers/Microsoft.Network/virtualNetworks/vnet-enterprise-eastus"
+    },
+    {
+      "resource_id": "/subscriptions/a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d/resourceGroups/rg-enterprise-core/providers/Microsoft.Compute/disks/az-os-disk-04",
+      "subscription_id": "a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d",
+      "resource_name": "az-os-disk-04",
+      "resource_type": "Microsoft.Compute/disks",
+      "service_name": "ManagedDisks",
+      "region": "eastus",
+      "status": "Attached",
+      "disk_size_gb": 128,
+      "sku": "Premium_LRS",
+      "created_at": "2026-09-02T08:09:17.278080+00:00",
+      "tags": {
+        "owner": "azureadmin4@enterprise.com",
+        "environment": "development"
+      }
+    },
+    {
+      "resource_id": "/subscriptions/a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d/resourceGroups/rg-enterprise-core/providers/Microsoft.Compute/snapshots/az-disk-snap-04",
+      "subscription_id": "a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d",
+      "resource_name": "az-disk-snap-04",
+      "resource_type": "Microsoft.Compute/snapshots",
+      "service_name": "ManagedDisks",
+      "region": "eastus",
+      "status": "Succeeded",
+      "created_at": "2026-10-14T08:09:17.278080+00:00",
+      "source_resource_id": "/subscriptions/a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d/resourceGroups/rg-enterprise-core/providers/Microsoft.Compute/disks/az-os-disk-04",
+      "tags": {
+        "environment": "development"
+      }
+    },
+    {
+      "resource_id": "/subscriptions/a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d/resourceGroups/rg-enterprise-core/providers/Microsoft.Compute/virtualMachines/az-prod-vm-05",
+      "subscription_id": "a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d",
+      "resource_name": "az-prod-vm-05",
+      "resource_type": "Microsoft.Compute/virtualMachines",
+      "service_name": "VirtualMachines",
+      "region": "eastus",
+      "status": "VM deallocated",
+      "vm_size": "Standard_D4s_v3",
+      "created_at": "2026-08-29T08:09:17.278080+00:00",
+      "tags": {
+        "owner": "azureadmin5@enterprise.com",
+        "environment": "development",
+        "department": "Infrastructure",
+        "cost-center": "CC-4050",
+        "project": "CloudCore"
+      },
+      "attached_disk_ids": [
+        "/subscriptions/a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d/resourceGroups/rg-enterprise-core/providers/Microsoft.Compute/disks/az-os-disk-05"
+      ],
+      "vnet_id": "/subscriptions/a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d/resourceGroups/rg-enterprise-core/providers/Microsoft.Network/virtualNetworks/vnet-enterprise-eastus"
+    },
+    {
+      "resource_id": "/subscriptions/a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d/resourceGroups/rg-enterprise-core/providers/Microsoft.Compute/disks/az-os-disk-05",
+      "subscription_id": "a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d",
+      "resource_name": "az-os-disk-05",
+      "resource_type": "Microsoft.Compute/disks",
+      "service_name": "ManagedDisks",
+      "region": "eastus",
+      "status": "Attached",
+      "disk_size_gb": 128,
+      "sku": "Premium_LRS",
+      "created_at": "2026-08-29T08:09:17.278080+00:00",
+      "tags": {
+        "owner": "azureadmin5@enterprise.com",
+        "environment": "development"
+      }
+    },
+    {
+      "resource_id": "/subscriptions/a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d/resourceGroups/rg-enterprise-core/providers/Microsoft.Compute/snapshots/az-disk-snap-05",
+      "subscription_id": "a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d",
+      "resource_name": "az-disk-snap-05",
+      "resource_type": "Microsoft.Compute/snapshots",
+      "service_name": "ManagedDisks",
+      "region": "eastus",
+      "status": "Succeeded",
+      "created_at": "2026-10-13T08:09:17.278080+00:00",
+      "source_resource_id": "/subscriptions/a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d/resourceGroups/rg-enterprise-core/providers/Microsoft.Compute/disks/az-os-disk-05",
+      "tags": {
+        "environment": "development"
+      }
+    },
+    {
+      "resource_id": "/subscriptions/a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d/resourceGroups/rg-enterprise-core/providers/Microsoft.Compute/disks/disk-unattached-spare",
+      "subscription_id": "a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d",
+      "resource_name": "disk-unattached-spare",
+      "resource_type": "Microsoft.Compute/disks",
+      "service_name": "ManagedDisks",
+      "region": "eastus",
+      "status": "Unattached",
+      "disk_size_gb": 512,
+      "sku": "StandardSSD_LRS",
+      "created_at": "2026-10-03T08:09:17.278080+00:00",
+      "tags": {}
+    },
+    {
+      "resource_id": "/subscriptions/a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d/resourceGroups/rg-enterprise-core/providers/Microsoft.Storage/storageAccounts/stenterpriseblob01",
+      "subscription_id": "a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d",
+      "resource_name": "stenterpriseblob01",
+      "resource_type": "Microsoft.Storage/storageAccounts",
+      "service_name": "StorageAccounts",
+      "region": "eastus",
+      "status": "Succeeded",
+      "created_at": "2026-07-30T08:09:17.278080+00:00",
+      "tags": {
+        "owner": "storage@enterprise.com",
+        "environment": "production",
+        "cost-center": "CC-5000"
+      }
+    },
+    {
+      "resource_id": "/subscriptions/a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d/resourceGroups/rg-enterprise-core/providers/Microsoft.Sql/servers/sql-srv-prod/databases/crm-db",
+      "subscription_id": "a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d",
+      "resource_name": "crm-db",
+      "resource_type": "Microsoft.Sql/servers/databases",
+      "service_name": "AzureSQL",
+      "region": "eastus",
+      "status": "Online",
+      "created_at": "2026-08-19T08:09:17.278080+00:00",
+      "tags": {
+        "owner": "crmteam@enterprise.com",
+        "environment": "production",
+        "cost-center": "CC-6000"
+      }
+    }
+  ]
+}

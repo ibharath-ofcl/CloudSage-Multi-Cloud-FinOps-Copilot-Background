@@ -1,0 +1,476 @@
+[
+  {
+    "billing_account_id": "01ABCD-23EFGH-45IJKL",
+    "project": {
+      "id": "gcp-prod-analytics-88",
+      "name": "Production Analytics",
+      "number": "987654321"
+    },
+    "service": {
+      "id": "SRV-000",
+      "description": "Compute Engine"
+    },
+    "sku": {
+      "id": "SKU-0000",
+      "description": "Instance Core running in Americas"
+    },
+    "usage_start_time": "2026-11-06T18:00:00+00:00",
+    "usage_end_time": "2026-11-06T19:00:00+00:00",
+    "cost": 0.75,
+    "currency": "USD",
+    "usage": {
+      "amount": 34.85,
+      "unit": "hour",
+      "pricing_unit": "hour"
+    },
+    "location": {
+      "location": "us-central1",
+      "region": "us-central1",
+      "zone": "us-central1-a"
+    },
+    "resource": {
+      "name": "//compute.googleapis.com/projects/gcp-prod-analytics-88/zones/us-central1-a/instances/idle-n1-standard-1-0000",
+      "global_name": "//compute.googleapis.com/projects/gcp-prod-analytics-88/zones/us-central1-a/instances/idle-n1-standard-1-0000"
+    },
+    "labels": [],
+    "credits": [
+      {
+        "name": "Sustained Usage Discount",
+        "amount": -0.15
+      }
+    ]
+  },
+  {
+    "billing_account_id": "01ABCD-23EFGH-45IJKL",
+    "project": {
+      "id": "gcp-prod-analytics-88",
+      "name": "Production Analytics",
+      "number": "987654321"
+    },
+    "service": {
+      "id": "SRV-001",
+      "description": "Cloud Storage"
+    },
+    "sku": {
+      "id": "SKU-0001",
+      "description": "Standard Storage US Regional"
+    },
+    "usage_start_time": "2026-11-04T11:00:00+00:00",
+    "usage_end_time": "2026-11-04T12:00:00+00:00",
+    "cost": 1.5958,
+    "currency": "USD",
+    "usage": {
+      "amount": 79.79,
+      "unit": "gibibyte month",
+      "pricing_unit": "gibibyte month"
+    },
+    "location": {
+      "location": "us-central1",
+      "region": "us-central1",
+      "zone": "us-central1-a"
+    },
+    "resource": {
+      "name": "//compute.googleapis.com/projects/gcp-prod-analytics-88/zones/us-central1-a/instances/gcp-asset-0001",
+      "global_name": "//compute.googleapis.com/projects/gcp-prod-analytics-88/zones/us-central1-a/instances/gcp-asset-0001"
+    },
+    "labels": [
+      {
+        "key": "owner",
+        "value": "search-team"
+      },
+      {
+        "key": "environment",
+        "value": "test"
+      },
+      {
+        "key": "project",
+        "value": "gcp-prod-analytics-88"
+      }
+    ],
+    "credits": []
+  },
+  {
+    "billing_account_id": "01ABCD-23EFGH-45IJKL",
+    "project": {
+      "id": "gcp-prod-analytics-88",
+      "name": "Production Analytics",
+      "number": "987654321"
+    },
+    "service": {
+      "id": "SRV-002",
+      "description": "Compute Engine"
+    },
+    "sku": {
+      "id": "SKU-0002",
+      "description": "Instance Core running in Americas"
+    },
+    "usage_start_time": "2026-11-01T01:00:00+00:00",
+    "usage_end_time": "2026-11-01T02:00:00+00:00",
+    "cost": 0.4967,
+    "currency": "USD",
+    "usage": {
+      "amount": 13.07,
+      "unit": "hour",
+      "pricing_unit": "hour"
+    },
+    "location": {
+      "location": "us-central1",
+      "region": "us-central1",
+      "zone": "us-central1-a"
+    },
+    "resource": {
+      "name": "//compute.googleapis.com/projects/gcp-prod-analytics-88/zones/us-central1-a/instances/gcp-asset-0002",
+      "global_name": "//compute.googleapis.com/projects/gcp-prod-analytics-88/zones/us-central1-a/instances/gcp-asset-0002"
+    },
+    "labels": [
+      {
+        "key": "owner",
+        "value": "search-team"
+      },
+      {
+        "key": "environment",
+        "value": "test"
+      },
+      {
+        "key": "project",
+        "value": "gcp-prod-analytics-88"
+      }
+    ],
+    "credits": []
+  },
+  {
+    "billing_account_id": "01ABCD-23EFGH-45IJKL",
+    "project": {
+      "id": "gcp-prod-analytics-88",
+      "name": "Production Analytics",
+      "number": "987654321"
+    },
+    "service": {
+      "id": "SRV-003",
+      "description": "BigQuery"
+    },
+    "sku": {
+      "id": "SKU-0003",
+      "description": "Analysis (Queries)"
+    },
+    "usage_start_time": "2026-11-05T02:00:00+00:00",
+    "usage_end_time": "2026-11-05T03:00:00+00:00",
+    "cost": 155.75,
+    "currency": "USD",
+    "usage": {
+      "amount": 31.15,
+      "unit": "tebibyte",
+      "pricing_unit": "tebibyte"
+    },
+    "location": {
+      "location": "us-central1",
+      "region": "us-central1",
+      "zone": "us-central1-a"
+    },
+    "resource": {
+      "name": "//compute.googleapis.com/projects/gcp-prod-analytics-88/zones/us-central1-a/instances/gcp-asset-0003",
+      "global_name": "//compute.googleapis.com/projects/gcp-prod-analytics-88/zones/us-central1-a/instances/gcp-asset-0003"
+    },
+    "labels": [
+      {
+        "key": "owner",
+        "value": "data-analytics"
+      },
+      {
+        "key": "environment",
+        "value": "dev"
+      },
+      {
+        "key": "project",
+        "value": "gcp-prod-analytics-88"
+      }
+    ],
+    "credits": []
+  },
+  {
+    "billing_account_id": "01ABCD-23EFGH-45IJKL",
+    "project": {
+      "id": "gcp-prod-analytics-88",
+      "name": "Production Analytics",
+      "number": "987654321"
+    },
+    "service": {
+      "id": "SRV-004",
+      "description": "Compute Engine"
+    },
+    "sku": {
+      "id": "SKU-0004",
+      "description": "Instance Core running in Americas"
+    },
+    "usage_start_time": "2026-11-05T00:00:00+00:00",
+    "usage_end_time": "2026-11-05T01:00:00+00:00",
+    "cost": 2.0847,
+    "currency": "USD",
+    "usage": {
+      "amount": 54.86,
+      "unit": "hour",
+      "pricing_unit": "hour"
+    },
+    "location": {
+      "location": "us-central1",
+      "region": "us-central1",
+      "zone": "us-central1-a"
+    },
+    "resource": {
+      "name": "//compute.googleapis.com/projects/gcp-prod-analytics-88/zones/us-central1-a/instances/gcp-asset-0004",
+      "global_name": "//compute.googleapis.com/projects/gcp-prod-analytics-88/zones/us-central1-a/instances/gcp-asset-0004"
+    },
+    "labels": [
+      {
+        "key": "owner",
+        "value": "security-core"
+      },
+      {
+        "key": "environment",
+        "value": "dev"
+      },
+      {
+        "key": "project",
+        "value": "gcp-prod-analytics-88"
+      }
+    ],
+    "credits": []
+  },
+  {
+    "billing_account_id": "01ABCD-23EFGH-45IJKL",
+    "project": {
+      "id": "gcp-prod-analytics-88",
+      "name": "Production Analytics",
+      "number": "987654321"
+    },
+    "service": {
+      "id": "SRV-005",
+      "description": "Cloud SQL"
+    },
+    "sku": {
+      "id": "SKU-0005",
+      "description": "Cloud SQL for PostgreSQL"
+    },
+    "usage_start_time": "2026-11-07T20:00:00+00:00",
+    "usage_end_time": "2026-11-07T21:00:00+00:00",
+    "cost": 1.4715,
+    "currency": "USD",
+    "usage": {
+      "amount": 9.81,
+      "unit": "hour",
+      "pricing_unit": "hour"
+    },
+    "location": {
+      "location": "us-central1",
+      "region": "us-central1",
+      "zone": "us-central1-a"
+    },
+    "resource": {
+      "name": "//compute.googleapis.com/projects/gcp-prod-analytics-88/zones/us-central1-a/instances/gcp-asset-0005",
+      "global_name": "//compute.googleapis.com/projects/gcp-prod-analytics-88/zones/us-central1-a/instances/gcp-asset-0005"
+    },
+    "labels": [
+      {
+        "key": "owner",
+        "value": "data-analytics"
+      },
+      {
+        "key": "environment",
+        "value": "staging"
+      },
+      {
+        "key": "project",
+        "value": "gcp-prod-analytics-88"
+      }
+    ],
+    "credits": []
+  },
+  {
+    "billing_account_id": "01ABCD-23EFGH-45IJKL",
+    "project": {
+      "id": "gcp-prod-analytics-88",
+      "name": "Production Analytics",
+      "number": "987654321"
+    },
+    "service": {
+      "id": "SRV-006",
+      "description": "Cloud SQL"
+    },
+    "sku": {
+      "id": "SKU-0006",
+      "description": "Cloud SQL for PostgreSQL"
+    },
+    "usage_start_time": "2026-11-04T00:00:00+00:00",
+    "usage_end_time": "2026-11-04T01:00:00+00:00",
+    "cost": 11.667,
+    "currency": "USD",
+    "usage": {
+      "amount": 77.78,
+      "unit": "hour",
+      "pricing_unit": "hour"
+    },
+    "location": {
+      "location": "us-central1",
+      "region": "us-central1",
+      "zone": "us-central1-a"
+    },
+    "resource": {
+      "name": "//compute.googleapis.com/projects/gcp-prod-analytics-88/zones/us-central1-a/instances/gcp-asset-0006",
+      "global_name": "//compute.googleapis.com/projects/gcp-prod-analytics-88/zones/us-central1-a/instances/gcp-asset-0006"
+    },
+    "labels": [
+      {
+        "key": "owner",
+        "value": "search-team"
+      },
+      {
+        "key": "environment",
+        "value": "production"
+      },
+      {
+        "key": "project",
+        "value": "gcp-prod-analytics-88"
+      }
+    ],
+    "credits": [
+      {
+        "name": "Sustained Usage Discount",
+        "amount": -2.3334
+      }
+    ]
+  },
+  {
+    "billing_account_id": "01ABCD-23EFGH-45IJKL",
+    "project": {
+      "id": "gcp-prod-analytics-88",
+      "name": "Production Analytics",
+      "number": "987654321"
+    },
+    "service": {
+      "id": "SRV-007",
+      "description": "Cloud SQL"
+    },
+    "sku": {
+      "id": "SKU-0007",
+      "description": "Cloud SQL for PostgreSQL"
+    },
+    "usage_start_time": "2026-11-07T20:00:00+00:00",
+    "usage_end_time": "2026-11-07T21:00:00+00:00",
+    "cost": 10.1235,
+    "currency": "USD",
+    "usage": {
+      "amount": 67.49,
+      "unit": "hour",
+      "pricing_unit": "hour"
+    },
+    "location": {
+      "location": "us-central1",
+      "region": "us-central1",
+      "zone": "us-central1-a"
+    },
+    "resource": {
+      "name": "//compute.googleapis.com/projects/gcp-prod-analytics-88/zones/us-central1-a/instances/gcp-asset-0007",
+      "global_name": "//compute.googleapis.com/projects/gcp-prod-analytics-88/zones/us-central1-a/instances/gcp-asset-0007"
+    },
+    "labels": [
+      {
+        "key": "owner",
+        "value": "security-core"
+      },
+      {
+        "key": "environment",
+        "value": "staging"
+      },
+      {
+        "key": "project",
+        "value": "gcp-prod-analytics-88"
+      }
+    ],
+    "credits": []
+  },
+  {
+    "billing_account_id": "01ABCD-23EFGH-45IJKL",
+    "project": {
+      "id": "gcp-prod-analytics-88",
+      "name": "Production Analytics",
+      "number": "987654321"
+    },
+    "service": {
+      "id": "SRV-008",
+      "description": "Cloud Storage"
+    },
+    "sku": {
+      "id": "SKU-0008",
+      "description": "Standard Storage US Regional"
+    },
+    "usage_start_time": "2026-11-02T11:00:00+00:00",
+    "usage_end_time": "2026-11-02T12:00:00+00:00",
+    "cost": 0.8722,
+    "currency": "USD",
+    "usage": {
+      "amount": 43.61,
+      "unit": "gibibyte month",
+      "pricing_unit": "gibibyte month"
+    },
+    "location": {
+      "location": "us-central1",
+      "region": "us-central1",
+      "zone": "us-central1-a"
+    },
+    "resource": {
+      "name": "//compute.googleapis.com/projects/gcp-prod-analytics-88/zones/us-central1-a/instances/gcp-asset-0008",
+      "global_name": "//compute.googleapis.com/projects/gcp-prod-analytics-88/zones/us-central1-a/instances/gcp-asset-0008"
+    },
+    "labels": [
+      {
+        "key": "owner",
+        "value": "security-core"
+      },
+      {
+        "key": "environment",
+        "value": "production"
+      },
+      {
+        "key": "project",
+        "value": "gcp-prod-analytics-88"
+      }
+    ],
+    "credits": []
+  },
+  {
+    "billing_account_id": "01ABCD-23EFGH-45IJKL",
+    "project": {
+      "id": "gcp-prod-analytics-88",
+      "name": "Production Analytics",
+      "number": "987654321"
+    },
+    "service": {
+      "id": "SRV-009",
+      "description": "BigQuery"
+    },
+    "sku": {
+      "id": "SKU-0009",
+      "description": "Analysis (Queries)"
+    },
+    "usage_start_time": "2026-11-05T10:00:00+00:00",
+    "usage_end_time": "2026-11-05T11:00:00+00:00",
+    "cost": 12.7,
+    "currency": "USD",
+    "usage": {
+      "amount": 2.54,
+      "unit": "tebibyte",
+      "pricing_unit": "tebibyte"
+    },
+    "location": {
+      "location": "us-central1",
+      "region": "us-central1",
+      "zone": "us-central1-a"
+    },
+    "resource": {
+      "name": "//compute.googleapis.com/projects/gcp-prod-analytics-88/zones/us-central1-a/instances/gcp-asset-0009",
+      "global_name": "//compute.googleapis.com/projects/gcp-prod-analytics-88/zones/us-central1-a/instances/gcp-asset-0009"
+    },
+    "labels": [],
+    "credits": []
+  }
+]

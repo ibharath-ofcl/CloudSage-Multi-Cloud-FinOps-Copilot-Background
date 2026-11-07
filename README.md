@@ -3,7 +3,7 @@
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
 [![Architecture](https://img.shields.io/badge/Architecture-FOCUS%201.0%20Compliant-green.svg)](docs/FUNCTIONAL_REQUIREMENTS.md)
 [![Safety](https://img.shields.io/badge/Safety-Advisory%20Only-orange.svg)](docs/BUSINESS_REQUIREMENTS.md)
-[![Status](https://img.shields.io/badge/Status-Stage%201%20Complete-brightgreen.svg)](docs/DEVELOPMENT_ROADMAP.md)
+[![Status](https://img.shields.io/badge/Status-Stage%206%20Complete-brightgreen.svg)](docs/DEVELOPMENT_ROADMAP.md)
 
 > **CloudSage** is an enterprise-grade, AI-powered Multi-Cloud Financial Operations (FinOps) platform engineered to unify fragmented cloud billing data, detect unnecessary expenditure, identify cost anomalies, and generate prioritized, evidence-backed savings recommendations across **Amazon Web Services (AWS)**, **Microsoft Azure**, and **Google Cloud Platform (GCP)**.
 
@@ -158,32 +158,97 @@ The development of CloudSage is structured across 15 disciplined stages:
 | Stage | Name | Status | Key Deliverable |
 | :---: | :--- | :---: | :--- |
 | **01** | **Requirement Analysis & Project Foundation** | **Completed** | Requirements, Architecture, Governance & Roadmap Foundation |
-| **02** | Core Data Models & Database Schema Architecture | *Planned* | FOCUS 1.0 PostgreSQL schemas, partitioning, and Alembic migrations |
-| **03** | Multi-Cloud Ingestion Engine | *Planned* | AWS CUR, Azure Cost, GCP BigQuery & seed dataset adapters |
-| **04** | Unified Data Normalization & FOCUS Pipeline | *Planned* | Currency conversion, tag normalization & service taxonomy engine |
-| **05** | Cloud Waste Detection Engine | *Planned* | Heuristics for idle VMs, oversized compute, unattached disks & snapshots |
-| **06** | Cost Anomaly Detection Engine | *Planned* | 30-day statistical baselining, Z-score detection & root-cause attribution |
-| **07** | Advisory Recommendation Engine & Optimization | *Planned* | Priority scoring, risk rating, savings calculation & approval states |
-| **08** | Core REST API & Backend Service Layer | *Planned* | FastAPI REST endpoints, filtering, cursor pagination & export APIs |
-| **09** | AI FinOps Copilot & Grounded Query Engine | *Planned* | Schema-safe NL2SQL translator, AST sandbox & deterministic verifier |
-| **10** | Enterprise Frontend Dashboard & Visualization UI | *Planned* | React/TypeScript UI, KPI cards, Recharts trends & provider breakdowns |
-| **11** | Waste & Recommendation Management UI | *Planned* | Interactive review tables, approval actions & remediation guides |
-| **12** | Anomaly Detection & Alerts Notification Hub | *Planned* | Threat feed, alert threshold rules & Slack/Teams/Email dispatchers |
-| **13** | Role-Based Access Control (RBAC) & Audit Logging | *Planned* | JWT auth, role middleware, ABAC scoping & immutable audit logging |
-| **14** | System Integration & Benchmark Test Suite | *Planned* | 100-case synthetic benchmark suite validating $\ge 90\%$ waste detection |
+| **02** | **Core Data Models & Database Schema Architecture** | **Completed** | FOCUS 1.0 PostgreSQL schemas, partitioning, and Alembic migrations |
+| **03** | **Multi-Cloud Ingestion Engine** | **Completed** | AWS CUR, Azure Cost, GCP BigQuery adapters, deduplication & REST API |
+| **04** | **Unified Data Normalization & FOCUS Pipeline** | **Completed** | FOCUS 1.0 validation, historical FX, SKU catalog, tag governance & quality engine |
+| **05** | **Multi-Cloud Resource Discovery & Inventory Intelligence** | **Completed** | Multi-cloud adapters, directional topology graph, reconciliation & quality scoring |
+| **06** | Cloud Waste Detection Engine | *Planned* | Heuristics for idle VMs, oversized compute, unattached disks & snapshots |
+| **07** | Cost Anomaly Detection Engine | *Planned* | 30-day statistical baselining, Z-score detection & root-cause attribution |
+| **08** | Advisory Recommendation Engine & Optimization | *Planned* | Priority scoring, risk rating, savings calculation & approval states |
+| **09** | Core REST API & Backend Service Layer | *Planned* | FastAPI REST endpoints, filtering, cursor pagination & export APIs |
+| **10** | AI FinOps Copilot & Grounded Query Engine | *Planned* | Schema-safe NL2SQL translator, AST sandbox & deterministic verifier |
+| **11** | Enterprise Frontend Dashboard & Visualization UI | *Planned* | React/TypeScript UI, KPI cards, Recharts trends & provider breakdowns |
+| **12** | Waste & Recommendation Management UI | *Planned* | Interactive review tables, approval actions & remediation guides |
+| **13** | Anomaly Detection & Alerts Notification Hub | *Planned* | Threat feed, alert threshold rules & Slack/Teams/Email dispatchers |
+| **14** | Role-Based Access Control (RBAC) & Audit Logging | *Planned* | JWT auth, role middleware, ABAC scoping & immutable audit logging |
 | **15** | Production Containerization, CI/CD & Readiness | *Planned* | Multi-stage Docker, Compose, GitHub Actions & Prometheus/Grafana |
 
 ---
 
 ## 7. Current Development Status
 
-- **Active Stage**: Stage 1 (Requirement Analysis & Project Foundation) is complete.
-- **Active Branch**: `stage-1/project-foundation`.
-- **Next Milestone**: Stage 2 (Core Data Models & Database Schema Architecture) awaits formal stakeholder review and approval.
+- **Completed Stages**: 
+  - Stage 1: Requirement Analysis & Project Foundation (`stage-1/project-foundation`).
+  - Stage 2: Core Data Models & Database Schema Architecture (`stage-2/data-models-schema`).
+  - Stage 3: Multi-Cloud Ingestion Engine (`stage-3/multicloud-ingestion`).
+  - Stage 4: Unified Data Normalization & FOCUS Pipeline (`stage-4/focus-normalization`).
+  - Stage 5: Multi-Cloud Resource Discovery & Inventory Intelligence (`stage-5/resource-inventory`).
+- **Active Branch**: `stage-5/resource-inventory`.
+- **Next Milestone**: Stage 6 (Cloud Waste Detection Engine) awaits formal review and approval.
 
 ---
 
-## 8. Documentation Index
+## 8. Multi-Cloud Normalization & Ingestion Engine Quickstart
+
+CloudSage provides an end-to-end multi-cloud billing ingestion, FOCUS 1.0 normalization, and data quality evaluation engine.
+
+### Ingestion & Normalization REST API
+```bash
+# Start the FastAPI application
+uvicorn backend.app.main:app --host 0.0.0.0 --port 8000
+
+# 1. Ingest Multi-Cloud Billing Feeds
+curl -X POST "http://localhost:8000/api/v1/ingestion/upload/aws" \
+  -F "file=@backend/sample_data/aws/aws_cur_sample.csv"
+
+# 2. Trigger Batch Normalization / In-Place Reprocessing
+curl -X POST "http://localhost:8000/api/v1/normalization/run" \
+  -H "Content-Type: application/json" \
+  -d '{"provider": "AWS", "reprocess_all": true, "batch_size": 500}'
+
+# 3. Retrieve Latest Data Quality Assessment
+curl "http://localhost:8000/api/v1/normalization/quality-report"
+
+# 4. Check FOCUS 1.0 Conformance Assessment
+curl "http://localhost:8000/api/v1/normalization/focus-validation"
+
+# 5. Query Tag Hygiene Scores
+curl "http://localhost:8000/api/v1/normalization/tag-quality?limit=10"
+```
+
+### Waste Detection REST API Quickstart
+```bash
+# 1. Trigger Multi-Cloud Waste Detection Run
+curl -X POST "http://localhost:8000/api/v1/waste-detection/run" \
+  -H "Content-Type: application/json" \
+  -d '{"provider": "ALL", "lookback_days": 7}'
+
+# 2. Query High-Severity Waste Findings
+curl "http://localhost:8000/api/v1/waste-detection/findings?severity=HIGH&limit=10"
+
+# 3. Retrieve Executive Waste Summary
+curl "http://localhost:8000/api/v1/waste-detection/summary"
+
+# 4. Detailed Financial Savings Summary
+curl "http://localhost:8000/api/v1/waste-detection/savings-summary"
+
+# 5. Inspect Finding Evidence Proof
+curl "http://localhost:8000/api/v1/waste-detection/findings/{finding_id}/evidence"
+
+# 6. Human Review: Acknowledge or Dismiss Finding
+curl -X PATCH "http://localhost:8000/api/v1/waste-detection/findings/{finding_id}/status" \
+  -H "Content-Type: application/json" \
+  -d '{"status": "ACKNOWLEDGED", "user": "finops@company.com"}'
+```
+
+### Running Test Suites
+```bash
+python3 -m pytest backend/tests -v
+```
+
+---
+
+## 9. Documentation Index
 
 Detailed architectural and functional specifications are located in the [`docs/`](docs/) directory:
 
@@ -191,15 +256,43 @@ Detailed architectural and functional specifications are located in the [`docs/`
 - [Business Requirements Document (BRD)](docs/BUSINESS_REQUIREMENTS.md)
 - [Functional Requirements Document (FRD)](docs/FUNCTIONAL_REQUIREMENTS.md)
 - [Non-Functional Requirements Document (NFR)](docs/NON_FUNCTIONAL_REQUIREMENTS.md)
+- [Database Schema & Relational Data Architecture](docs/DATABASE_SCHEMA.md)
+- [Multi-Cloud Ingestion Engine Architecture](docs/INGESTION_ARCHITECTURE.md)
+- [Cloud Provider Field Mappings & Normalization Taxonomy](docs/CLOUD_PROVIDER_FIELD_MAPPINGS.md)
+- [FOCUS 1.0 Specification Conformance & Matrix](docs/FOCUS_1_0_IMPLEMENTATION.md)
+- [Advanced Currency Normalization & Historical FX](docs/CURRENCY_NORMALIZATION.md)
+- [Multi-Cloud SKU Catalog & Taxonomy](docs/SKU_CATALOG.md)
+- [Advanced Resource Tag Normalization & Hygiene](docs/TAG_NORMALIZATION.md)
+- [Data Quality & Governance Framework](docs/DATA_QUALITY_FRAMEWORK.md)
+- [Unified Normalization Pipeline Architecture](docs/NORMALIZATION_PIPELINE.md)
+- [Data Normalization & FOCUS 1.0 Alignment](docs/DATA_NORMALIZATION.md)
+- [Synthetic Datasets & Seeded FinOps Scenarios](docs/SYNTHETIC_DATASETS.md)
+- [Multi-Cloud Ingestion API Reference](docs/INGESTION_API.md)
 - [User Roles, Personas & Permissions Matrix](docs/USER_ROLES_AND_PERMISSIONS.md)
 - [Technology Stack Evaluation](docs/TECHNOLOGY_STACK.md)
 - [System Architecture & Data Flow](docs/SYSTEM_ARCHITECTURE.md)
 - [Acceptance & Success Criteria](docs/SUCCESS_CRITERIA.md)
+- [Multi-Cloud Resource Inventory & Intelligence Architecture](docs/RESOURCE_INVENTORY_ARCHITECTURE.md)
+- [Cloud Provider Inventory Adapters Reference](docs/CLOUD_PROVIDER_ADAPTERS.md)
+- [Multi-Cloud Resource Reconciliation Engine](docs/RESOURCE_RECONCILIATION.md)
+- [Multi-Cloud Resource Topology & Relationships](docs/RESOURCE_RELATIONSHIPS.md)
+- [Billing-to-Inventory Financial Correlation](docs/BILLING_INVENTORY_CORRELATION.md)
+- [Inventory Quality & Governance Evaluation Framework](docs/INVENTORY_QUALITY.md)
+- [Resource Inventory & Intelligence REST API Reference](docs/INVENTORY_API.md)
+- [Multi-Cloud Waste Detection Architecture](docs/WASTE_DETECTION_ARCHITECTURE.md)
+- [Waste Detection Rules & Heuristics Catalog](docs/DETECTION_RULES.md)
+- [Idle Compute Detection Specification](docs/IDLE_COMPUTE_DETECTION.md)
+- [Storage & Snapshot Waste Detection Specification](docs/STORAGE_AND_SNAPSHOT_DETECTION.md)
+- [Oversized Resource Detection & Rightsizing Specification](docs/OVERSIZED_RESOURCE_DETECTION.md)
+- [Conservative Financial Savings Estimation Methodology](docs/SAVINGS_ESTIMATION.md)
+- [Waste Finding Lifecycle & Governance Specification](docs/FINDING_LIFECYCLE.md)
+- [Multi-Cloud Waste Detection REST API Reference](docs/WASTE_DETECTION_API.md)
+- [Synthetic Waste Test Scenarios Matrix](docs/DETECTION_TEST_SCENARIOS.md)
 - [15-Stage Enterprise Development Roadmap](docs/DEVELOPMENT_ROADMAP.md)
 
 ---
 
-## 9. Non-Destructive Advisory Policy
+## 10. Non-Destructive Advisory Policy
 
 > [!IMPORTANT]
 > **Advisory-Only Safety Guarantee**: CloudSage does **not** perform autonomous destructive changes to cloud infrastructure. All recommendations generated by the platform are strictly advisory. Infrastructure modifications require human review, engineering approval, and manual or CI/CD execution via external infrastructure-as-code tools (Terraform, CloudFormation, Pulumi, or cloud consoles).
