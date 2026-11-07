@@ -9,6 +9,11 @@ from backend.app.models.anomaly import CostAnomaly
 from backend.app.models.audit import AuditLog
 from backend.app.models.billing import BillingRecord
 from backend.app.models.ingestion import IngestionRun
+from backend.app.models.inventory import (
+    InventoryQualityReport,
+    InventorySyncRun,
+    ResourceRelationship,
+)
 from backend.app.models.normalization import (
     DataQualityReport,
     ExchangeRate,
@@ -37,4 +42,7 @@ __all__ = [
     "SkuCatalogMapping",
     "NormalizationRun",
     "DataQualityReport",
+    "ResourceRelationship",
+    "InventorySyncRun",
+    "InventoryQualityReport",
 ]

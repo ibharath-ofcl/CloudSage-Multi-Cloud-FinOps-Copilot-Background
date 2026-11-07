@@ -1,0 +1,332 @@
+{
+  "resources": [
+    {
+      "resource_id": "//compute.googleapis.com/projects/enterprise-finops-prod-01/zones/us-central1-a/instances/gce-app-node-01",
+      "project_id": "enterprise-finops-prod-01",
+      "resource_name": "gce-app-node-01",
+      "resource_type": "compute.googleapis.com/Instance",
+      "service_name": "ComputeEngine",
+      "region": "us-central1",
+      "zone": "us-central1-a",
+      "status": "RUNNING",
+      "machine_type": "e2-standard-4",
+      "created_at": "2026-09-25T08:09:17.278107+00:00",
+      "labels": {
+        "owner": "gcpengineer1@enterprise.com",
+        "env": "production",
+        "dept": "Analytics",
+        "cost_center": "cc-7010",
+        "project_id": "FinOpsGCP"
+      },
+      "attached_disks": [
+        "//compute.googleapis.com/projects/enterprise-finops-prod-01/zones/us-central1-a/disks/gce-boot-disk-01"
+      ],
+      "network_interfaces": [
+        {
+          "network": "//compute.googleapis.com/projects/enterprise-finops-prod-01/global/networks/enterprise-vpc-default"
+        }
+      ]
+    },
+    {
+      "resource_id": "//compute.googleapis.com/projects/enterprise-finops-prod-01/zones/us-central1-a/disks/gce-boot-disk-01",
+      "project_id": "enterprise-finops-prod-01",
+      "resource_name": "gce-boot-disk-01",
+      "resource_type": "compute.googleapis.com/Disk",
+      "service_name": "ComputeEngine",
+      "region": "us-central1",
+      "zone": "us-central1-a",
+      "status": "ATTACHED",
+      "size_gb": 100,
+      "created_at": "2026-09-25T08:09:17.278107+00:00",
+      "labels": {
+        "owner": "gcpengineer1@enterprise.com",
+        "env": "production"
+      }
+    },
+    {
+      "resource_id": "//compute.googleapis.com/projects/enterprise-finops-prod-01/global/snapshots/gce-snap-backup-01",
+      "project_id": "enterprise-finops-prod-01",
+      "resource_name": "gce-snap-backup-01",
+      "resource_type": "compute.googleapis.com/Snapshot",
+      "service_name": "ComputeEngine",
+      "region": "us-central1",
+      "status": "READY",
+      "created_at": "2026-10-22T08:09:17.278107+00:00",
+      "source_disk": "//compute.googleapis.com/projects/enterprise-finops-prod-01/zones/us-central1-a/disks/gce-boot-disk-01",
+      "labels": {
+        "env": "production"
+      }
+    },
+    {
+      "resource_id": "//compute.googleapis.com/projects/enterprise-finops-prod-01/zones/us-central1-a/instances/gce-app-node-02",
+      "project_id": "enterprise-finops-prod-01",
+      "resource_name": "gce-app-node-02",
+      "resource_type": "compute.googleapis.com/Instance",
+      "service_name": "ComputeEngine",
+      "region": "us-central1",
+      "zone": "us-central1-a",
+      "status": "RUNNING",
+      "machine_type": "e2-standard-4",
+      "created_at": "2026-09-22T08:09:17.278107+00:00",
+      "labels": {
+        "owner": "gcpengineer2@enterprise.com",
+        "env": "production",
+        "dept": "Analytics",
+        "cost_center": "cc-7020",
+        "project_id": "FinOpsGCP"
+      },
+      "attached_disks": [
+        "//compute.googleapis.com/projects/enterprise-finops-prod-01/zones/us-central1-a/disks/gce-boot-disk-02"
+      ],
+      "network_interfaces": [
+        {
+          "network": "//compute.googleapis.com/projects/enterprise-finops-prod-01/global/networks/enterprise-vpc-default"
+        }
+      ]
+    },
+    {
+      "resource_id": "//compute.googleapis.com/projects/enterprise-finops-prod-01/zones/us-central1-a/disks/gce-boot-disk-02",
+      "project_id": "enterprise-finops-prod-01",
+      "resource_name": "gce-boot-disk-02",
+      "resource_type": "compute.googleapis.com/Disk",
+      "service_name": "ComputeEngine",
+      "region": "us-central1",
+      "zone": "us-central1-a",
+      "status": "ATTACHED",
+      "size_gb": 100,
+      "created_at": "2026-09-22T08:09:17.278107+00:00",
+      "labels": {
+        "owner": "gcpengineer2@enterprise.com",
+        "env": "production"
+      }
+    },
+    {
+      "resource_id": "//compute.googleapis.com/projects/enterprise-finops-prod-01/global/snapshots/gce-snap-backup-02",
+      "project_id": "enterprise-finops-prod-01",
+      "resource_name": "gce-snap-backup-02",
+      "resource_type": "compute.googleapis.com/Snapshot",
+      "service_name": "ComputeEngine",
+      "region": "us-central1",
+      "status": "READY",
+      "created_at": "2026-10-21T08:09:17.278107+00:00",
+      "source_disk": "//compute.googleapis.com/projects/enterprise-finops-prod-01/zones/us-central1-a/disks/gce-boot-disk-02",
+      "labels": {
+        "env": "production"
+      }
+    },
+    {
+      "resource_id": "//compute.googleapis.com/projects/enterprise-finops-prod-01/zones/us-central1-a/instances/gce-app-node-03",
+      "project_id": "enterprise-finops-prod-01",
+      "resource_name": "gce-app-node-03",
+      "resource_type": "compute.googleapis.com/Instance",
+      "service_name": "ComputeEngine",
+      "region": "us-central1",
+      "zone": "us-central1-a",
+      "status": "RUNNING",
+      "machine_type": "e2-standard-4",
+      "created_at": "2026-09-19T08:09:17.278107+00:00",
+      "labels": {
+        "owner": "gcpengineer3@enterprise.com",
+        "env": "production",
+        "dept": "Analytics",
+        "cost_center": "cc-7030",
+        "project_id": "FinOpsGCP"
+      },
+      "attached_disks": [
+        "//compute.googleapis.com/projects/enterprise-finops-prod-01/zones/us-central1-a/disks/gce-boot-disk-03"
+      ],
+      "network_interfaces": [
+        {
+          "network": "//compute.googleapis.com/projects/enterprise-finops-prod-01/global/networks/enterprise-vpc-default"
+        }
+      ]
+    },
+    {
+      "resource_id": "//compute.googleapis.com/projects/enterprise-finops-prod-01/zones/us-central1-a/disks/gce-boot-disk-03",
+      "project_id": "enterprise-finops-prod-01",
+      "resource_name": "gce-boot-disk-03",
+      "resource_type": "compute.googleapis.com/Disk",
+      "service_name": "ComputeEngine",
+      "region": "us-central1",
+      "zone": "us-central1-a",
+      "status": "ATTACHED",
+      "size_gb": 100,
+      "created_at": "2026-09-19T08:09:17.278107+00:00",
+      "labels": {
+        "owner": "gcpengineer3@enterprise.com",
+        "env": "production"
+      }
+    },
+    {
+      "resource_id": "//compute.googleapis.com/projects/enterprise-finops-prod-01/global/snapshots/gce-snap-backup-03",
+      "project_id": "enterprise-finops-prod-01",
+      "resource_name": "gce-snap-backup-03",
+      "resource_type": "compute.googleapis.com/Snapshot",
+      "service_name": "ComputeEngine",
+      "region": "us-central1",
+      "status": "READY",
+      "created_at": "2026-10-20T08:09:17.278107+00:00",
+      "source_disk": "//compute.googleapis.com/projects/enterprise-finops-prod-01/zones/us-central1-a/disks/gce-boot-disk-03",
+      "labels": {
+        "env": "production"
+      }
+    },
+    {
+      "resource_id": "//compute.googleapis.com/projects/enterprise-finops-prod-01/zones/us-central1-a/instances/gce-app-node-04",
+      "project_id": "enterprise-finops-prod-01",
+      "resource_name": "gce-app-node-04",
+      "resource_type": "compute.googleapis.com/Instance",
+      "service_name": "ComputeEngine",
+      "region": "us-central1",
+      "zone": "us-central1-a",
+      "status": "RUNNING",
+      "machine_type": "e2-standard-4",
+      "created_at": "2026-09-16T08:09:17.278107+00:00",
+      "labels": {
+        "owner": "gcpengineer4@enterprise.com",
+        "env": "test",
+        "dept": "Analytics",
+        "cost_center": "cc-7040",
+        "project_id": "FinOpsGCP"
+      },
+      "attached_disks": [
+        "//compute.googleapis.com/projects/enterprise-finops-prod-01/zones/us-central1-a/disks/gce-boot-disk-04"
+      ],
+      "network_interfaces": [
+        {
+          "network": "//compute.googleapis.com/projects/enterprise-finops-prod-01/global/networks/enterprise-vpc-default"
+        }
+      ]
+    },
+    {
+      "resource_id": "//compute.googleapis.com/projects/enterprise-finops-prod-01/zones/us-central1-a/disks/gce-boot-disk-04",
+      "project_id": "enterprise-finops-prod-01",
+      "resource_name": "gce-boot-disk-04",
+      "resource_type": "compute.googleapis.com/Disk",
+      "service_name": "ComputeEngine",
+      "region": "us-central1",
+      "zone": "us-central1-a",
+      "status": "ATTACHED",
+      "size_gb": 100,
+      "created_at": "2026-09-16T08:09:17.278107+00:00",
+      "labels": {
+        "owner": "gcpengineer4@enterprise.com",
+        "env": "test"
+      }
+    },
+    {
+      "resource_id": "//compute.googleapis.com/projects/enterprise-finops-prod-01/global/snapshots/gce-snap-backup-04",
+      "project_id": "enterprise-finops-prod-01",
+      "resource_name": "gce-snap-backup-04",
+      "resource_type": "compute.googleapis.com/Snapshot",
+      "service_name": "ComputeEngine",
+      "region": "us-central1",
+      "status": "READY",
+      "created_at": "2026-10-19T08:09:17.278107+00:00",
+      "source_disk": "//compute.googleapis.com/projects/enterprise-finops-prod-01/zones/us-central1-a/disks/gce-boot-disk-04",
+      "labels": {
+        "env": "test"
+      }
+    },
+    {
+      "resource_id": "//compute.googleapis.com/projects/enterprise-finops-prod-01/zones/us-central1-a/instances/gce-app-node-05",
+      "project_id": "enterprise-finops-prod-01",
+      "resource_name": "gce-app-node-05",
+      "resource_type": "compute.googleapis.com/Instance",
+      "service_name": "ComputeEngine",
+      "region": "us-central1",
+      "zone": "us-central1-a",
+      "status": "TERMINATED",
+      "machine_type": "e2-standard-4",
+      "created_at": "2026-09-13T08:09:17.278107+00:00",
+      "labels": {
+        "owner": "gcpengineer5@enterprise.com",
+        "env": "test",
+        "dept": "Analytics",
+        "cost_center": "cc-7050",
+        "project_id": "FinOpsGCP"
+      },
+      "attached_disks": [
+        "//compute.googleapis.com/projects/enterprise-finops-prod-01/zones/us-central1-a/disks/gce-boot-disk-05"
+      ],
+      "network_interfaces": [
+        {
+          "network": "//compute.googleapis.com/projects/enterprise-finops-prod-01/global/networks/enterprise-vpc-default"
+        }
+      ]
+    },
+    {
+      "resource_id": "//compute.googleapis.com/projects/enterprise-finops-prod-01/zones/us-central1-a/disks/gce-boot-disk-05",
+      "project_id": "enterprise-finops-prod-01",
+      "resource_name": "gce-boot-disk-05",
+      "resource_type": "compute.googleapis.com/Disk",
+      "service_name": "ComputeEngine",
+      "region": "us-central1",
+      "zone": "us-central1-a",
+      "status": "ATTACHED",
+      "size_gb": 100,
+      "created_at": "2026-09-13T08:09:17.278107+00:00",
+      "labels": {
+        "owner": "gcpengineer5@enterprise.com",
+        "env": "test"
+      }
+    },
+    {
+      "resource_id": "//compute.googleapis.com/projects/enterprise-finops-prod-01/global/snapshots/gce-snap-backup-05",
+      "project_id": "enterprise-finops-prod-01",
+      "resource_name": "gce-snap-backup-05",
+      "resource_type": "compute.googleapis.com/Snapshot",
+      "service_name": "ComputeEngine",
+      "region": "us-central1",
+      "status": "READY",
+      "created_at": "2026-10-18T08:09:17.278107+00:00",
+      "source_disk": "//compute.googleapis.com/projects/enterprise-finops-prod-01/zones/us-central1-a/disks/gce-boot-disk-05",
+      "labels": {
+        "env": "test"
+      }
+    },
+    {
+      "resource_id": "//compute.googleapis.com/projects/enterprise-finops-prod-01/zones/us-central1-a/disks/gce-disk-detached-old",
+      "project_id": "enterprise-finops-prod-01",
+      "resource_name": "gce-disk-detached-old",
+      "resource_type": "compute.googleapis.com/Disk",
+      "service_name": "ComputeEngine",
+      "region": "us-central1",
+      "zone": "us-central1-a",
+      "status": "READY",
+      "size_gb": 300,
+      "created_at": "2026-09-08T08:09:17.278107+00:00",
+      "labels": {}
+    },
+    {
+      "resource_id": "//storage.googleapis.com/projects/enterprise-finops-prod-01/buckets/enterprise-lake-data",
+      "project_id": "enterprise-finops-prod-01",
+      "resource_name": "enterprise-lake-data",
+      "resource_type": "storage.googleapis.com/Bucket",
+      "service_name": "CloudStorage",
+      "region": "us-central1",
+      "status": "RUNNABLE",
+      "created_at": "2026-06-10T08:09:17.278107+00:00",
+      "labels": {
+        "owner": "dataeng@enterprise.com",
+        "env": "production",
+        "cost_center": "cc-8000"
+      }
+    },
+    {
+      "resource_id": "//sqladmin.googleapis.com/projects/enterprise-finops-prod-01/instances/postgres-shared-instance",
+      "project_id": "enterprise-finops-prod-01",
+      "resource_name": "postgres-shared-instance",
+      "resource_type": "sqladmin.googleapis.com/Instance",
+      "service_name": "CloudSQL",
+      "region": "us-central1",
+      "status": "RUNNABLE",
+      "created_at": "2026-07-20T08:09:17.278107+00:00",
+      "labels": {
+        "owner": "dbadmin@enterprise.com",
+        "env": "production",
+        "cost_center": "cc-9000"
+      }
+    }
+  ]
+}

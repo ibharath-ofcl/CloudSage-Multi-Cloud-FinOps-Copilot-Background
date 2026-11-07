@@ -161,16 +161,16 @@ The development of CloudSage is structured across 15 disciplined stages:
 | **02** | **Core Data Models & Database Schema Architecture** | **Completed** | FOCUS 1.0 PostgreSQL schemas, partitioning, and Alembic migrations |
 | **03** | **Multi-Cloud Ingestion Engine** | **Completed** | AWS CUR, Azure Cost, GCP BigQuery adapters, deduplication & REST API |
 | **04** | **Unified Data Normalization & FOCUS Pipeline** | **Completed** | FOCUS 1.0 validation, historical FX, SKU catalog, tag governance & quality engine |
-| **05** | Cloud Waste Detection Engine | *Planned* | Heuristics for idle VMs, oversized compute, unattached disks & snapshots |
-| **06** | Cost Anomaly Detection Engine | *Planned* | 30-day statistical baselining, Z-score detection & root-cause attribution |
-| **07** | Advisory Recommendation Engine & Optimization | *Planned* | Priority scoring, risk rating, savings calculation & approval states |
-| **08** | Core REST API & Backend Service Layer | *Planned* | FastAPI REST endpoints, filtering, cursor pagination & export APIs |
-| **09** | AI FinOps Copilot & Grounded Query Engine | *Planned* | Schema-safe NL2SQL translator, AST sandbox & deterministic verifier |
-| **10** | Enterprise Frontend Dashboard & Visualization UI | *Planned* | React/TypeScript UI, KPI cards, Recharts trends & provider breakdowns |
-| **11** | Waste & Recommendation Management UI | *Planned* | Interactive review tables, approval actions & remediation guides |
-| **12** | Anomaly Detection & Alerts Notification Hub | *Planned* | Threat feed, alert threshold rules & Slack/Teams/Email dispatchers |
-| **13** | Role-Based Access Control (RBAC) & Audit Logging | *Planned* | JWT auth, role middleware, ABAC scoping & immutable audit logging |
-| **14** | System Integration & Benchmark Test Suite | *Planned* | 100-case synthetic benchmark suite validating $\ge 90\%$ waste detection |
+| **05** | **Multi-Cloud Resource Discovery & Inventory Intelligence** | **Completed** | Multi-cloud adapters, directional topology graph, reconciliation & quality scoring |
+| **06** | Cloud Waste Detection Engine | *Planned* | Heuristics for idle VMs, oversized compute, unattached disks & snapshots |
+| **07** | Cost Anomaly Detection Engine | *Planned* | 30-day statistical baselining, Z-score detection & root-cause attribution |
+| **08** | Advisory Recommendation Engine & Optimization | *Planned* | Priority scoring, risk rating, savings calculation & approval states |
+| **09** | Core REST API & Backend Service Layer | *Planned* | FastAPI REST endpoints, filtering, cursor pagination & export APIs |
+| **10** | AI FinOps Copilot & Grounded Query Engine | *Planned* | Schema-safe NL2SQL translator, AST sandbox & deterministic verifier |
+| **11** | Enterprise Frontend Dashboard & Visualization UI | *Planned* | React/TypeScript UI, KPI cards, Recharts trends & provider breakdowns |
+| **12** | Waste & Recommendation Management UI | *Planned* | Interactive review tables, approval actions & remediation guides |
+| **13** | Anomaly Detection & Alerts Notification Hub | *Planned* | Threat feed, alert threshold rules & Slack/Teams/Email dispatchers |
+| **14** | Role-Based Access Control (RBAC) & Audit Logging | *Planned* | JWT auth, role middleware, ABAC scoping & immutable audit logging |
 | **15** | Production Containerization, CI/CD & Readiness | *Planned* | Multi-stage Docker, Compose, GitHub Actions & Prometheus/Grafana |
 
 ---
@@ -182,8 +182,9 @@ The development of CloudSage is structured across 15 disciplined stages:
   - Stage 2: Core Data Models & Database Schema Architecture (`stage-2/data-models-schema`).
   - Stage 3: Multi-Cloud Ingestion Engine (`stage-3/multicloud-ingestion`).
   - Stage 4: Unified Data Normalization & FOCUS Pipeline (`stage-4/focus-normalization`).
-- **Active Branch**: `stage-4/focus-normalization`.
-- **Next Milestone**: Stage 5 (Cloud Waste Detection Engine) awaits formal review and approval.
+  - Stage 5: Multi-Cloud Resource Discovery & Inventory Intelligence (`stage-5/resource-inventory`).
+- **Active Branch**: `stage-5/resource-inventory`.
+- **Next Milestone**: Stage 6 (Cloud Waste Detection Engine) awaits formal review and approval.
 
 ---
 
@@ -246,6 +247,13 @@ Detailed architectural and functional specifications are located in the [`docs/`
 - [Technology Stack Evaluation](docs/TECHNOLOGY_STACK.md)
 - [System Architecture & Data Flow](docs/SYSTEM_ARCHITECTURE.md)
 - [Acceptance & Success Criteria](docs/SUCCESS_CRITERIA.md)
+- [Multi-Cloud Resource Inventory & Intelligence Architecture](docs/RESOURCE_INVENTORY_ARCHITECTURE.md)
+- [Cloud Provider Inventory Adapters Reference](docs/CLOUD_PROVIDER_ADAPTERS.md)
+- [Multi-Cloud Resource Reconciliation Engine](docs/RESOURCE_RECONCILIATION.md)
+- [Multi-Cloud Resource Topology & Relationships](docs/RESOURCE_RELATIONSHIPS.md)
+- [Billing-to-Inventory Financial Correlation](docs/BILLING_INVENTORY_CORRELATION.md)
+- [Inventory Quality & Governance Evaluation Framework](docs/INVENTORY_QUALITY.md)
+- [Resource Inventory & Intelligence REST API Reference](docs/INVENTORY_API.md)
 - [15-Stage Enterprise Development Roadmap](docs/DEVELOPMENT_ROADMAP.md)
 
 ---

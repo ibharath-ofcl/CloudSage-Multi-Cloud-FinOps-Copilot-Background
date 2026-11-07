@@ -90,19 +90,33 @@ CREATE TABLE IF NOT EXISTS cloud_resources (
     service_name VARCHAR(128) NOT NULL,
     resource_type VARCHAR(64) NOT NULL,
     region VARCHAR(64) NOT NULL,
+    zone VARCHAR(64),
     status VARCHAR(32) NOT NULL DEFAULT 'active',
     tags JSONB NOT NULL DEFAULT '{}'::jsonb,
+    raw_tags JSONB DEFAULT '{}'::jsonb,
     owner VARCHAR(128),
+    department VARCHAR(128),
+    project VARCHAR(128),
     environment VARCHAR(64) NOT NULL DEFAULT 'unknown',
     cost_center VARCHAR(64),
+    tag_quality_score NUMERIC(5, 2) NOT NULL DEFAULT 0.00,
     monthly_cost NUMERIC(18, 4) NOT NULL DEFAULT 0.0000,
+    resource_created_at TIMESTAMPTZ,
     first_discovered_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-    last_seen_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    last_seen_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    last_inventory_sync_at TIMESTAMPTZ,
+    discovery_source VARCHAR(32) NOT NULL DEFAULT 'BILLING_INFERRED',
+    discovery_status VARCHAR(32) NOT NULL DEFAULT 'CONFIRMED',
+    resource_metadata JSONB DEFAULT '{}'::jsonb,
+    metadata_version VARCHAR(16) NOT NULL DEFAULT '1.0'
 );
 
 CREATE INDEX IF NOT EXISTS idx_resources_tags ON cloud_resources USING GIN (tags);
 CREATE INDEX IF NOT EXISTS idx_resources_prov_env ON cloud_resources (provider, environment);
 CREATE INDEX IF NOT EXISTS idx_resources_owner ON cloud_resources (owner);
+CREATE INDEX IF NOT EXISTS idx_res_prov_status ON cloud_resources (provider, status);
+CREATE INDEX IF NOT EXISTS idx_res_account_res ON cloud_resources (account_id, resource_id);
+CREATE INDEX IF NOT EXISTS idx_res_project ON cloud_resources (project);
 
 -- 6. Resource Metrics Table
 CREATE TABLE IF NOT EXISTS resource_metrics (
@@ -319,4 +333,58 @@ CREATE TABLE IF NOT EXISTS data_quality_reports (
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 CREATE INDEX IF NOT EXISTS idx_dq_provider ON data_quality_reports (provider);
+
+-- 18. Resource Topology Relationships Table
+CREATE TABLE IF NOT EXISTS resource_relationships (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    source_resource_id VARCHAR(512) NOT NULL REFERENCES cloud_resources(resource_id) ON DELETE CASCADE,
+    target_resource_id VARCHAR(512) NOT NULL,
+    relationship_type VARCHAR(64) NOT NULL,
+    provider VARCHAR(16) NOT NULL,
+    discovery_source VARCHAR(32) NOT NULL DEFAULT 'INVENTORY_DISCOVERY',
+    confidence NUMERIC(5, 4) NOT NULL DEFAULT 1.0000,
+    first_observed_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    last_observed_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    relationship_metadata JSONB DEFAULT '{}'::jsonb,
+    CONSTRAINT uq_resource_relationships UNIQUE (source_resource_id, target_resource_id, relationship_type)
+);
+CREATE INDEX IF NOT EXISTS idx_rel_src_tgt ON resource_relationships (source_resource_id, target_resource_id);
+CREATE INDEX IF NOT EXISTS idx_rel_provider_type ON resource_relationships (provider, relationship_type);
+
+-- 19. Inventory Synchronization Runs Table
+CREATE TABLE IF NOT EXISTS inventory_sync_runs (
+    run_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    provider VARCHAR(16) NOT NULL,
+    discovery_mode VARCHAR(32) NOT NULL DEFAULT 'EXPORT_BASED',
+    status VARCHAR(32) NOT NULL DEFAULT 'PENDING',
+    source_identifier VARCHAR(256),
+    total_discovered INTEGER NOT NULL DEFAULT 0,
+    new_resources INTEGER NOT NULL DEFAULT 0,
+    updated_resources INTEGER NOT NULL DEFAULT 0,
+    stale_resources INTEGER NOT NULL DEFAULT 0,
+    relationships_discovered INTEGER NOT NULL DEFAULT 0,
+    started_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    completed_at TIMESTAMPTZ,
+    error_details JSONB NOT NULL DEFAULT '[]'::jsonb
+);
+CREATE INDEX IF NOT EXISTS idx_sync_prov_status ON inventory_sync_runs (provider, status);
+
+-- 20. Inventory Quality Reports Table
+CREATE TABLE IF NOT EXISTS inventory_quality_reports (
+    report_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    sync_run_id UUID,
+    provider VARCHAR(16),
+    total_resources INTEGER NOT NULL DEFAULT 0,
+    completeness_score NUMERIC(5, 2) NOT NULL DEFAULT 100.00,
+    tag_completeness_score NUMERIC(5, 2) NOT NULL DEFAULT 100.00,
+    inventory_confidence NUMERIC(5, 4) NOT NULL DEFAULT 1.0000,
+    findings_count INTEGER NOT NULL DEFAULT 0,
+    critical_findings INTEGER NOT NULL DEFAULT 0,
+    high_findings INTEGER NOT NULL DEFAULT 0,
+    medium_findings INTEGER NOT NULL DEFAULT 0,
+    low_findings INTEGER NOT NULL DEFAULT 0,
+    findings_summary JSONB NOT NULL DEFAULT '{}'::jsonb,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+CREATE INDEX IF NOT EXISTS idx_inv_qual_prov ON inventory_quality_reports (provider);
 

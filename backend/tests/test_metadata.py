@@ -38,6 +38,9 @@ EXPECTED_TABLES = {
     "sku_catalog_mappings",
     "normalization_runs",
     "data_quality_reports",
+    "resource_relationships",
+    "inventory_sync_runs",
+    "inventory_quality_reports",
 }
 
 FINANCIAL_MONETARY_COLUMNS = {
