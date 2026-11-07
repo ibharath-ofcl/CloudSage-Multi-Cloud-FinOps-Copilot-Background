@@ -48,6 +48,10 @@ EXPECTED_TABLES = {
     "recommendation_evidence",
     "recommendation_history",
     "recommendation_runs",
+    "copilot_conversations",
+    "copilot_messages",
+    "copilot_feedback",
+    "copilot_usage_logs",
 }
 
 FINANCIAL_MONETARY_COLUMNS = {

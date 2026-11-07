@@ -3,7 +3,7 @@
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
 [![Architecture](https://img.shields.io/badge/Architecture-FOCUS%201.0%20Compliant-green.svg)](docs/FUNCTIONAL_REQUIREMENTS.md)
 [![Safety](https://img.shields.io/badge/Safety-Advisory%20Only-orange.svg)](docs/BUSINESS_REQUIREMENTS.md)
-[![Status](https://img.shields.io/badge/Status-Stage%208%20Complete-brightgreen.svg)](docs/DEVELOPMENT_ROADMAP.md)
+[![Status](https://img.shields.io/badge/Status-Stage%209%20Complete-brightgreen.svg)](docs/DEVELOPMENT_ROADMAP.md)
 
 > **CloudSage** is an enterprise-grade, AI-powered Multi-Cloud Financial Operations (FinOps) platform engineered to unify fragmented cloud billing data, detect unnecessary expenditure, identify cost anomalies, and generate prioritized, evidence-backed savings recommendations across **Amazon Web Services (AWS)**, **Microsoft Azure**, and **Google Cloud Platform (GCP)**.
 
@@ -186,8 +186,9 @@ The development of CloudSage is structured across 15 disciplined stages:
   - Stage 6: Cloud Waste Detection Engine (`stage-6/waste-detection`).
   - Stage 7: Intelligent Multi-Cloud Cost Anomaly Detection Engine (`stage-7/cost-anomaly-detection`).
   - Stage 8: Advisory FinOps Recommendation & Optimization Engine (`stage-8/recommendation-engine`).
-- **Active Branch**: `stage-8/recommendation-engine`.
-- **Next Milestone**: Stage 9 (AI FinOps Copilot – Natural Language Query & Reasoning Engine) awaits formal review and approval.
+  - Stage 9: AI-Powered Multi-Cloud FinOps Copilot (`stage-9/ai-finops-copilot`).
+- **Active Branch**: `stage-9/ai-finops-copilot`.
+- **Next Milestone**: Stage 10 (Interactive FinOps Dashboards & Data Visualization) awaits formal review and approval.
 
 ---
 
@@ -335,6 +336,16 @@ Detailed architectural and functional specifications are located in the [`docs/`
 - [Recommendation Security & Non-Destructive Advisory Policy](docs/RECOMMENDATION_SECURITY.md)
 - [Synthetic Recommendation Scenarios Catalog](docs/SYNTHETIC_RECOMMENDATION_SCENARIOS.md)
 - [Stage 8 QA Test and Verification Report](docs/STAGE_8_TEST_REPORT.md)
+- [AI Copilot Architecture & Orchestration Pipeline](docs/AI_COPILOT_ARCHITECTURE.md)
+- [FinOps Intent Classification & Entity Extraction](docs/COPILOT_INTENT_CLASSIFICATION.md)
+- [Safe Analytical Query Planning Specification](docs/COPILOT_QUERY_PLANNING.md)
+- [Evidence Grounding & Anti-Hallucination Framework](docs/COPILOT_EVIDENCE_GROUNDING.md)
+- [LLM Provider Configuration & Deterministic Fallback](docs/COPILOT_LLM_PROVIDER_CONFIGURATION.md)
+- [Copilot Security Architecture & Policy Guardrails](docs/COPILOT_SECURITY_AND_GUARDRAILS.md)
+- [Conversational Memory & Follow-Up Context Resolution](docs/COPILOT_CONVERSATION_MEMORY.md)
+- [AI FinOps Copilot REST API Reference](docs/COPILOT_API_REFERENCE.md)
+- [Deterministic 30-Question Benchmark Evaluation](docs/COPILOT_BENCHMARK_EVALUATION.md)
+- [Stage 9 QA Test and Verification Report](docs/STAGE_9_TEST_REPORT.md)
 - [15-Stage Enterprise Development Roadmap](docs/DEVELOPMENT_ROADMAP.md)
 
 ---

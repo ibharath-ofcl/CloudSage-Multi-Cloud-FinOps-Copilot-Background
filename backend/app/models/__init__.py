@@ -8,6 +8,12 @@ from backend.app.models.alert import AlertRule, NotificationLog
 from backend.app.models.anomaly import AnomalyDetectionRun, CostAnomaly, CostBaseline
 from backend.app.models.audit import AuditLog
 from backend.app.models.billing import BillingRecord
+from backend.app.models.copilot import (
+    CopilotConversation,
+    CopilotFeedback,
+    CopilotMessage,
+    CopilotUsageLog,
+)
 from backend.app.models.ingestion import IngestionRun
 from backend.app.models.inventory import (
     InventoryQualityReport,
@@ -56,4 +62,8 @@ __all__ = [
     "ResourceRelationship",
     "InventorySyncRun",
     "InventoryQualityReport",
+    "CopilotConversation",
+    "CopilotMessage",
+    "CopilotFeedback",
+    "CopilotUsageLog",
 ]

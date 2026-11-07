@@ -41,6 +41,18 @@ class Settings(BaseSettings):
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 15
     REFRESH_TOKEN_EXPIRE_DAYS: int = 7
 
+    # AI FinOps Copilot
+    COPILOT_ENABLED: bool = True
+    COPILOT_PROVIDER: str = "auto"  # auto, openai, anthropic, fallback
+    COPILOT_MODEL_NAME: str = "gpt-4o-mini"
+    COPILOT_API_KEY: str = ""
+    COPILOT_API_ENDPOINT: str = ""
+    COPILOT_REQUEST_TIMEOUT_SECONDS: int = 30
+    COPILOT_MAX_TOKENS: int = 1500
+    COPILOT_TEMPERATURE: float = 0.0
+    COPILOT_RATE_LIMIT_PER_MINUTE: int = 60
+    COPILOT_DEMO_MODE: bool = True
+
     # CORS
     BACKEND_CORS_ORIGINS: List[str] = ["http://localhost:3000", "http://localhost:5173"]
 
