@@ -5,13 +5,13 @@ Initializes REST API routes, middleware, OpenAPI documentation, and health endpo
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from backend.app.api.routes import ingestion
+from backend.app.api.routes import ingestion, normalization
 from backend.app.core.config import settings
 
 app = FastAPI(
     title=settings.PROJECT_NAME,
     description="Enterprise Multi-Cloud FinOps Copilot Platform Backend API.",
-    version="0.3.0",
+    version="0.4.0",
     docs_url="/docs",
     redoc_url="/redoc",
     openapi_url=f"{settings.API_V1_STR}/openapi.json",
@@ -28,6 +28,7 @@ app.add_middleware(
 
 # Register API Sub-Routers
 app.include_router(ingestion.router, prefix=settings.API_V1_STR)
+app.include_router(normalization.router, prefix=settings.API_V1_STR)
 
 
 @app.get("/", tags=["Root"])
@@ -35,7 +36,7 @@ def root():
     return {
         "project": settings.PROJECT_NAME,
         "status": "online",
-        "version": "0.3.0",
+        "version": "0.4.0",
         "documentation": "/docs"
     }
 

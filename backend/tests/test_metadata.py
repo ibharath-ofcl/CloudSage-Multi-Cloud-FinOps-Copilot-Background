@@ -34,6 +34,10 @@ EXPECTED_TABLES = {
     "alert_rules",
     "notification_logs",
     "ingestion_runs",
+    "exchange_rates",
+    "sku_catalog_mappings",
+    "normalization_runs",
+    "data_quality_reports",
 }
 
 FINANCIAL_MONETARY_COLUMNS = {

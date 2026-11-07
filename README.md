@@ -3,7 +3,7 @@
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
 [![Architecture](https://img.shields.io/badge/Architecture-FOCUS%201.0%20Compliant-green.svg)](docs/FUNCTIONAL_REQUIREMENTS.md)
 [![Safety](https://img.shields.io/badge/Safety-Advisory%20Only-orange.svg)](docs/BUSINESS_REQUIREMENTS.md)
-[![Status](https://img.shields.io/badge/Status-Stage%203%20Complete-brightgreen.svg)](docs/DEVELOPMENT_ROADMAP.md)
+[![Status](https://img.shields.io/badge/Status-Stage%204%20Complete-brightgreen.svg)](docs/DEVELOPMENT_ROADMAP.md)
 
 > **CloudSage** is an enterprise-grade, AI-powered Multi-Cloud Financial Operations (FinOps) platform engineered to unify fragmented cloud billing data, detect unnecessary expenditure, identify cost anomalies, and generate prioritized, evidence-backed savings recommendations across **Amazon Web Services (AWS)**, **Microsoft Azure**, and **Google Cloud Platform (GCP)**.
 
@@ -160,7 +160,7 @@ The development of CloudSage is structured across 15 disciplined stages:
 | **01** | **Requirement Analysis & Project Foundation** | **Completed** | Requirements, Architecture, Governance & Roadmap Foundation |
 | **02** | **Core Data Models & Database Schema Architecture** | **Completed** | FOCUS 1.0 PostgreSQL schemas, partitioning, and Alembic migrations |
 | **03** | **Multi-Cloud Ingestion Engine** | **Completed** | AWS CUR, Azure Cost, GCP BigQuery adapters, deduplication & REST API |
-| **04** | Unified Data Normalization & FOCUS Pipeline | *Planned* | Currency conversion, tag normalization & service taxonomy engine |
+| **04** | **Unified Data Normalization & FOCUS Pipeline** | **Completed** | FOCUS 1.0 validation, historical FX, SKU catalog, tag governance & quality engine |
 | **05** | Cloud Waste Detection Engine | *Planned* | Heuristics for idle VMs, oversized compute, unattached disks & snapshots |
 | **06** | Cost Anomaly Detection Engine | *Planned* | 30-day statistical baselining, Z-score detection & root-cause attribution |
 | **07** | Advisory Recommendation Engine & Optimization | *Planned* | Priority scoring, risk rating, savings calculation & approval states |
@@ -181,34 +181,38 @@ The development of CloudSage is structured across 15 disciplined stages:
   - Stage 1: Requirement Analysis & Project Foundation (`stage-1/project-foundation`).
   - Stage 2: Core Data Models & Database Schema Architecture (`stage-2/data-models-schema`).
   - Stage 3: Multi-Cloud Ingestion Engine (`stage-3/multicloud-ingestion`).
-- **Active Branch**: `stage-3/multicloud-ingestion`.
-- **Next Milestone**: Stage 4 (Unified Data Normalization & FOCUS Pipeline) awaits formal review and approval.
+  - Stage 4: Unified Data Normalization & FOCUS Pipeline (`stage-4/focus-normalization`).
+- **Active Branch**: `stage-4/focus-normalization`.
+- **Next Milestone**: Stage 5 (Cloud Waste Detection Engine) awaits formal review and approval.
 
 ---
 
-## 8. Multi-Cloud Ingestion Engine Quickstart
+## 8. Multi-Cloud Normalization & Ingestion Engine Quickstart
 
-CloudSage provides a multi-cloud billing ingestion engine supporting AWS CUR (CSV), Azure Cost Management (CSV), and GCP BigQuery (JSON/CSV).
+CloudSage provides an end-to-end multi-cloud billing ingestion, FOCUS 1.0 normalization, and data quality evaluation engine.
 
-### Ingestion REST API
+### Ingestion & Normalization REST API
 ```bash
 # Start the FastAPI application
 uvicorn backend.app.main:app --host 0.0.0.0 --port 8000
 
-# Ingest an AWS Cost & Usage Report
+# 1. Ingest Multi-Cloud Billing Feeds
 curl -X POST "http://localhost:8000/api/v1/ingestion/upload/aws" \
   -F "file=@backend/sample_data/aws/aws_cur_sample.csv"
 
-# Ingest an Azure Cost Export
-curl -X POST "http://localhost:8000/api/v1/ingestion/upload/azure" \
-  -F "file=@backend/sample_data/azure/azure_cost_sample.csv"
+# 2. Trigger Batch Normalization / In-Place Reprocessing
+curl -X POST "http://localhost:8000/api/v1/normalization/run" \
+  -H "Content-Type: application/json" \
+  -d '{"provider": "AWS", "reprocess_all": true, "batch_size": 500}'
 
-# Ingest a GCP BigQuery Billing Export
-curl -X POST "http://localhost:8000/api/v1/ingestion/upload/gcp" \
-  -F "file=@backend/sample_data/gcp/gcp_billing_sample.json"
+# 3. Retrieve Latest Data Quality Assessment
+curl "http://localhost:8000/api/v1/normalization/quality-report"
 
-# Check Ingestion Summary
-curl "http://localhost:8000/api/v1/ingestion/summary"
+# 4. Check FOCUS 1.0 Conformance Assessment
+curl "http://localhost:8000/api/v1/normalization/focus-validation"
+
+# 5. Query Tag Hygiene Scores
+curl "http://localhost:8000/api/v1/normalization/tag-quality?limit=10"
 ```
 
 ### Running Test Suites
@@ -229,6 +233,12 @@ Detailed architectural and functional specifications are located in the [`docs/`
 - [Database Schema & Relational Data Architecture](docs/DATABASE_SCHEMA.md)
 - [Multi-Cloud Ingestion Engine Architecture](docs/INGESTION_ARCHITECTURE.md)
 - [Cloud Provider Field Mappings & Normalization Taxonomy](docs/CLOUD_PROVIDER_FIELD_MAPPINGS.md)
+- [FOCUS 1.0 Specification Conformance & Matrix](docs/FOCUS_1_0_IMPLEMENTATION.md)
+- [Advanced Currency Normalization & Historical FX](docs/CURRENCY_NORMALIZATION.md)
+- [Multi-Cloud SKU Catalog & Taxonomy](docs/SKU_CATALOG.md)
+- [Advanced Resource Tag Normalization & Hygiene](docs/TAG_NORMALIZATION.md)
+- [Data Quality & Governance Framework](docs/DATA_QUALITY_FRAMEWORK.md)
+- [Unified Normalization Pipeline Architecture](docs/NORMALIZATION_PIPELINE.md)
 - [Data Normalization & FOCUS 1.0 Alignment](docs/DATA_NORMALIZATION.md)
 - [Synthetic Datasets & Seeded FinOps Scenarios](docs/SYNTHETIC_DATASETS.md)
 - [Multi-Cloud Ingestion API Reference](docs/INGESTION_API.md)

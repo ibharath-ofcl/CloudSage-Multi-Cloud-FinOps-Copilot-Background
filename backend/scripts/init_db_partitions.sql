@@ -256,3 +256,67 @@ CREATE TABLE IF NOT EXISTS ingestion_runs (
 CREATE INDEX IF NOT EXISTS idx_ingest_prov_status ON ingestion_runs (provider, status);
 CREATE INDEX IF NOT EXISTS idx_ingest_started_at ON ingestion_runs (started_at);
 
+-- 14. Currency Exchange Rates Table
+CREATE TABLE IF NOT EXISTS exchange_rates (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    currency_code VARCHAR(3) NOT NULL,
+    effective_date DATE NOT NULL,
+    rate_to_usd NUMERIC(18, 6) NOT NULL,
+    source VARCHAR(64) NOT NULL DEFAULT 'ECB_REFERENCE',
+    is_interpolated BOOLEAN NOT NULL DEFAULT FALSE,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+CREATE UNIQUE INDEX IF NOT EXISTS idx_exchange_rates_curr_date ON exchange_rates (currency_code, effective_date);
+
+-- 15. SKU Catalog Mappings Table
+CREATE TABLE IF NOT EXISTS sku_catalog_mappings (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    provider VARCHAR(16) NOT NULL,
+    service_code VARCHAR(128) NOT NULL,
+    sku_id VARCHAR(256),
+    canonical_category VARCHAR(32) NOT NULL,
+    service_family VARCHAR(64) NOT NULL,
+    resource_type VARCHAR(64) NOT NULL,
+    normalized_unit VARCHAR(32) NOT NULL,
+    pricing_model_default VARCHAR(32),
+    confidence NUMERIC(5, 4) NOT NULL DEFAULT 1.0000,
+    provenance VARCHAR(32) NOT NULL DEFAULT 'SYSTEM_CATALOG',
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+CREATE INDEX IF NOT EXISTS idx_sku_catalog_lookup ON sku_catalog_mappings (provider, service_code, sku_id);
+
+-- 16. Normalization Runs Table
+CREATE TABLE IF NOT EXISTS normalization_runs (
+    run_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    status VARCHAR(32) NOT NULL DEFAULT 'PENDING',
+    normalization_version VARCHAR(16) NOT NULL DEFAULT '1.0.0',
+    mapping_version VARCHAR(16) NOT NULL DEFAULT '2026.11',
+    total_records INTEGER NOT NULL DEFAULT 0,
+    successful_records INTEGER NOT NULL DEFAULT 0,
+    failed_records INTEGER NOT NULL DEFAULT 0,
+    warnings_count INTEGER NOT NULL DEFAULT 0,
+    average_quality_score NUMERIC(5, 2) NOT NULL DEFAULT 100.00,
+    started_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    completed_at TIMESTAMPTZ,
+    error_details JSONB NOT NULL DEFAULT '[]'::jsonb
+);
+CREATE INDEX IF NOT EXISTS idx_norm_status ON normalization_runs (status);
+
+-- 17. Data Quality Reports Table
+CREATE TABLE IF NOT EXISTS data_quality_reports (
+    report_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    run_id UUID,
+    provider VARCHAR(16),
+    overall_score NUMERIC(5, 2) NOT NULL DEFAULT 100.00,
+    total_records_evaluated INTEGER NOT NULL DEFAULT 0,
+    critical_findings INTEGER NOT NULL DEFAULT 0,
+    high_findings INTEGER NOT NULL DEFAULT 0,
+    medium_findings INTEGER NOT NULL DEFAULT 0,
+    low_findings INTEGER NOT NULL DEFAULT 0,
+    informational_findings INTEGER NOT NULL DEFAULT 0,
+    findings_summary JSONB NOT NULL DEFAULT '{}'::jsonb,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+CREATE INDEX IF NOT EXISTS idx_dq_provider ON data_quality_reports (provider);
+

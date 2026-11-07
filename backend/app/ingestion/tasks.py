@@ -62,6 +62,28 @@ def execute_background_ingestion(
         session.close()
 
 
+def execute_background_normalization(
+    provider_str: Optional[str] = None,
+    batch_size: int = 500,
+) -> Dict[str, Any]:
+    """Synchronous core logic for executing normalization reprocessing."""
+    from backend.app.normalization.pipeline import NormalizationPipeline
+    session = SyncSessionLocal()
+    try:
+        pipeline = NormalizationPipeline(db=session)
+        run = pipeline.reprocess_existing_records(provider=provider_str, batch_size=batch_size)
+        return {
+            "run_id": str(run.run_id),
+            "status": run.status,
+            "total_records": run.total_records,
+            "successful_records": run.successful_records,
+            "failed_records": run.failed_records,
+            "average_quality_score": str(run.average_quality_score),
+        }
+    finally:
+        session.close()
+
+
 if HAS_CELERY and celery_app:
     @celery_app.task(
         bind=True,
@@ -76,3 +98,15 @@ if HAS_CELERY and celery_app:
     def ingest_billing_file_task(self, file_path: str, provider_str: str, batch_size: int = 500):
         """Asynchronous Celery task for executing large billing file imports."""
         return execute_background_ingestion(file_path, provider_str, batch_size)
+
+    @celery_app.task(
+        bind=True,
+        name="tasks.reprocess_normalization",
+        max_retries=3,
+        default_retry_delay=30,
+        autoretry_for=(Exception,),
+        retry_backoff=True,
+    )
+    def reprocess_normalization_task(self, provider_str: Optional[str] = None, batch_size: int = 500):
+        """Asynchronous Celery task for re-normalizing existing billing data."""
+        return execute_background_normalization(provider_str, batch_size)
