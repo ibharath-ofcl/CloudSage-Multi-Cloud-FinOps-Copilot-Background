@@ -162,8 +162,8 @@ The development of CloudSage is structured across 15 disciplined stages:
 | **03** | **Multi-Cloud Ingestion Engine** | **Completed** | AWS CUR, Azure Cost, GCP BigQuery adapters, deduplication & REST API |
 | **04** | **Unified Data Normalization & FOCUS Pipeline** | **Completed** | FOCUS 1.0 validation, historical FX, SKU catalog, tag governance & quality engine |
 | **05** | **Multi-Cloud Resource Discovery & Inventory Intelligence** | **Completed** | Multi-cloud adapters, directional topology graph, reconciliation & quality scoring |
-| **06** | Cloud Waste Detection Engine | *Planned* | Heuristics for idle VMs, oversized compute, unattached disks & snapshots |
-| **07** | Cost Anomaly Detection Engine | *Planned* | 30-day statistical baselining, Z-score detection & root-cause attribution |
+| **06** | **Cloud Waste Detection Engine** | **Completed** | Heuristics for idle VMs, oversized compute, unattached disks & snapshots |
+| **07** | **Cost Anomaly Detection Engine** | **Completed** | Statistical baselining, Z-score/IQR ensemble, change-point analysis & root cause |
 | **08** | Advisory Recommendation Engine & Optimization | *Planned* | Priority scoring, risk rating, savings calculation & approval states |
 | **09** | Core REST API & Backend Service Layer | *Planned* | FastAPI REST endpoints, filtering, cursor pagination & export APIs |
 | **10** | AI FinOps Copilot & Grounded Query Engine | *Planned* | Schema-safe NL2SQL translator, AST sandbox & deterministic verifier |
@@ -183,8 +183,10 @@ The development of CloudSage is structured across 15 disciplined stages:
   - Stage 3: Multi-Cloud Ingestion Engine (`stage-3/multicloud-ingestion`).
   - Stage 4: Unified Data Normalization & FOCUS Pipeline (`stage-4/focus-normalization`).
   - Stage 5: Multi-Cloud Resource Discovery & Inventory Intelligence (`stage-5/resource-inventory`).
-- **Active Branch**: `stage-5/resource-inventory`.
-- **Next Milestone**: Stage 6 (Cloud Waste Detection Engine) awaits formal review and approval.
+  - Stage 6: Cloud Waste Detection Engine (`stage-6/waste-detection`).
+  - Stage 7: Intelligent Multi-Cloud Cost Anomaly Detection Engine (`stage-7/cost-anomaly-detection`).
+- **Active Branch**: `stage-7/cost-anomaly-detection`.
+- **Next Milestone**: Stage 8 (Advisory Recommendation Engine & Optimization) awaits formal review and approval.
 
 ---
 

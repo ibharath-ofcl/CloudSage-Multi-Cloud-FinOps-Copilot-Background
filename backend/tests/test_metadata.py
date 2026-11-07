@@ -43,6 +43,8 @@ EXPECTED_TABLES = {
     "inventory_sync_runs",
     "inventory_quality_reports",
     "waste_detection_runs",
+    "cost_baselines",
+    "anomaly_detection_runs",
 }
 
 FINANCIAL_MONETARY_COLUMNS = {
@@ -61,6 +63,19 @@ FINANCIAL_MONETARY_COLUMNS = {
     "total_cost",
     "total_estimated_monthly_savings",
     "original_cost",
+    "absolute_deviation",
+    "estimated_excess_cost",
+    "projected_monthly_impact",
+    "total_excess_cost",
+    "mean",
+    "stddev",
+    "median",
+    "mad",
+    "q1",
+    "q3",
+    "iqr",
+    "min_value",
+    "max_value",
 }
 
 
