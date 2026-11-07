@@ -158,7 +158,7 @@ The development of CloudSage is structured across 15 disciplined stages:
 | Stage | Name | Status | Key Deliverable |
 | :---: | :--- | :---: | :--- |
 | **01** | **Requirement Analysis & Project Foundation** | **Completed** | Requirements, Architecture, Governance & Roadmap Foundation |
-| **02** | Core Data Models & Database Schema Architecture | *Planned* | FOCUS 1.0 PostgreSQL schemas, partitioning, and Alembic migrations |
+| **02** | **Core Data Models & Database Schema Architecture** | **Completed** | FOCUS 1.0 PostgreSQL schemas, partitioning, and Alembic migrations |
 | **03** | Multi-Cloud Ingestion Engine | *Planned* | AWS CUR, Azure Cost, GCP BigQuery & seed dataset adapters |
 | **04** | Unified Data Normalization & FOCUS Pipeline | *Planned* | Currency conversion, tag normalization & service taxonomy engine |
 | **05** | Cloud Waste Detection Engine | *Planned* | Heuristics for idle VMs, oversized compute, unattached disks & snapshots |
@@ -177,9 +177,9 @@ The development of CloudSage is structured across 15 disciplined stages:
 
 ## 7. Current Development Status
 
-- **Active Stage**: Stage 1 (Requirement Analysis & Project Foundation) is complete.
-- **Active Branch**: `stage-1/project-foundation`.
-- **Next Milestone**: Stage 2 (Core Data Models & Database Schema Architecture) awaits formal stakeholder review and approval.
+- **Completed Stages**: Stage 1 (Project Foundation) and Stage 2 (Core Data Models & Database Schema Architecture).
+- **Active Branch**: `stage-2/data-models-schema`.
+- **Next Milestone**: Stage 3 (Multi-Cloud Ingestion Engine) awaits formal review and approval.
 
 ---
 
@@ -191,6 +191,7 @@ Detailed architectural and functional specifications are located in the [`docs/`
 - [Business Requirements Document (BRD)](docs/BUSINESS_REQUIREMENTS.md)
 - [Functional Requirements Document (FRD)](docs/FUNCTIONAL_REQUIREMENTS.md)
 - [Non-Functional Requirements Document (NFR)](docs/NON_FUNCTIONAL_REQUIREMENTS.md)
+- [Database Schema & Relational Data Architecture](docs/DATABASE_SCHEMA.md)
 - [User Roles, Personas & Permissions Matrix](docs/USER_ROLES_AND_PERMISSIONS.md)
 - [Technology Stack Evaluation](docs/TECHNOLOGY_STACK.md)
 - [System Architecture & Data Flow](docs/SYSTEM_ARCHITECTURE.md)
