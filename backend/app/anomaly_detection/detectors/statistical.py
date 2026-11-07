@@ -188,3 +188,4 @@ class StatisticalEnsembleDetector(BaseAnomalyDetector):
             message=f"Found {len(anomalies)} statistical anomalies." if anomalies else "No anomalies detected.",
             metrics={"evaluated_points": len(eval_points), "anomalies_count": len(anomalies)},
         )
+

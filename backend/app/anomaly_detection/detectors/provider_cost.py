@@ -84,3 +84,4 @@ class ProviderAccountSpikeDetector(BaseAnomalyDetector):
             message=res.message,
             metrics=res.metrics,
         )
+

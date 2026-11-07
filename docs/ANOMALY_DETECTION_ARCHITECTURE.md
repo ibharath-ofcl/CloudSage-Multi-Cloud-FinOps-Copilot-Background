@@ -98,3 +98,4 @@ flowchart TD
 
 5. **Auditable Lifecycle Management**:
    The engine tracks every anomaly through states: `DETECTED`, `INVESTIGATING`, `ACKNOWLEDGED`, `RESOLVED`, `DISMISSED`, and `REOPENED`. Dismissals and resolutions require mandatory justifications and user attribution, ensuring auditable FinOps governance.
+

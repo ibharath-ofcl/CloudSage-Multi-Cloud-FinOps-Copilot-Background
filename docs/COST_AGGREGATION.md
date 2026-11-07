@@ -54,3 +54,4 @@ Billing records frequently contain negative line items representing provider cre
 - **Prevents Artificial Standard Deviation Inflation**: Including large negative credits distorts the baseline standard deviation ($\sigma$), artificially widening Tukey fences and suppression thresholds, causing actual cost spikes to go undetected.
 - **Prevents False Anomalies on Credit Expiration**: When a temporary promotional credit expires, daily net spend returns to normal catalog rates. If net spend was tracked with credits, the return to normal catalog rates would be incorrectly flagged as an anomalous cost explosion.
 - **Separate Audit Trail**: Negative credits and adjustments are preserved in the database and surfaced during root-cause attribution to explain billing reconciliations.
+

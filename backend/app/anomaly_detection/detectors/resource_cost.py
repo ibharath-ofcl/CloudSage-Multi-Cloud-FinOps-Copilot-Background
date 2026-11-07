@@ -84,3 +84,4 @@ class ResourceCostSpikeDetector(BaseAnomalyDetector):
             message=res.message,
             metrics=res.metrics,
         )
+

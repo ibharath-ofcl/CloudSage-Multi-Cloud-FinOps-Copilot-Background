@@ -139,3 +139,4 @@ class ChangePointDetector(BaseAnomalyDetector):
             message=f"Detected {cp_res.change_type} shift on {cp_res.change_point_date}.",
             metrics={"change_type": cp_res.change_type, "shift_magnitude": str(cp_res.shift_magnitude)},
         )
+

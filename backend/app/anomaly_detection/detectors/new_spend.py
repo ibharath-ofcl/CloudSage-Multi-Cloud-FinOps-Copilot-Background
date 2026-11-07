@@ -152,3 +152,4 @@ class NewSpendPatternDetector(BaseAnomalyDetector):
             message=explanation,
             metrics={"zero_history_days": zero_days, "first_cost": str(current_pt.cost)},
         )
+

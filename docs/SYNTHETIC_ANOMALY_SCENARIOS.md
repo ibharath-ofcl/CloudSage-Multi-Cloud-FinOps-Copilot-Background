@@ -47,3 +47,4 @@ session = SyncSessionLocal()
 result = seed_synthetic_anomalies(db=session, baseline_days=21)
 print(f"Seeded {result['scenarios_seeded']} scenarios with {result['billing_records_created']} records.")
 ```
+

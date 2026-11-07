@@ -178,3 +178,4 @@ def test_detect_change_points_insufficient_history():
     res = detect_change_points(short_series, baseline_window_days=30, observation_window_days=7)
     assert res.is_change_point is False
     assert res.change_type == "NONE"
+

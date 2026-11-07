@@ -62,3 +62,4 @@ class BaseAnomalyDetector(ABC):
         returning any detected anomaly candidates.
         """
         pass
+

@@ -138,3 +138,4 @@ def downgrade() -> None:
     op.drop_column('cost_anomalies', 'resource_id')
     op.drop_column('cost_anomalies', 'detector_version')
     op.drop_column('cost_anomalies', 'detector_id')
+

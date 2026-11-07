@@ -77,3 +77,4 @@ If current daily expenditure falls back below the threshold:
 2. `resolution_reason = "AUTO_RESOLVED_RETURN_TO_BASELINE"`.
 3. `resolved_by = "CloudSage_Autonomous_Engine"`.
 4. Investigation notes document the normalization date and current cost.
+

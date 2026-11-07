@@ -318,3 +318,4 @@ def test_api_methods_and_run(client: TestClient, engine):
     res_run_detail = client.get(f"/api/v1/anomaly-detection/runs/{run_id}")
     assert res_run_detail.status_code == 200
     assert res_run_detail.json()["run_id"] == run_id
+

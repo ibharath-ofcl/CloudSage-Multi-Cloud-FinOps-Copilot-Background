@@ -67,3 +67,4 @@ def test_seed_and_detect_synthetic_anomaly_scenarios(db_session: Session):
     # Check that baselines were generated and persisted
     baselines = db_session.query(CostBaseline).all()
     assert len(baselines) > 0
+

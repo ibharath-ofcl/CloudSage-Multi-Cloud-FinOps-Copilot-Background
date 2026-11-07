@@ -81,3 +81,4 @@ flowchart TD
    - Spending exhibits monotonic or near-monotonic upward growth over $\ge 4$ consecutive observation days.
    - Typical causes: data accumulation without lifecycle expiration, unconstrained autoscaler creep, memory leak causing pod proliferation.
    - Monthly Impact: Projected based on latest daily growth.
+

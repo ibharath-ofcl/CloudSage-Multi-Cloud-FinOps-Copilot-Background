@@ -62,3 +62,4 @@ If a runaway table causes a service-level anomaly of $\$800$, and a resource-lev
    $$\text{Key}_{\text{Service}} = \text{SRV}:p:a:s:d$$
 2. If resource-level anomalies exist for service $(p, a, s)$ on date $d$, the parent service-level entry is suppressed in favor of the finer-grained resource entries.
 3. The resulting deduplicated sum guarantees that every excess dollar is counted exactly once in executive summaries and financial reports.
+

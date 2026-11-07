@@ -189,3 +189,4 @@ class UsagePriceDivergenceDetector(BaseAnomalyDetector):
             message=explanation,
             metrics={"category": category.value, "rate_change_pct": str(rate_pct_change)},
         )
+

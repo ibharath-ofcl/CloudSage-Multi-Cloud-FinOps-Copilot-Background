@@ -194,3 +194,4 @@ def test_human_review_status_transitions(db_session: Session):
     assert dismissed.status == AnomalyStatus.DISMISSED
     assert dismissed.dismissal_reason == "Approved quarterly data archival migration."
     assert dismissed.dismissed_by == "lead_architect"
+

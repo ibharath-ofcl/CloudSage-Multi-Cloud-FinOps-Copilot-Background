@@ -65,3 +65,4 @@ SELECT dimension_key, window_days, mean, stddev, median, mad, q1, q3, iqr
 FROM cost_baselines
 WHERE dimension_key = 'AWS/111122223333/AmazonDynamoDB' AND window_days = 30;
 ```
+

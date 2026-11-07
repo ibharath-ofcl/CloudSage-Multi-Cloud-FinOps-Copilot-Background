@@ -89,3 +89,4 @@ if HAS_CELERY and celery_app:
             detector_ids=detector_ids,
             scope=scope,
         )
+

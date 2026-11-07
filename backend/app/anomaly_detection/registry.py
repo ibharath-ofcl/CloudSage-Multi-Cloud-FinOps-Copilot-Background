@@ -62,3 +62,4 @@ def get_detector_registry() -> AnomalyDetectorRegistry:
         _GLOBAL_REGISTRY = AnomalyDetectorRegistry()
         _GLOBAL_REGISTRY.initialize_defaults()
     return _GLOBAL_REGISTRY
+

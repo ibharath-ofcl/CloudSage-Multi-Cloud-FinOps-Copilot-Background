@@ -317,3 +317,4 @@ def detect_change_points(
             "observation_window_points": len(observation_points),
         },
     )
+
