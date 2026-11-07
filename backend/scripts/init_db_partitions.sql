@@ -406,4 +406,57 @@ CREATE TABLE IF NOT EXISTS waste_detection_runs (
 CREATE INDEX IF NOT EXISTS idx_waste_run_prov_status ON waste_detection_runs (provider, status);
 CREATE INDEX IF NOT EXISTS idx_waste_run_started ON waste_detection_runs (started_at);
 
+-- 22. Cost Baselines Table
+CREATE TABLE IF NOT EXISTS cost_baselines (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    dimension_type VARCHAR(32) NOT NULL,
+    dimension_key VARCHAR(512) NOT NULL,
+    provider VARCHAR(16) NOT NULL,
+    account_id VARCHAR(64),
+    service_name VARCHAR(128),
+    region VARCHAR(64),
+    resource_id VARCHAR(512),
+    window_days INTEGER NOT NULL DEFAULT 30,
+    start_date DATE NOT NULL,
+    end_date DATE NOT NULL,
+    mean NUMERIC(18, 4) NOT NULL DEFAULT 0.0000,
+    stddev NUMERIC(18, 4) NOT NULL DEFAULT 0.0000,
+    median NUMERIC(18, 4) NOT NULL DEFAULT 0.0000,
+    mad NUMERIC(18, 4) NOT NULL DEFAULT 0.0000,
+    q1 NUMERIC(18, 4) NOT NULL DEFAULT 0.0000,
+    q3 NUMERIC(18, 4) NOT NULL DEFAULT 0.0000,
+    iqr NUMERIC(18, 4) NOT NULL DEFAULT 0.0000,
+    min_value NUMERIC(18, 4) NOT NULL DEFAULT 0.0000,
+    max_value NUMERIC(18, 4) NOT NULL DEFAULT 0.0000,
+    sample_count INTEGER NOT NULL DEFAULT 0,
+    zero_count INTEGER NOT NULL DEFAULT 0,
+    currency VARCHAR(3) NOT NULL DEFAULT 'USD',
+    version VARCHAR(16) NOT NULL DEFAULT '1.0',
+    calculated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+CREATE INDEX IF NOT EXISTS idx_baseline_dim_key_window ON cost_baselines (dimension_key, window_days);
+CREATE INDEX IF NOT EXISTS idx_baseline_prov_svc ON cost_baselines (provider, service_name);
+
+-- 23. Anomaly Detection Runs Table
+CREATE TABLE IF NOT EXISTS anomaly_detection_runs (
+    run_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    provider VARCHAR(16) NOT NULL DEFAULT 'ALL',
+    scope VARCHAR(64) NOT NULL DEFAULT 'FULL',
+    status VARCHAR(32) NOT NULL DEFAULT 'PENDING',
+    total_series_evaluated INTEGER NOT NULL DEFAULT 0,
+    baselines_generated INTEGER NOT NULL DEFAULT 0,
+    anomalies_created INTEGER NOT NULL DEFAULT 0,
+    anomalies_updated INTEGER NOT NULL DEFAULT 0,
+    anomalies_unchanged INTEGER NOT NULL DEFAULT 0,
+    anomalies_resolved INTEGER NOT NULL DEFAULT 0,
+    total_excess_cost NUMERIC(18, 4) NOT NULL DEFAULT 0.0000,
+    detector_summary JSONB NOT NULL DEFAULT '{}'::jsonb,
+    error_details JSONB NOT NULL DEFAULT '[]'::jsonb,
+    started_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    completed_at TIMESTAMPTZ
+);
+CREATE INDEX IF NOT EXISTS idx_anomaly_run_prov_status ON anomaly_detection_runs (provider, status);
+CREATE INDEX IF NOT EXISTS idx_anomaly_run_started ON anomaly_detection_runs (started_at);
+
+
 
