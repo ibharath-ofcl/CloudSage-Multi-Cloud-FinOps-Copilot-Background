@@ -538,6 +538,65 @@ CREATE TABLE IF NOT EXISTS recommendation_history (
 );
 CREATE INDEX IF NOT EXISTS idx_rec_hist_rec_time ON recommendation_history (recommendation_id, created_at);
 
+-- 27. Copilot Conversations Table
+CREATE TABLE IF NOT EXISTS copilot_conversations (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id VARCHAR(100),
+    title VARCHAR(255) NOT NULL DEFAULT 'FinOps Analysis',
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+CREATE INDEX IF NOT EXISTS idx_copilot_conv_user ON copilot_conversations (user_id);
+CREATE INDEX IF NOT EXISTS idx_copilot_conv_updated ON copilot_conversations (updated_at);
+
+-- 28. Copilot Messages Table
+CREATE TABLE IF NOT EXISTS copilot_messages (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    conversation_id UUID NOT NULL REFERENCES copilot_conversations(id) ON DELETE CASCADE,
+    role VARCHAR(32) NOT NULL DEFAULT 'USER',
+    content TEXT NOT NULL,
+    intent VARCHAR(64),
+    query_plan JSONB NOT NULL DEFAULT '{}'::jsonb,
+    evidence_citations JSONB NOT NULL DEFAULT '[]'::jsonb,
+    tokens_used INTEGER NOT NULL DEFAULT 0,
+    execution_duration_ms INTEGER NOT NULL DEFAULT 0,
+    model_name VARCHAR(100),
+    provider VARCHAR(50),
+    raw_metadata JSONB NOT NULL DEFAULT '{}'::jsonb,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+CREATE INDEX IF NOT EXISTS idx_copilot_msg_conv_time ON copilot_messages (conversation_id, created_at);
+CREATE INDEX IF NOT EXISTS idx_copilot_msg_intent ON copilot_messages (intent);
+
+-- 29. Copilot Feedback Table
+CREATE TABLE IF NOT EXISTS copilot_feedback (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    message_id UUID NOT NULL UNIQUE REFERENCES copilot_messages(id) ON DELETE CASCADE,
+    user_id VARCHAR(100),
+    rating INTEGER NOT NULL,
+    feedback_text TEXT,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+CREATE INDEX IF NOT EXISTS idx_copilot_fb_rating ON copilot_feedback (rating);
+
+-- 30. Copilot Usage Logs Table
+CREATE TABLE IF NOT EXISTS copilot_usage_logs (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id VARCHAR(100),
+    conversation_id VARCHAR(100),
+    model_name VARCHAR(100) NOT NULL,
+    provider VARCHAR(50) NOT NULL,
+    prompt_tokens INTEGER NOT NULL DEFAULT 0,
+    completion_tokens INTEGER NOT NULL DEFAULT 0,
+    total_tokens INTEGER NOT NULL DEFAULT 0,
+    execution_duration_ms INTEGER NOT NULL DEFAULT 0,
+    status VARCHAR(50) NOT NULL DEFAULT 'success',
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+CREATE INDEX IF NOT EXISTS idx_copilot_usage_created ON copilot_usage_logs (created_at);
+CREATE INDEX IF NOT EXISTS idx_copilot_usage_model ON copilot_usage_logs (model_name);
+
+
 
 
 
