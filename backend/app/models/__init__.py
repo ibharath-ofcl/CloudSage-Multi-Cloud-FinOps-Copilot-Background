@@ -20,7 +20,12 @@ from backend.app.models.normalization import (
     NormalizationRun,
     SkuCatalogMapping,
 )
-from backend.app.models.recommendation import Recommendation
+from backend.app.models.recommendation import (
+    Recommendation,
+    RecommendationEvidence,
+    RecommendationHistory,
+    RecommendationRun,
+)
 from backend.app.models.resource import CloudResource, ResourceMetric
 from backend.app.models.user import User
 from backend.app.models.waste import WasteDetection, WasteDetectionRun
@@ -33,6 +38,9 @@ __all__ = [
     "WasteDetection",
     "WasteDetectionRun",
     "Recommendation",
+    "RecommendationEvidence",
+    "RecommendationHistory",
+    "RecommendationRun",
     "CostAnomaly",
     "CostBaseline",
     "AnomalyDetectionRun",

@@ -3,7 +3,7 @@
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
 [![Architecture](https://img.shields.io/badge/Architecture-FOCUS%201.0%20Compliant-green.svg)](docs/FUNCTIONAL_REQUIREMENTS.md)
 [![Safety](https://img.shields.io/badge/Safety-Advisory%20Only-orange.svg)](docs/BUSINESS_REQUIREMENTS.md)
-[![Status](https://img.shields.io/badge/Status-Stage%206%20Complete-brightgreen.svg)](docs/DEVELOPMENT_ROADMAP.md)
+[![Status](https://img.shields.io/badge/Status-Stage%208%20Complete-brightgreen.svg)](docs/DEVELOPMENT_ROADMAP.md)
 
 > **CloudSage** is an enterprise-grade, AI-powered Multi-Cloud Financial Operations (FinOps) platform engineered to unify fragmented cloud billing data, detect unnecessary expenditure, identify cost anomalies, and generate prioritized, evidence-backed savings recommendations across **Amazon Web Services (AWS)**, **Microsoft Azure**, and **Google Cloud Platform (GCP)**.
 
@@ -185,16 +185,43 @@ The development of CloudSage is structured across 15 disciplined stages:
   - Stage 5: Multi-Cloud Resource Discovery & Inventory Intelligence (`stage-5/resource-inventory`).
   - Stage 6: Cloud Waste Detection Engine (`stage-6/waste-detection`).
   - Stage 7: Intelligent Multi-Cloud Cost Anomaly Detection Engine (`stage-7/cost-anomaly-detection`).
-- **Active Branch**: `stage-7/cost-anomaly-detection`.
-- **Next Milestone**: Stage 8 (Advisory Recommendation Engine & Optimization) awaits formal review and approval.
+  - Stage 8: Advisory FinOps Recommendation & Optimization Engine (`stage-8/recommendation-engine`).
+- **Active Branch**: `stage-8/recommendation-engine`.
+- **Next Milestone**: Stage 9 (AI FinOps Copilot – Natural Language Query & Reasoning Engine) awaits formal review and approval.
 
 ---
 
-## 8. Multi-Cloud Normalization & Ingestion Engine Quickstart
+## 8. Multi-Cloud Recommendation & Ingestion Quickstart
 
-CloudSage provides an end-to-end multi-cloud billing ingestion, FOCUS 1.0 normalization, and data quality evaluation engine.
+### Recommendation Engine REST API Quickstart
+```bash
+# Start FastAPI application
+uvicorn backend.app.main:app --host 0.0.0.0 --port 8000
 
-### Ingestion & Normalization REST API
+# 1. Trigger Multi-Cloud Recommendation Run
+curl -X POST "http://localhost:8000/api/v1/recommendations/run" \
+  -H "Content-Type: application/json" \
+  -d '{"provider": "ALL", "scope": "FULL"}'
+
+# 2. Retrieve Executive Recommendation Summary
+curl "http://localhost:8000/api/v1/recommendations/summary"
+
+# 3. Query Priority P1 Recommendations
+curl "http://localhost:8000/api/v1/recommendations?priority=P1&limit=10"
+
+# 4. Inspect Recommendation Evidence & Guidance
+curl "http://localhost:8000/api/v1/recommendations/{recommendation_id}"
+
+# 5. Execute Formal Lifecycle Approval
+curl -X PATCH "http://localhost:8000/api/v1/recommendations/{recommendation_id}/status" \
+  -H "Content-Type: application/json" \
+  -d '{"status": "APPROVED", "actor_email": "finops-lead@enterprise.com", "notes": "Approved for sprint maintenance"}'
+
+# 6. Export Recommendations in CSV or JSON
+curl "http://localhost:8000/api/v1/recommendations/export?export_format=csv" -o recommendations.csv
+```
+
+### Ingestion & Normalization REST API Quickstart
 ```bash
 # Start the FastAPI application
 uvicorn backend.app.main:app --host 0.0.0.0 --port 8000
@@ -290,6 +317,24 @@ Detailed architectural and functional specifications are located in the [`docs/`
 - [Waste Finding Lifecycle & Governance Specification](docs/FINDING_LIFECYCLE.md)
 - [Multi-Cloud Waste Detection REST API Reference](docs/WASTE_DETECTION_API.md)
 - [Synthetic Waste Test Scenarios Matrix](docs/DETECTION_TEST_SCENARIOS.md)
+- [Cost Anomaly Detection Engine Architecture](docs/COST_ANOMALY_DETECTION_ARCHITECTURE.md)
+- [Statistical Methods & Anomaly Algorithms](docs/STATISTICAL_METHODS.md)
+- [Baseline Calculation & Metric Models](docs/BASELINE_CALCULATION.md)
+- [Root Cause Attribution Engine](docs/ROOT_CAUSE_ATTRIBUTION.md)
+- [Financial Impact Assessment Methodology](docs/FINANCIAL_IMPACT_ASSESSMENT.md)
+- [Anomaly Lifecycle & Governance Specification](docs/ANOMALY_LIFECYCLE.md)
+- [Cost Anomaly Detection REST API Reference](docs/ANOMALY_DETECTION_API.md)
+- [Synthetic Anomaly Scenarios Catalog](docs/SYNTHETIC_ANOMALY_SCENARIOS.md)
+- [Recommendation Engine Architecture](docs/RECOMMENDATION_ENGINE_ARCHITECTURE.md)
+- [Optimization Strategies Catalog](docs/RECOMMENDATION_STRATEGIES.md)
+- [Prioritization & Multi-Factor Scoring](docs/RECOMMENDATION_SCORING.md)
+- [Financial Savings Calculation Engine](docs/SAVINGS_CALCULATION.md)
+- [Recommendation Correlation & Anti-Double-Counting](docs/RECOMMENDATION_CORRELATION.md)
+- [Recommendation Lifecycle & Governance](docs/RECOMMENDATION_LIFECYCLE.md)
+- [Recommendation REST API Reference](docs/RECOMMENDATION_API.md)
+- [Recommendation Security & Non-Destructive Advisory Policy](docs/RECOMMENDATION_SECURITY.md)
+- [Synthetic Recommendation Scenarios Catalog](docs/SYNTHETIC_RECOMMENDATION_SCENARIOS.md)
+- [Stage 8 QA Test and Verification Report](docs/STAGE_8_TEST_REPORT.md)
 - [15-Stage Enterprise Development Roadmap](docs/DEVELOPMENT_ROADMAP.md)
 
 ---
