@@ -140,7 +140,7 @@ PHASE 5: SECURITY, NOTIFICATIONS & PRODUCTION READINESS (Stages 13 - 15)
 
 ---
 
-### Stage 7: Advisory Recommendation Engine & Savings Optimization
+### Stage 8: Advisory Recommendation Engine & Savings Optimization
 - **Focus**: Prioritizing, risk-rating, and cataloging actionable savings proposals.
 - **Key Deliverables**:
   - Advisory recommendation generator translating detected waste into structured action items.
@@ -152,7 +152,7 @@ PHASE 5: SECURITY, NOTIFICATIONS & PRODUCTION READINESS (Stages 13 - 15)
 
 ---
 
-### Stage 8: Core REST API & Backend Service Layer
+### Stage 9: Core REST API & Backend Service Layer
 - **Focus**: High-throughput FastAPI application exposing secure REST endpoints.
 - **Key Deliverables**:
   - REST endpoints for Dashboard KPIs, Spend Trends, Waste Items, Anomalies, and Recommendations.
@@ -163,7 +163,7 @@ PHASE 5: SECURITY, NOTIFICATIONS & PRODUCTION READINESS (Stages 13 - 15)
 
 ---
 
-### Stage 9: AI FinOps Copilot & Grounded Query Engine
+### Stage 10: AI FinOps Copilot & Grounded Query Engine
 - **Focus**: Natural language query interface with deterministic database grounding.
 - **Key Deliverables**:
   - NL2SQL translator mapping user prompts to canonical schema queries.
@@ -175,7 +175,7 @@ PHASE 5: SECURITY, NOTIFICATIONS & PRODUCTION READINESS (Stages 13 - 15)
 
 ---
 
-### Stage 10: Enterprise Frontend Dashboard & Visualization UI
+### Stage 11: Enterprise Frontend Dashboard & Visualization UI
 - **Focus**: Responsive React/TypeScript web application delivering executive financial insights.
 - **Key Deliverables**:
   - Executive KPI summary cards (Total Spend MTD, Run-Rate, Potential Savings, Realized Savings).
@@ -186,7 +186,7 @@ PHASE 5: SECURITY, NOTIFICATIONS & PRODUCTION READINESS (Stages 13 - 15)
 
 ---
 
-### Stage 11: Waste & Recommendation Management UI
+### Stage 12: Waste & Recommendation Management UI
 - **Focus**: Interactive workbench for triaging waste and reviewing recommendations.
 - **Key Deliverables**:
   - Filterable waste items table with utilization telemetry and estimated savings.
@@ -197,7 +197,7 @@ PHASE 5: SECURITY, NOTIFICATIONS & PRODUCTION READINESS (Stages 13 - 15)
 
 ---
 
-### Stage 12: Anomaly Detection & Alerts Notification Hub
+### Stage 13: Anomaly Detection & Alerts Notification Hub
 - **Focus**: Threat board for cost spikes and multi-channel notification dispatch.
 - **Key Deliverables**:
   - Real-time cost anomaly feed with root-cause drilldown modals.
@@ -208,7 +208,7 @@ PHASE 5: SECURITY, NOTIFICATIONS & PRODUCTION READINESS (Stages 13 - 15)
 
 ---
 
-### Stage 13: Role-Based Access Control (RBAC), Audit Logging & Security Hardening
+### Stage 14: Role-Based Access Control (RBAC), Audit Logging & Security Hardening
 - **Focus**: Enterprise identity, authorization enforcement, and security hardening.
 - **Key Deliverables**:
   - User authentication via JWT with refresh token rotation.
@@ -219,23 +219,13 @@ PHASE 5: SECURITY, NOTIFICATIONS & PRODUCTION READINESS (Stages 13 - 15)
 
 ---
 
-### Stage 14: System Integration, End-to-End Testing & Benchmark Test Suite
-- **Focus**: Comprehensive validation against synthetic benchmark datasets and success criteria.
-- **Key Deliverables**:
-  - Synthetic benchmark dataset containing 100 seeded waste scenarios and cost spikes.
-  - Automated integration test suite validating $\ge 90\%$ waste detection rate.
-  - End-to-end pipeline latency validation (ingestion to anomaly alert $\le 5$ minutes).
-  - Automated Copilot mathematical truth assertion test suite.
-- **Acceptance Criteria**: All 7 core success criteria verified and passing in automated test harness.
-
----
-
-### Stage 15: Production Containerization, CI/CD, Deployment & Operational Readiness
+### Stage 15: Production Containerization, CI/CD, Deployment & Benchmark Test Suite
 - **Focus**: Production packaging, deployment automation, and operational observability.
 - **Key Deliverables**:
   - Multi-stage Dockerfiles for Frontend, Backend API, and Celery Workers.
   - Docker Compose configuration for 1-command local and staging bootstrapping.
   - GitHub Actions CI/CD workflows for automated linting, testing, and container publishing.
   - Prometheus metrics instrumentation and pre-configured Grafana monitoring dashboards.
+  - Automated integration test suite validating $\ge 90\%$ waste detection rate across 100 benchmark scenarios.
   - Production deployment guide and operational runbook.
 - **Acceptance Criteria**: Fully containerized deployment starting cleanly with verified health checks and metrics scraping.
