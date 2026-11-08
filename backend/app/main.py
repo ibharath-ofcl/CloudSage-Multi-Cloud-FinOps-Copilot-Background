@@ -7,6 +7,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import RedirectResponse
 from backend.app.api.routes import (
+    alerts,
     anomaly_detection,
     copilot,
     dashboard,
@@ -21,7 +22,7 @@ from backend.app.core.config import settings
 app = FastAPI(
     title=settings.PROJECT_NAME,
     description="Enterprise Multi-Cloud FinOps Copilot Platform Backend API.",
-    version="0.10.0",
+    version="0.12.0",
     docs_url="/docs",
     redoc_url="/redoc",
     openapi_url=f"{settings.API_V1_STR}/openapi.json",
@@ -45,6 +46,7 @@ app.include_router(anomaly_detection.router, prefix=settings.API_V1_STR)
 app.include_router(recommendations.router, prefix=settings.API_V1_STR)
 app.include_router(copilot.router, prefix=settings.API_V1_STR)
 app.include_router(dashboard.router, prefix=settings.API_V1_STR)
+app.include_router(alerts.router, prefix=settings.API_V1_STR)
 
 
 @app.get("/dashboard", tags=["FinOps Dashboards & Visualizations"], include_in_schema=False)

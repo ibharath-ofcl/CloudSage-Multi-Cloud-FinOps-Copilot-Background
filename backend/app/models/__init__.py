@@ -4,7 +4,16 @@ Exports all canonical SQLAlchemy 2.0 ORM models and Declarative Base.
 """
 
 from backend.app.core.database import Base
-from backend.app.models.alert import AlertRule, NotificationLog
+from backend.app.models.alert import (
+    AlertHistory,
+    AlertInstance,
+    AlertRule,
+    InAppNotification,
+    NotificationDeliveryAttempt,
+    NotificationLog,
+    NotificationOutbox,
+    NotificationPreference,
+)
 from backend.app.models.anomaly import AnomalyDetectionRun, CostAnomaly, CostBaseline
 from backend.app.models.audit import AuditLog
 from backend.app.models.billing import BillingRecord
@@ -55,6 +64,12 @@ __all__ = [
     "User",
     "AuditLog",
     "AlertRule",
+    "AlertInstance",
+    "AlertHistory",
+    "InAppNotification",
+    "NotificationOutbox",
+    "NotificationDeliveryAttempt",
+    "NotificationPreference",
     "NotificationLog",
     "IngestionRun",
     "ExchangeRate",

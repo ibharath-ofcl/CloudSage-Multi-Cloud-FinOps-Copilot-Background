@@ -2,6 +2,7 @@ import React from 'react';
 import { useFilters } from '../context/FilterContext';
 import { RefreshCw, Download, Sparkles, Filter } from 'lucide-react';
 import { DashboardService } from '../services/api';
+import { NotificationBell } from './NotificationBell';
 
 interface HeaderProps {
   onRefresh: () => void;
@@ -71,6 +72,8 @@ export const Header: React.FC<HeaderProps> = ({ onRefresh, onToggleCopilot, isLo
 
       {/* Action Buttons */}
       <div className="flex items-center gap-2">
+        <NotificationBell />
+
         <button
           onClick={onRefresh}
           disabled={isLoading}

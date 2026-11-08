@@ -22,8 +22,8 @@ PHASE 3: ADVISORY RECOMMENDATIONS & AI INTELLIGENCE (Stages 8 - 9)
 
 PHASE 4: FRONTEND INTERFACE & DASHBOARDS (Stages 10 - 12)
   Stage 10: Interactive FinOps Dashboards & Data Visualization [COMPLETED]
-  Stage 11: Enterprise Recommendation & Waste Management UI
-  Stage 12: Anomaly Investigation & Root-Cause Analysis UI
+  Stage 11: Enterprise Recommendation & Waste Management Workspace [COMPLETED]
+  Stage 12: Cost Anomaly & Enterprise Alerts Notification Hub [COMPLETED]
 
 PHASE 5: SECURITY, NOTIFICATIONS & PRODUCTION READINESS (Stages 13 - 15)
   Stage 13: Anomaly Detection & Alerts Notification Hub
@@ -221,14 +221,19 @@ PHASE 5: SECURITY, NOTIFICATIONS & PRODUCTION READINESS (Stages 13 - 15)
 
 ---
 
-### Stage 12: Waste & Recommendation Management UI
-- **Focus**: Interactive workbench for triaging waste and reviewing recommendations.
+### Stage 12: Cost Anomaly & Enterprise Alerts Notification Hub [COMPLETED]
+- **Focus**: Enterprise alerting, rule-based evaluation, deduplication, and multi-channel notification outbox.
 - **Key Deliverables**:
-  - Filterable waste items table with utilization telemetry and estimated savings.
-  - Recommendation review cards with risk badges, priority tags, and remediation commands.
-  - Human-in-the-loop review actions (Endorse, Approve, Dismiss, Snooze).
-  - Audit history drawer showing state transitions and reviewer comments.
-- **Acceptance Criteria**: Intuitive, error-free workflow transitions reflecting real-time database state.
+  - Multi-dimensional alert rule management with dry-run impact simulation preview.
+  - Deterministic deduplication key computation (`res:...` and `acct:...`) and cooldown window suppression.
+  - Severity escalation bypass ($P1$ / `CRITICAL`) with automatic trigger count increment.
+  - Non-blocking transactional outbox pattern with exponential backoff retry and dead-letter queue (DLQ).
+  - Multi-channel notification providers: In-App, HTML Email with advisory disclaimer, Webhook, Slack, Teams.
+  - In-app notification center with header bell badge counter, flyout popover, and mark read/unread.
+  - Server-side identity derivation via `get_authenticated_principal` with Webhook SSRF validation.
+  - 58 automated tests passing (384 total repository tests with zero regressions against the 326 baseline).
+  - 17-step end-to-end demonstration script `backend/scripts/demo_stage12_alerts_hub.py`.
+- **Acceptance Criteria**: Strict advisory-only policy with zero mutating cloud API calls; non-blocking notification dispatch; zero float representations using `Decimal` and `Numeric(18, 4)`; 100% test pass rate (100% verified).
 
 ---
 

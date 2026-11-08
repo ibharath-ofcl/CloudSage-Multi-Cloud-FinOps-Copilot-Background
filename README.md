@@ -356,6 +356,15 @@ Detailed architectural and functional specifications are located in the [`docs/`
 - [Savings Override & Financial Verification Governance](docs/SAVINGS_OVERRIDE_AND_VERIFICATION.md)
 - [Stage 11 Security, Governance & Risk Architecture](docs/STAGE_11_SECURITY_AND_GOVERNANCE.md)
 - [Stage 11 QA Test and Verification Report](docs/STAGE_11_TEST_REPORT.md)
+- [Alerting & Enterprise Notification Hub Architecture](docs/ALERTING_ARCHITECTURE.md)
+- [Alert Rule Management Guide](docs/ALERT_RULE_MANAGEMENT.md)
+- [Alert Lifecycle & Deduplication Architecture](docs/ALERT_LIFECYCLE_AND_DEDUPLICATION.md)
+- [In-App Notification Center Guide](docs/NOTIFICATION_CENTER.md)
+- [Email & Webhook Delivery Integration Guide](docs/EMAIL_AND_WEBHOOK_DELIVERY.md)
+- [Transactional Outbox & Retry Engine Guide](docs/NOTIFICATION_OUTBOX_AND_RETRIES.md)
+- [Escalation Policies & Notification Preferences Guide](docs/ESCALATION_AND_NOTIFICATION_PREFERENCES.md)
+- [Notification Security, SSRF Defenses & Privacy](docs/NOTIFICATION_SECURITY_AND_PRIVACY.md)
+- [Stage 12 QA Test and Verification Report](docs/STAGE_12_TEST_REPORT.md)
 - [15-Stage Enterprise Development Roadmap](docs/DEVELOPMENT_ROADMAP.md)
 
 ---

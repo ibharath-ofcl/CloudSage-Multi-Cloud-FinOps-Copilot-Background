@@ -18,6 +18,27 @@ import {
   DataQualitySummaryResponse,
   CopilotChatResponse,
 } from '../types/dashboard';
+import {
+  AlertRule,
+  AlertRuleCreate,
+  AlertRuleUpdate,
+  AlertRuleListResponse,
+  AlertRulePreviewRequest,
+  AlertRulePreviewResponse,
+  AlertInstance,
+  AlertInstanceListResponse,
+  AlertInstanceDetail,
+  AlertStats,
+  AlertActionRequest,
+  AlertHistory,
+  InAppNotification,
+  InAppNotificationListResponse,
+  UnreadCountResponse,
+  NotificationOutbox,
+  NotificationOutboxListResponse,
+  NotificationHealth,
+  NotificationPreference,
+} from '../types/alerts';
 
 const API_BASE = '/api/v1';
 
@@ -309,6 +330,164 @@ export const WorkspaceService = {
 
   async getResourceCorrelations(resourceId: string) {
     const res = await apiClient.get(`/inventory/resources/${encodeURIComponent(resourceId)}/correlations`);
+    return res.data;
+  },
+};
+
+export const AlertService = {
+  async listRules(params?: {
+    provider?: string;
+    severity?: string;
+    is_active?: boolean;
+    search?: string;
+    limit?: number;
+    offset?: number;
+  }): Promise<AlertRuleListResponse> {
+    const res = await apiClient.get<AlertRuleListResponse>('/alert-rules', { params });
+    return res.data;
+  },
+
+  async getRule(ruleId: string): Promise<AlertRule> {
+    const res = await apiClient.get<AlertRule>(`/alert-rules/${ruleId}`);
+    return res.data;
+  },
+
+  async createRule(rule: AlertRuleCreate): Promise<AlertRule> {
+    const res = await apiClient.post<AlertRule>('/alert-rules', rule);
+    return res.data;
+  },
+
+  async updateRule(ruleId: string, rule: AlertRuleUpdate): Promise<AlertRule> {
+    const res = await apiClient.put<AlertRule>(`/alert-rules/${ruleId}`, rule);
+    return res.data;
+  },
+
+  async toggleRule(ruleId: string): Promise<AlertRule> {
+    const res = await apiClient.post<AlertRule>(`/alert-rules/${ruleId}/toggle`);
+    return res.data;
+  },
+
+  async deleteRule(ruleId: string): Promise<{ status: string; rule_id: string }> {
+    const res = await apiClient.delete<{ status: string; rule_id: string }>(`/alert-rules/${ruleId}`);
+    return res.data;
+  },
+
+  async previewRule(previewData: AlertRulePreviewRequest): Promise<AlertRulePreviewResponse> {
+    const res = await apiClient.post<AlertRulePreviewResponse>('/alert-rules/preview', previewData);
+    return res.data;
+  },
+
+  async listAlerts(params?: {
+    status?: string;
+    severity?: string;
+    provider?: string;
+    rule_id?: string;
+    is_suppressed?: boolean;
+    start_date?: string;
+    end_date?: string;
+    search?: string;
+    limit?: number;
+    offset?: number;
+  }): Promise<AlertInstanceListResponse> {
+    const res = await apiClient.get<AlertInstanceListResponse>('/alerts', { params });
+    return res.data;
+  },
+
+  async getStats(): Promise<AlertStats> {
+    const res = await apiClient.get<AlertStats>('/alerts/stats');
+    return res.data;
+  },
+
+  async getAlert(alertId: string): Promise<AlertInstanceDetail> {
+    const res = await apiClient.get<AlertInstanceDetail>(`/alerts/${alertId}`);
+    return res.data;
+  },
+
+  async executeAction(alertId: string, actionData: AlertActionRequest): Promise<AlertInstance> {
+    const res = await apiClient.post<AlertInstance>(`/alerts/${alertId}/action`, actionData);
+    return res.data;
+  },
+
+  async getAlertHistory(alertId: string): Promise<AlertHistory[]> {
+    const res = await apiClient.get<AlertHistory[]>(`/alerts/${alertId}/history`);
+    return res.data;
+  },
+};
+
+export const NotificationService = {
+  async listNotifications(params?: {
+    unread_only?: boolean;
+    limit?: number;
+    offset?: number;
+  }): Promise<InAppNotificationListResponse> {
+    const res = await apiClient.get<InAppNotificationListResponse>('/notifications', { params });
+    return res.data;
+  },
+
+  async getUnreadCount(): Promise<UnreadCountResponse> {
+    const res = await apiClient.get<UnreadCountResponse>('/notifications/unread-count');
+    return res.data;
+  },
+
+  async markAsRead(notificationId: string): Promise<InAppNotification> {
+    const res = await apiClient.post<InAppNotification>(`/notifications/${notificationId}/read`);
+    return res.data;
+  },
+
+  async markAsUnread(notificationId: string): Promise<InAppNotification> {
+    const res = await apiClient.post<InAppNotification>(`/notifications/${notificationId}/unread`);
+    return res.data;
+  },
+
+  async markAllAsRead(): Promise<{ status: string; marked_read_count: number }> {
+    const res = await apiClient.post<{ status: string; marked_read_count: number }>('/notifications/mark-all-read');
+    return res.data;
+  },
+
+  async listOutbox(params?: {
+    status?: string;
+    channel?: string;
+    limit?: number;
+    offset?: number;
+  }): Promise<NotificationOutboxListResponse> {
+    const res = await apiClient.get<NotificationOutboxListResponse>('/notification-deliveries/outbox', { params });
+    return res.data;
+  },
+
+  async getOutboxItem(outboxId: string): Promise<NotificationOutbox> {
+    const res = await apiClient.get<NotificationOutbox>(`/notification-deliveries/outbox/${outboxId}`);
+    return res.data;
+  },
+
+  async retryOutbox(outboxId: string): Promise<any> {
+    const res = await apiClient.post(`/notification-deliveries/outbox/${outboxId}/retry`);
+    return res.data;
+  },
+
+  async cancelOutbox(outboxId: string): Promise<NotificationOutbox> {
+    const res = await apiClient.post<NotificationOutbox>(`/notification-deliveries/outbox/${outboxId}/cancel`);
+    return res.data;
+  },
+
+  async getPipelineHealth(): Promise<NotificationHealth> {
+    const res = await apiClient.get<NotificationHealth>('/notification-deliveries/health');
+    return res.data;
+  },
+
+  async dispatchOutbox(batchSize: number = 50): Promise<any> {
+    const res = await apiClient.post('/notification-deliveries/dispatch', null, {
+      params: { batch_size: batchSize },
+    });
+    return res.data;
+  },
+
+  async getPreferences(): Promise<NotificationPreference> {
+    const res = await apiClient.get<NotificationPreference>('/notification-preferences/me');
+    return res.data;
+  },
+
+  async updatePreferences(pref: Partial<NotificationPreference>): Promise<NotificationPreference> {
+    const res = await apiClient.put<NotificationPreference>('/notification-preferences/me', pref);
     return res.data;
   },
 };
