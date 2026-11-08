@@ -18,6 +18,27 @@ import {
   DataQualitySummaryResponse,
   CopilotChatResponse,
 } from '../types/dashboard';
+import {
+  AlertRule,
+  AlertRuleCreate,
+  AlertRuleUpdate,
+  AlertRuleListResponse,
+  AlertRulePreviewRequest,
+  AlertRulePreviewResponse,
+  AlertInstance,
+  AlertInstanceListResponse,
+  AlertInstanceDetail,
+  AlertStats,
+  AlertActionRequest,
+  AlertHistory,
+  InAppNotification,
+  InAppNotificationListResponse,
+  UnreadCountResponse,
+  NotificationOutbox,
+  NotificationOutboxListResponse,
+  NotificationHealth,
+  NotificationPreference,
+} from '../types/alerts';
 
 const API_BASE = '/api/v1';
 
@@ -143,6 +164,330 @@ export const CopilotService = {
 
   async getCapabilities() {
     const res = await apiClient.get('/copilot/capabilities');
+    return res.data;
+  },
+};
+
+export const WorkspaceService = {
+  // Recommendations
+  async listRecommendations(params?: {
+    provider?: string;
+    status?: string;
+    priority?: string;
+    risk_level?: string;
+    action_type?: string;
+    assigned_to?: string;
+    min_savings?: number;
+    search?: string;
+    sort_by?: string;
+    sort_order?: string;
+    skip?: number;
+    limit?: number;
+  }) {
+    const res = await apiClient.get('/recommendations', { params });
+    return res.data;
+  },
+
+  async getRecommendation(recId: string) {
+    const res = await apiClient.get(`/recommendations/${recId}`);
+    return res.data;
+  },
+
+  async updateRecommendationStatus(recId: string, payload: {
+    status: string;
+    actor_email: string;
+    reason?: string;
+    notes?: string;
+  }) {
+    const res = await apiClient.patch(`/recommendations/${recId}/status`, payload);
+    return res.data;
+  },
+
+  async batchReviewRecommendations(payload: {
+    recommendation_ids: string[];
+    action: string;
+    actor_email: string;
+    reason?: string;
+    snooze_days?: number;
+    assigned_to?: string;
+    external_ticket_ref?: string;
+  }) {
+    const res = await apiClient.post('/recommendations/batch', payload);
+    return res.data;
+  },
+
+  async proposeSavingsOverride(recId: string, payload: {
+    proposed_monthly_savings: number;
+    reason: string;
+    proposed_by: string;
+  }) {
+    const res = await apiClient.post(`/recommendations/${recId}/override`, payload);
+    return res.data;
+  },
+
+  async listSavingsOverrides(recId: string) {
+    const res = await apiClient.get(`/recommendations/${recId}/overrides`);
+    return res.data;
+  },
+
+  async approveSavingsOverride(recId: string, overrideId: string, payload: {
+    approved: boolean;
+    approved_by: string;
+    rejection_reason?: string;
+  }) {
+    const res = await apiClient.post(`/recommendations/${recId}/override/${overrideId}/approve`, payload);
+    return res.data;
+  },
+
+  async getRecommendationPlaybook(recId: string, format: string = 'markdown') {
+    const res = await apiClient.get(`/recommendations/${recId}/playbook`, { params: { format } });
+    return res.data;
+  },
+
+  getRecommendationPlaybookDownloadUrl(recId: string, format: string = 'markdown') {
+    return `${API_BASE}/recommendations/${recId}/playbook/download?format=${format}`;
+  },
+
+  async getRecommendationTelemetry(recId: string, days: number = 14) {
+    const res = await apiClient.get(`/recommendations/${recId}/telemetry`, { params: { days } });
+    return res.data;
+  },
+
+  async getRecommendationCorrelations(recId: string) {
+    const res = await apiClient.get(`/recommendations/${recId}/correlations`);
+    return res.data;
+  },
+
+  // Waste Findings
+  async listWasteFindings(params?: {
+    provider?: string;
+    account_id?: string;
+    waste_type?: string;
+    severity?: string;
+    status?: string;
+    min_savings?: number;
+    owner?: string;
+    environment?: string;
+    limit?: number;
+    offset?: number;
+  }) {
+    const res = await apiClient.get('/waste-detection/findings', { params });
+    return res.data;
+  },
+
+  async getWasteFinding(findingId: string) {
+    const res = await apiClient.get(`/waste-detection/findings/${findingId}`);
+    return res.data;
+  },
+
+  async performWasteAction(findingId: string, payload: {
+    action: string;
+    actor: string;
+    reason?: string;
+    snooze_days?: number;
+    assigned_to?: string;
+  }) {
+    const res = await apiClient.post(`/waste-detection/findings/${findingId}/action`, payload);
+    return res.data;
+  },
+
+  async batchWasteAction(payload: {
+    finding_ids: string[];
+    action: string;
+    actor: string;
+    reason?: string;
+    snooze_days?: number;
+    assigned_to?: string;
+  }) {
+    const res = await apiClient.post('/waste-detection/batch', payload);
+    return res.data;
+  },
+
+  async getFindingPlaybook(findingId: string, format: string = 'markdown') {
+    const res = await apiClient.get(`/waste-detection/findings/${findingId}/playbook`, { params: { format } });
+    return res.data;
+  },
+
+  getFindingPlaybookDownloadUrl(findingId: string, format: string = 'markdown') {
+    return `${API_BASE}/waste-detection/findings/${findingId}/playbook/download?format=${format}`;
+  },
+
+  async getFindingTelemetry(findingId: string, days: number = 14) {
+    const res = await apiClient.get(`/waste-detection/findings/${findingId}/telemetry`, { params: { days } });
+    return res.data;
+  },
+
+  async getFindingInvestigation(findingId: string) {
+    const res = await apiClient.get(`/waste-detection/findings/${findingId}/investigation`);
+    return res.data;
+  },
+
+  // General Inventory Resource Telemetry & Correlations
+  async getResourceTelemetry(resourceId: string, days: number = 14) {
+    const res = await apiClient.get(`/inventory/resources/${encodeURIComponent(resourceId)}/telemetry`, { params: { days } });
+    return res.data;
+  },
+
+  async getResourceCorrelations(resourceId: string) {
+    const res = await apiClient.get(`/inventory/resources/${encodeURIComponent(resourceId)}/correlations`);
+    return res.data;
+  },
+};
+
+export const AlertService = {
+  async listRules(params?: {
+    provider?: string;
+    severity?: string;
+    is_active?: boolean;
+    search?: string;
+    limit?: number;
+    offset?: number;
+  }): Promise<AlertRuleListResponse> {
+    const res = await apiClient.get<AlertRuleListResponse>('/alert-rules', { params });
+    return res.data;
+  },
+
+  async getRule(ruleId: string): Promise<AlertRule> {
+    const res = await apiClient.get<AlertRule>(`/alert-rules/${ruleId}`);
+    return res.data;
+  },
+
+  async createRule(rule: AlertRuleCreate): Promise<AlertRule> {
+    const res = await apiClient.post<AlertRule>('/alert-rules', rule);
+    return res.data;
+  },
+
+  async updateRule(ruleId: string, rule: AlertRuleUpdate): Promise<AlertRule> {
+    const res = await apiClient.put<AlertRule>(`/alert-rules/${ruleId}`, rule);
+    return res.data;
+  },
+
+  async toggleRule(ruleId: string): Promise<AlertRule> {
+    const res = await apiClient.post<AlertRule>(`/alert-rules/${ruleId}/toggle`);
+    return res.data;
+  },
+
+  async deleteRule(ruleId: string): Promise<{ status: string; rule_id: string }> {
+    const res = await apiClient.delete<{ status: string; rule_id: string }>(`/alert-rules/${ruleId}`);
+    return res.data;
+  },
+
+  async previewRule(previewData: AlertRulePreviewRequest): Promise<AlertRulePreviewResponse> {
+    const res = await apiClient.post<AlertRulePreviewResponse>('/alert-rules/preview', previewData);
+    return res.data;
+  },
+
+  async listAlerts(params?: {
+    status?: string;
+    severity?: string;
+    provider?: string;
+    rule_id?: string;
+    is_suppressed?: boolean;
+    start_date?: string;
+    end_date?: string;
+    search?: string;
+    limit?: number;
+    offset?: number;
+  }): Promise<AlertInstanceListResponse> {
+    const res = await apiClient.get<AlertInstanceListResponse>('/alerts', { params });
+    return res.data;
+  },
+
+  async getStats(): Promise<AlertStats> {
+    const res = await apiClient.get<AlertStats>('/alerts/stats');
+    return res.data;
+  },
+
+  async getAlert(alertId: string): Promise<AlertInstanceDetail> {
+    const res = await apiClient.get<AlertInstanceDetail>(`/alerts/${alertId}`);
+    return res.data;
+  },
+
+  async executeAction(alertId: string, actionData: AlertActionRequest): Promise<AlertInstance> {
+    const res = await apiClient.post<AlertInstance>(`/alerts/${alertId}/action`, actionData);
+    return res.data;
+  },
+
+  async getAlertHistory(alertId: string): Promise<AlertHistory[]> {
+    const res = await apiClient.get<AlertHistory[]>(`/alerts/${alertId}/history`);
+    return res.data;
+  },
+};
+
+export const NotificationService = {
+  async listNotifications(params?: {
+    unread_only?: boolean;
+    limit?: number;
+    offset?: number;
+  }): Promise<InAppNotificationListResponse> {
+    const res = await apiClient.get<InAppNotificationListResponse>('/notifications', { params });
+    return res.data;
+  },
+
+  async getUnreadCount(): Promise<UnreadCountResponse> {
+    const res = await apiClient.get<UnreadCountResponse>('/notifications/unread-count');
+    return res.data;
+  },
+
+  async markAsRead(notificationId: string): Promise<InAppNotification> {
+    const res = await apiClient.post<InAppNotification>(`/notifications/${notificationId}/read`);
+    return res.data;
+  },
+
+  async markAsUnread(notificationId: string): Promise<InAppNotification> {
+    const res = await apiClient.post<InAppNotification>(`/notifications/${notificationId}/unread`);
+    return res.data;
+  },
+
+  async markAllAsRead(): Promise<{ status: string; marked_read_count: number }> {
+    const res = await apiClient.post<{ status: string; marked_read_count: number }>('/notifications/mark-all-read');
+    return res.data;
+  },
+
+  async listOutbox(params?: {
+    status?: string;
+    channel?: string;
+    limit?: number;
+    offset?: number;
+  }): Promise<NotificationOutboxListResponse> {
+    const res = await apiClient.get<NotificationOutboxListResponse>('/notification-deliveries/outbox', { params });
+    return res.data;
+  },
+
+  async getOutboxItem(outboxId: string): Promise<NotificationOutbox> {
+    const res = await apiClient.get<NotificationOutbox>(`/notification-deliveries/outbox/${outboxId}`);
+    return res.data;
+  },
+
+  async retryOutbox(outboxId: string): Promise<any> {
+    const res = await apiClient.post(`/notification-deliveries/outbox/${outboxId}/retry`);
+    return res.data;
+  },
+
+  async cancelOutbox(outboxId: string): Promise<NotificationOutbox> {
+    const res = await apiClient.post<NotificationOutbox>(`/notification-deliveries/outbox/${outboxId}/cancel`);
+    return res.data;
+  },
+
+  async getPipelineHealth(): Promise<NotificationHealth> {
+    const res = await apiClient.get<NotificationHealth>('/notification-deliveries/health');
+    return res.data;
+  },
+
+  async dispatchOutbox(batchSize: number = 50): Promise<any> {
+    const res = await apiClient.post('/notification-deliveries/dispatch', null, {
+      params: { batch_size: batchSize },
+    });
+    return res.data;
+  },
+
+  async getPreferences(): Promise<NotificationPreference> {
+    const res = await apiClient.get<NotificationPreference>('/notification-preferences/me');
+    return res.data;
+  },
+
+  async updatePreferences(pref: Partial<NotificationPreference>): Promise<NotificationPreference> {
+    const res = await apiClient.put<NotificationPreference>('/notification-preferences/me', pref);
     return res.data;
   },
 };

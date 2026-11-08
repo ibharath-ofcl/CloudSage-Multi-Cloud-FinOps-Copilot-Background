@@ -12,6 +12,12 @@ import { RecommendationsPage } from './pages/RecommendationsPage';
 import { SavingsPage } from './pages/SavingsPage';
 import { InventoryPage } from './pages/InventoryPage';
 import { QualityPage } from './pages/QualityPage';
+import { AlertManagementPage } from './pages/AlertManagementPage';
+import { AlertDetailPage } from './pages/AlertDetailPage';
+import { AlertRuleManagementPage } from './pages/AlertRuleManagementPage';
+import { NotificationCenter } from './pages/NotificationCenter';
+import { DeliveryStatusPanel } from './pages/DeliveryStatusPanel';
+import { NotificationPreferencesPage } from './pages/NotificationPreferencesPage';
 
 export const App: React.FC = () => {
   const [isCopilotOpen, setIsCopilotOpen] = useState(false);
@@ -44,6 +50,12 @@ export const App: React.FC = () => {
               <Route path="/savings" element={<SavingsPage key={refreshTrigger} />} />
               <Route path="/inventory" element={<InventoryPage key={refreshTrigger} />} />
               <Route path="/quality" element={<QualityPage key={refreshTrigger} />} />
+              <Route path="/alerts" element={<AlertManagementPage key={refreshTrigger} />} />
+              <Route path="/alerts/:alertId" element={<AlertDetailPage key={refreshTrigger} />} />
+              <Route path="/alert-rules" element={<AlertRuleManagementPage key={refreshTrigger} />} />
+              <Route path="/notifications" element={<NotificationCenter key={refreshTrigger} />} />
+              <Route path="/notification-deliveries" element={<DeliveryStatusPanel key={refreshTrigger} />} />
+              <Route path="/notification-preferences" element={<NotificationPreferencesPage key={refreshTrigger} />} />
             </Routes>
           </main>
         </div>

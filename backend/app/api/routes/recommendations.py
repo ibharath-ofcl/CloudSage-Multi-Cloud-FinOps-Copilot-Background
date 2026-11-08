@@ -24,15 +24,25 @@ from backend.app.models.recommendation import (
     RecommendationEvidence,
     RecommendationHistory,
     RecommendationRun,
+    RecommendationSavingsOverride,
 )
 from backend.app.recommendations.engine import RecommendationEngine, get_recommendation_engine
 from backend.app.recommendations.lifecycle import (
+    DualCustodyViolationError,
     InvalidStateTransitionError,
     RejectionReasonRequiredError,
+    batch_transition_recommendations,
+    propose_savings_override,
+    review_savings_override,
     transition_recommendation_status,
 )
+from backend.app.recommendations.playbooks import RemediationPlaybookGenerator
 from backend.app.recommendations.savings import calculate_roi, quantize_currency
+from backend.app.services.correlation import CorrelationService
+from backend.app.services.telemetry import TelemetryService
 from backend.app.schemas.recommendation import (
+    BatchRecommendationReviewRequest,
+    BatchRecommendationReviewResponse,
     FinancialImpactResponse,
     OwnerImpactResponse,
     RecommendationCategoryBreakdown,
@@ -47,6 +57,10 @@ from backend.app.schemas.recommendation import (
     RecommendationSavingsDetail,
     RecommendationStatusUpdate,
     RecommendationSummaryResponse,
+    RemediationPlaybookResponse,
+    SavingsOverrideApproveRequest,
+    SavingsOverrideProposeRequest,
+    SavingsOverrideResponse,
 )
 
 router = APIRouter(prefix="/recommendations", tags=["Advisory Recommendations"])
@@ -68,6 +82,50 @@ def trigger_recommendation_run(
         scope=payload.scope or "FULL",
     )
     return run
+
+
+@router.post("/batch", response_model=BatchRecommendationReviewResponse)
+def batch_review_recommendations(
+    payload: BatchRecommendationReviewRequest,
+    db: Session = Depends(get_sync_db),
+):
+    """
+    Executes batch human-in-the-loop review operations (Approve, Reject, Dismiss, Snooze, Endorse)
+    across multiple recommendations with transaction isolation.
+    """
+    action_map = {
+        "APPROVE": RecommendationStatus.APPROVED,
+        "APPROVED": RecommendationStatus.APPROVED,
+        "ACCEPT": RecommendationStatus.ACCEPTED,
+        "ACCEPTED": RecommendationStatus.ACCEPTED,
+        "REJECT": RecommendationStatus.REJECTED,
+        "REJECTED": RecommendationStatus.REJECTED,
+        "DISMISS": RecommendationStatus.DISMISSED,
+        "DISMISSED": RecommendationStatus.DISMISSED,
+        "SNOOZE": RecommendationStatus.SNOOZED,
+        "SNOOZED": RecommendationStatus.SNOOZED,
+        "ENDORSE": RecommendationStatus.ENDORSED,
+        "ENDORSED": RecommendationStatus.ENDORSED,
+    }
+
+    target_status = action_map.get(payload.action.upper().strip())
+    if not target_status:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"Unsupported batch action '{payload.action}'. Permitted: {', '.join(sorted(action_map.keys()))}",
+        )
+
+    result = batch_transition_recommendations(
+        db=db,
+        recommendation_ids=payload.recommendation_ids,
+        new_status=target_status,
+        actor=payload.actor_email,
+        reason=payload.reason,
+        snooze_days=payload.snooze_days,
+        assigned_to=payload.assigned_to,
+        external_ticket_ref=payload.external_ticket_ref,
+    )
+    return result
 
 
 @router.get("/summary", response_model=RecommendationSummaryResponse)
@@ -286,12 +344,16 @@ def list_recommendations(
     risk_level: Optional[str] = None,
     action_type: Optional[str] = None,
     service_name: Optional[str] = None,
+    assigned_to: Optional[str] = None,
+    min_savings: Optional[Decimal] = None,
     search: Optional[str] = None,
+    sort_by: Optional[str] = Query("priority", description="Sort by: priority, savings, risk, confidence, created_at"),
+    sort_order: Optional[str] = Query("desc", description="Sort order: asc, desc"),
     skip: int = Query(0, ge=0),
     limit: int = Query(50, ge=1, le=100),
     db: Session = Depends(get_sync_db),
 ):
-    """Lists optimization recommendations with rich filtering, search, and pagination."""
+    """Lists optimization recommendations with rich filtering, search, multi-factor sort, and pagination."""
     query = db.query(Recommendation)
 
     if provider and provider != "ALL":
@@ -306,6 +368,10 @@ def list_recommendations(
         query = query.filter(Recommendation.action_type == action_type.upper())
     if service_name:
         query = query.filter(Recommendation.service_name == service_name)
+    if assigned_to:
+        query = query.filter(Recommendation.assigned_to.ilike(f"%{assigned_to}%"))
+    if min_savings is not None:
+        query = query.filter(Recommendation.estimated_monthly_savings >= min_savings)
     if search:
         s = f"%{search}%"
         query = query.filter(
@@ -313,13 +379,32 @@ def list_recommendations(
                 Recommendation.title.ilike(s),
                 Recommendation.description.ilike(s),
                 Recommendation.resource_id.ilike(s),
+                Recommendation.assigned_to.ilike(s),
+                Recommendation.external_ticket_ref.ilike(s),
             )
         )
 
-    query = query.order_by(
-        Recommendation.priority_score.desc(),
-        Recommendation.estimated_monthly_savings.desc(),
-    )
+    # Sorting
+    is_asc = sort_order and sort_order.lower() == "asc"
+    sort_field = (sort_by or "priority").lower()
+
+    if sort_field == "savings":
+        primary = Recommendation.estimated_monthly_savings.asc() if is_asc else Recommendation.estimated_monthly_savings.desc()
+        query = query.order_by(primary, Recommendation.priority_score.desc())
+    elif sort_field == "risk":
+        primary = Recommendation.risk_score.asc() if is_asc else Recommendation.risk_score.desc()
+        query = query.order_by(primary, Recommendation.estimated_monthly_savings.desc())
+    elif sort_field == "confidence":
+        primary = Recommendation.confidence_score.asc() if is_asc else Recommendation.confidence_score.desc()
+        query = query.order_by(primary, Recommendation.estimated_monthly_savings.desc())
+    elif sort_field == "created_at":
+        primary = Recommendation.created_at.asc() if is_asc else Recommendation.created_at.desc()
+        query = query.order_by(primary)
+    else:  # default "priority"
+        primary = Recommendation.priority_score.asc() if is_asc else Recommendation.priority_score.desc()
+        secondary = Recommendation.estimated_monthly_savings.asc() if is_asc else Recommendation.estimated_monthly_savings.desc()
+        query = query.order_by(primary, secondary)
+
     return query.offset(skip).limit(limit).all()
 
 
@@ -457,3 +542,188 @@ def submit_recommendation_feedback(
     db.commit()
     db.refresh(hist)
     return hist
+
+
+@router.post("/{rec_id}/override", response_model=SavingsOverrideResponse, status_code=status.HTTP_201_CREATED)
+def propose_override(
+    rec_id: UUID,
+    payload: SavingsOverrideProposeRequest,
+    db: Session = Depends(get_sync_db),
+):
+    """Proposes a revised savings figure for an optimization recommendation."""
+    try:
+        override = propose_savings_override(
+            db=db,
+            recommendation_id=rec_id,
+            proposed_monthly_savings=payload.proposed_monthly_savings,
+            reason=payload.reason,
+            proposed_by=payload.proposed_by,
+        )
+        return override
+    except ValueError as e:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
+
+
+@router.get("/{rec_id}/overrides", response_model=List[SavingsOverrideResponse])
+def list_overrides(
+    rec_id: UUID,
+    db: Session = Depends(get_sync_db),
+):
+    """Lists all historical savings overrides and proposals for a recommendation."""
+    rec = db.query(Recommendation).filter(Recommendation.id == rec_id).first()
+    if not rec:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Recommendation '{rec_id}' not found.",
+        )
+    return rec.savings_overrides
+
+
+@router.post("/{rec_id}/override/{override_id}/approve", response_model=SavingsOverrideResponse)
+def approve_override(
+    rec_id: UUID,
+    override_id: UUID,
+    payload: SavingsOverrideApproveRequest,
+    db: Session = Depends(get_sync_db),
+):
+    """Formally approves or rejects a proposed savings override with audit history."""
+    try:
+        reviewed = review_savings_override(
+            db=db,
+            override_id=override_id,
+            approved_by=payload.approved_by,
+            approve=payload.approved,
+            rejection_reason=payload.rejection_reason,
+            enforce_dual_custody=False,
+        )
+        return reviewed
+    except DualCustodyViolationError as e:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail=str(e))
+    except ValueError as e:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
+
+
+@router.get("/{rec_id}/playbook", response_model=RemediationPlaybookResponse)
+def generate_recommendation_playbook(
+    rec_id: UUID,
+    format: str = Query("markdown", description="Format: terraform, cloudformation, aws_cli, azure_cli, gcp_cli, bicep, markdown"),
+    db: Session = Depends(get_sync_db),
+):
+    """
+    Generates deterministic, production-grade Infrastructure-as-Code or CLI remediation playbooks.
+    STRICTLY ADVISORY: CloudSage never executes mutations autonomously.
+    """
+    rec = db.query(Recommendation).filter(Recommendation.id == rec_id).first()
+    if not rec:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Recommendation '{rec_id}' not found.",
+        )
+
+    res_id = rec.resource_id or f"{rec.provider.lower()}-{rec.service_name or 'resource'}"
+    playbook = RemediationPlaybookGenerator.generate_playbook(
+        provider=rec.provider,
+        action_type=rec.action_type,
+        resource_id=res_id,
+        resource_name=rec.resource_name,
+        region=rec.region,
+        account_id=rec.account_id,
+        service_name=rec.service_name,
+        estimated_monthly_savings=rec.estimated_monthly_savings,
+        details=rec.implementation_guidance or {},
+        playbook_format=format,
+    )
+    return playbook
+
+
+@router.get("/{rec_id}/playbook/download")
+def download_recommendation_playbook(
+    rec_id: UUID,
+    format: str = Query("markdown", description="Format: terraform, cloudformation, aws_cli, azure_cli, gcp_cli, bicep, markdown"),
+    db: Session = Depends(get_sync_db),
+):
+    """Downloads the advisory remediation playbook file directly."""
+    rec = db.query(Recommendation).filter(Recommendation.id == rec_id).first()
+    if not rec:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Recommendation '{rec_id}' not found.",
+        )
+
+    res_id = rec.resource_id or f"{rec.provider.lower()}-{rec.service_name or 'resource'}"
+    playbook = RemediationPlaybookGenerator.generate_playbook(
+        provider=rec.provider,
+        action_type=rec.action_type,
+        resource_id=res_id,
+        resource_name=rec.resource_name,
+        region=rec.region,
+        account_id=rec.account_id,
+        service_name=rec.service_name,
+        estimated_monthly_savings=rec.estimated_monthly_savings,
+        details=rec.implementation_guidance or {},
+        playbook_format=format,
+    )
+
+    return Response(
+        content=playbook["content"],
+        media_type=playbook["mime_type"],
+        headers={"Content-Disposition": f"attachment; filename={playbook['filename']}"},
+    )
+
+
+@router.get("/{rec_id}/telemetry")
+def get_recommendation_telemetry(
+    rec_id: UUID,
+    days: int = Query(14, ge=1, le=90),
+    db: Session = Depends(get_sync_db),
+):
+    """
+    Retrieves real time-series metrics (CPU, Memory, Network, Disk) for the target resource.
+    Never fabricates telemetry; returns explicit empty status if unmonitored.
+    """
+    rec = db.query(Recommendation).filter(Recommendation.id == rec_id).first()
+    if not rec:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Recommendation '{rec_id}' not found.",
+        )
+
+    if not rec.resource_id:
+        return {
+            "resource_id": None,
+            "has_telemetry": False,
+            "reason": "NO_RESOURCE_ID",
+            "message": "This is an account/service-level recommendation without a singular resource.",
+            "metrics": {},
+            "summary": {},
+        }
+
+    return TelemetryService.get_resource_telemetry(db, resource_id=rec.resource_id, days=days)
+
+
+@router.get("/{rec_id}/correlations")
+def get_recommendation_correlations(
+    rec_id: UUID,
+    db: Session = Depends(get_sync_db),
+):
+    """
+    Retrieves unified entity correlation view linking resource, waste findings,
+    anomalies, billing records, and telemetry with strict anti-double-counting guarantees.
+    """
+    rec = db.query(Recommendation).filter(Recommendation.id == rec_id).first()
+    if not rec:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Recommendation '{rec_id}' not found.",
+        )
+
+    if not rec.resource_id:
+        return {
+            "resource_id": None,
+            "recommendation_id": str(rec.id),
+            "has_resource": False,
+            "message": "Recommendation is not mapped to an individual cloud resource ARN.",
+        }
+
+    return CorrelationService.get_resource_correlations(db, resource_id=rec.resource_id)
+

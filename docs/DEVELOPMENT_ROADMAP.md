@@ -22,8 +22,8 @@ PHASE 3: ADVISORY RECOMMENDATIONS & AI INTELLIGENCE (Stages 8 - 9)
 
 PHASE 4: FRONTEND INTERFACE & DASHBOARDS (Stages 10 - 12)
   Stage 10: Interactive FinOps Dashboards & Data Visualization [COMPLETED]
-  Stage 11: Enterprise Recommendation & Waste Management UI
-  Stage 12: Anomaly Investigation & Root-Cause Analysis UI
+  Stage 11: Enterprise Recommendation & Waste Management Workspace [COMPLETED]
+  Stage 12: Cost Anomaly & Enterprise Alerts Notification Hub [COMPLETED]
 
 PHASE 5: SECURITY, NOTIFICATIONS & PRODUCTION READINESS (Stages 13 - 15)
   Stage 13: Anomaly Detection & Alerts Notification Hub
@@ -201,25 +201,39 @@ PHASE 5: SECURITY, NOTIFICATIONS & PRODUCTION READINESS (Stages 13 - 15)
 
 ---
 
-### Stage 11: Enterprise Frontend Dashboard & Visualization UI
-- **Focus**: Responsive React/TypeScript web application delivering executive financial insights.
+### Stage 11: Enterprise Recommendation & Waste Management Workspace
+- **Status**: [COMPLETED]
+- **Branch**: `stage-11/enterprise-recommendation-waste-workspace`
+- **Focus**: Production-grade enterprise workspace for investigating recommendations, reviewing waste findings, managing governance lifecycles, inspecting telemetry, and generating multi-format remediation playbooks.
 - **Key Deliverables**:
-  - Executive KPI summary cards (Total Spend MTD, Run-Rate, Potential Savings, Realized Savings).
-  - Interactive multi-cloud spending distribution charts (Recharts donut & bar charts).
-  - Historical spending trends (Daily/Monthly stacked area charts).
-  - Filter controls for Date Range, Cloud Provider, Service Category, and Environment.
-- **Acceptance Criteria**: Sub-2-second page load time; responsive design across desktop and tablet viewports.
+  - Database schema & Alembic migration `009_recommendation_waste_workspace.py` adding workspace governance columns and `recommendation_savings_overrides` audit table.
+  - Enterprise Recommendation Workspace (`backend/app/api/routes/recommendations.py`, `RecommendationsPage.tsx`) with multi-factor sorting, triage filtering, and detail drawers.
+  - Enterprise Waste Management Workspace (`backend/app/api/routes/waste_detection.py`, `WastePage.tsx`) supporting ACKNOWLEDGE, ASSIGN, SNOOZE, DISMISS, RESOLVE, and REOPEN lifecycles.
+  - Resource Telemetry Analytics & Visualization (`TelemetryService`, `TelemetryPanel.tsx`) computing min, max, avg, latest metrics across 7, 14, 30, and 90-day windows with non-fabricated empty state guarantees.
+  - Multi-Format Remediation Playbook Generator (`RemediationPlaybookGenerator`, `RemediationPlaybookPanel.tsx`) synthesizing advisory scripts across 7 formats (Terraform `.tf`, CloudFormation `.yaml`, AWS CLI `.sh`, Azure CLI `.sh`, Azure Bicep `.bicep`, GCP CLI `.sh`, and Markdown `.md`) with identifier sanitization and rollback plans.
+  - Unified Entity Correlation & Anti-Double-Counting Taxonomy (`CorrelationService`, `RelatedEvidencePanel.tsx`) providing cross-entity links while maintaining strict separation of baseline spend, avoidable waste, potential savings, and realized savings.
+  - Two-Phase Savings Override Governance (`RecommendationSavingsOverride`, `SavingsOverrideModal.tsx`) with proposal, review, approval, and rejection workflows.
+  - Atomic Batch Operations with transaction savepoints (`db.begin_nested()`) isolating partial failures during bulk reviews.
+  - 8 comprehensive architectural and operational documentation guides in `docs/`.
+  - 46 new automated unit and integration tests passing with 100% success rate across all new workspace capabilities.
+  - 326 total automated tests passing across the repository with zero regressions against the 280-test baseline.
+- **Acceptance Criteria**: Strict advisory-only policy with zero mutating cloud API calls; zero float representations using Python `Decimal` and PostgreSQL `Numeric(18, 4)`; non-fabricated telemetry guarantees; 100% passing tests (100% verified).
 
 ---
 
-### Stage 12: Waste & Recommendation Management UI
-- **Focus**: Interactive workbench for triaging waste and reviewing recommendations.
+### Stage 12: Cost Anomaly & Enterprise Alerts Notification Hub [COMPLETED]
+- **Focus**: Enterprise alerting, rule-based evaluation, deduplication, and multi-channel notification outbox.
 - **Key Deliverables**:
-  - Filterable waste items table with utilization telemetry and estimated savings.
-  - Recommendation review cards with risk badges, priority tags, and remediation commands.
-  - Human-in-the-loop review actions (Endorse, Approve, Dismiss, Snooze).
-  - Audit history drawer showing state transitions and reviewer comments.
-- **Acceptance Criteria**: Intuitive, error-free workflow transitions reflecting real-time database state.
+  - Multi-dimensional alert rule management with dry-run impact simulation preview.
+  - Deterministic deduplication key computation (`res:...` and `acct:...`) and cooldown window suppression.
+  - Severity escalation bypass ($P1$ / `CRITICAL`) with automatic trigger count increment.
+  - Non-blocking transactional outbox pattern with exponential backoff retry and dead-letter queue (DLQ).
+  - Multi-channel notification providers: In-App, HTML Email with advisory disclaimer, Webhook, Slack, Teams.
+  - In-app notification center with header bell badge counter, flyout popover, and mark read/unread.
+  - Server-side identity derivation via `get_authenticated_principal` with Webhook SSRF validation.
+  - 58 automated tests passing (384 total repository tests with zero regressions against the 326 baseline).
+  - 17-step end-to-end demonstration script `backend/scripts/demo_stage12_alerts_hub.py`.
+- **Acceptance Criteria**: Strict advisory-only policy with zero mutating cloud API calls; non-blocking notification dispatch; zero float representations using `Decimal` and `Numeric(18, 4)`; 100% test pass rate (100% verified).
 
 ---
 

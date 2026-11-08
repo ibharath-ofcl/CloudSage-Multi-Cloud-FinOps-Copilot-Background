@@ -10,6 +10,7 @@ from typing import Any, Dict, List, Optional
 import uuid
 
 from sqlalchemy import (
+    Boolean,
     Column,
     DateTime,
     ForeignKey,
@@ -297,6 +298,34 @@ class Recommendation(Base):
         nullable=True,
         doc="Timestamp after which recommendation expires if unacted",
     )
+    snooze_until = Column(
+        DateTime(timezone=True),
+        nullable=True,
+        doc="Timestamp until recommendation is snoozed from triage",
+    )
+    assigned_to = Column(
+        String(128),
+        nullable=True,
+        index=True,
+        doc="Assigned owner or engineering lead",
+    )
+    external_ticket_ref = Column(
+        String(128),
+        nullable=True,
+        index=True,
+        doc="Jira / ServiceNow / Linear ticket reference",
+    )
+    revised_monthly_savings = Column(
+        Numeric(18, 4),
+        nullable=True,
+        doc="Governance-approved revised monthly savings",
+    )
+    is_savings_overridden = Column(
+        Boolean,
+        nullable=False,
+        default=False,
+        doc="True if savings were modified and approved via governance workflow",
+    )
     created_at = Column(
         DateTime(timezone=True),
         nullable=False,
@@ -321,6 +350,11 @@ class Recommendation(Base):
     )
     history_items = relationship(
         "RecommendationHistory",
+        back_populates="recommendation",
+        cascade="all, delete-orphan",
+    )
+    savings_overrides = relationship(
+        "RecommendationSavingsOverride",
         back_populates="recommendation",
         cascade="all, delete-orphan",
     )
@@ -590,3 +624,84 @@ class RecommendationRun(Base):
 
     def __repr__(self) -> str:
         return f"<RecommendationRun id={self.run_id} status={self.status} savings={self.total_monthly_savings}>"
+
+
+class RecommendationSavingsOverride(Base):
+    """
+    Formal governance audit record for proposing and approving revised monthly savings
+    on an optimization recommendation, supporting human-in-the-loop dual control.
+    """
+    __tablename__ = "recommendation_savings_overrides"
+
+    id = Column(
+        Uuid(as_uuid=True),
+        primary_key=True,
+        default=uuid.uuid4,
+        nullable=False,
+    )
+    recommendation_id = Column(
+        Uuid(as_uuid=True),
+        ForeignKey("recommendations.id", ondelete="CASCADE"),
+        nullable=False,
+        index=True,
+    )
+    original_monthly_savings = Column(
+        Numeric(18, 4),
+        nullable=False,
+        doc="Original algorithmic monthly savings projection in USD",
+    )
+    proposed_monthly_savings = Column(
+        Numeric(18, 4),
+        nullable=False,
+        doc="Proposed revised monthly savings projection in USD",
+    )
+    reason = Column(
+        Text,
+        nullable=False,
+        doc="Engineering / FinOps justification for manual override",
+    )
+    proposed_by = Column(
+        String(128),
+        nullable=False,
+        doc="Identity of engineer/analyst proposing the adjustment",
+    )
+    approved_by = Column(
+        String(128),
+        nullable=True,
+        doc="Identity of FinOps manager/lead who reviewed and approved/rejected",
+    )
+    status = Column(
+        String(32),
+        nullable=False,
+        default="PROPOSED",
+        index=True,
+        doc="Governance status: PROPOSED, APPROVED, REJECTED",
+    )
+    rejection_reason = Column(
+        Text,
+        nullable=True,
+        doc="Explanation if the proposed override was rejected",
+    )
+    created_at = Column(
+        DateTime(timezone=True),
+        nullable=False,
+        default=lambda: datetime.now(timezone.utc),
+        index=True,
+    )
+    reviewed_at = Column(
+        DateTime(timezone=True),
+        nullable=True,
+        doc="Timestamp of approval or rejection",
+    )
+
+    recommendation = relationship("Recommendation", back_populates="savings_overrides")
+
+    __table_args__ = (
+        Index("idx_rec_override_rec_status", "recommendation_id", "status"),
+    )
+
+    def __repr__(self) -> str:
+        return (
+            f"<RecommendationSavingsOverride id={self.id} rec_id={self.recommendation_id} "
+            f"orig={self.original_monthly_savings} proposed={self.proposed_monthly_savings} status={self.status}>"
+        )

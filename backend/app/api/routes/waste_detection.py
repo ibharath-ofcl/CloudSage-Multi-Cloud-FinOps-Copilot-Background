@@ -10,7 +10,7 @@ from decimal import Decimal
 from typing import Any, Dict, List, Optional
 import uuid
 
-from fastapi import APIRouter, Depends, HTTPException, Query, status
+from fastapi import APIRouter, Depends, HTTPException, Query, Response, status
 from sqlalchemy import func
 from sqlalchemy.orm import Session
 
@@ -18,11 +18,24 @@ from backend.app.core.database import get_sync_db
 from backend.app.core.enums import Severity, WasteStatus, WasteType
 from backend.app.models.resource import CloudResource
 from backend.app.models.waste import WasteDetection, WasteDetectionRun
+from backend.app.recommendations.playbooks import RemediationPlaybookGenerator
+from backend.app.schemas.recommendation import RemediationPlaybookResponse
+from backend.app.services.correlation import CorrelationService
+from backend.app.services.telemetry import TelemetryService
 from backend.app.waste_detection.engine import WasteDetectionEngine
+from backend.app.waste_detection.lifecycle import (
+    InvalidWasteTransitionError,
+    WasteJustificationRequiredError,
+    batch_transition_waste,
+    transition_waste_status,
+)
 from backend.app.waste_detection.registry import DetectorRegistry
 from backend.app.waste_detection.schemas import (
+    BatchWasteActionRequest,
+    BatchWasteActionResponse,
     DetectorInfoResponse,
     FindingStatusUpdateRequest,
+    WasteActionRequest,
     WasteDetectionRunRequest,
     WasteDetectionRunResponse,
     WasteFindingListResponse,
@@ -52,6 +65,27 @@ def run_waste_detection(
         lookback_days=request.lookback_days,
     )
     return WasteDetectionRunResponse.model_validate(run)
+
+
+@router.post("/batch", response_model=BatchWasteActionResponse)
+def batch_waste_actions(
+    payload: BatchWasteActionRequest,
+    db: Session = Depends(get_sync_db),
+):
+    """
+    Executes batch triage actions (ACKNOWLEDGE, ASSIGN, SNOOZE, DISMISS, RESOLVE, REOPEN)
+    across multiple waste findings with error isolation and transaction safety.
+    """
+    result = batch_transition_waste(
+        db=db,
+        finding_ids=payload.finding_ids,
+        action=payload.action,
+        actor=payload.actor,
+        reason=payload.reason,
+        snooze_days=payload.snooze_days,
+        assigned_to=payload.assigned_to,
+    )
+    return result
 
 
 @router.get("/findings", response_model=WasteFindingListResponse)
@@ -407,3 +441,140 @@ def get_finding_evidence(
         "first_detected_at": finding.first_detected_at,
         "last_evaluated_at": finding.last_evaluated_at,
     }
+
+
+@router.post("/findings/{finding_id}/action", response_model=WasteFindingResponse)
+def perform_finding_action(
+    finding_id: uuid.UUID,
+    payload: WasteActionRequest,
+    db: Session = Depends(get_sync_db),
+) -> WasteFindingResponse:
+    """
+    Executes a formal lifecycle action on a waste finding:
+    ACKNOWLEDGE, ASSIGN, SNOOZE, DISMISS, RESOLVE, REOPEN.
+    """
+    try:
+        updated = transition_waste_status(
+            db=db,
+            finding_id=finding_id,
+            action=payload.action,
+            actor=payload.actor,
+            reason=payload.reason,
+            snooze_days=payload.snooze_days,
+            assigned_to=payload.assigned_to,
+        )
+        return WasteFindingResponse.model_validate(updated)
+    except (InvalidWasteTransitionError, WasteJustificationRequiredError, ValueError) as e:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
+
+
+@router.get("/findings/{finding_id}/playbook", response_model=RemediationPlaybookResponse)
+def get_finding_playbook(
+    finding_id: uuid.UUID,
+    format: str = Query("markdown", description="Format: terraform, cloudformation, aws_cli, azure_cli, gcp_cli, bicep, markdown"),
+    db: Session = Depends(get_sync_db),
+):
+    """
+    Generates deterministic, production-grade Infrastructure-as-Code or CLI remediation playbook
+    for an identified waste finding. STRICTLY ADVISORY.
+    """
+    finding = db.query(WasteDetection).filter(WasteDetection.id == finding_id).first()
+    if not finding:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Waste finding with id '{finding_id}' not found",
+        )
+
+    res = finding.resource
+    playbook = RemediationPlaybookGenerator.generate_playbook(
+        provider=finding.provider,
+        action_type=finding.waste_type,
+        resource_id=finding.resource_id,
+        resource_name=res.resource_name if res and hasattr(res, "resource_name") else finding.resource_id,
+        region=res.region if res else "us-east-1",
+        account_id=finding.account_id,
+        service_name=res.service_name if res else finding.waste_type,
+        estimated_monthly_savings=finding.estimated_monthly_waste,
+        details=finding.telemetry_proof or {},
+        playbook_format=format,
+    )
+    return playbook
+
+
+@router.get("/findings/{finding_id}/playbook/download")
+def download_finding_playbook(
+    finding_id: uuid.UUID,
+    format: str = Query("markdown", description="Format: terraform, cloudformation, aws_cli, azure_cli, gcp_cli, bicep, markdown"),
+    db: Session = Depends(get_sync_db),
+):
+    """Downloads the advisory remediation playbook file directly."""
+    finding = db.query(WasteDetection).filter(WasteDetection.id == finding_id).first()
+    if not finding:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Waste finding with id '{finding_id}' not found",
+        )
+
+    res = finding.resource
+    playbook = RemediationPlaybookGenerator.generate_playbook(
+        provider=finding.provider,
+        action_type=finding.waste_type,
+        resource_id=finding.resource_id,
+        resource_name=res.resource_name if res and hasattr(res, "resource_name") else finding.resource_id,
+        region=res.region if res else "us-east-1",
+        account_id=finding.account_id,
+        service_name=res.service_name if res else finding.waste_type,
+        estimated_monthly_savings=finding.estimated_monthly_waste,
+        details=finding.telemetry_proof or {},
+        playbook_format=format,
+    )
+
+    return Response(
+        content=playbook["content"],
+        media_type=playbook["mime_type"],
+        headers={"Content-Disposition": f"attachment; filename={playbook['filename']}"},
+    )
+
+
+@router.get("/findings/{finding_id}/telemetry")
+def get_finding_telemetry(
+    finding_id: uuid.UUID,
+    days: int = Query(14, ge=1, le=90),
+    db: Session = Depends(get_sync_db),
+):
+    """
+    Retrieves real time-series metrics (CPU, Memory, Network, Disk) for the waste finding's target resource.
+    Never fabricates telemetry; returns explicit empty status if unmonitored.
+    """
+    finding = db.query(WasteDetection).filter(WasteDetection.id == finding_id).first()
+    if not finding:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Waste finding with id '{finding_id}' not found",
+        )
+
+    return TelemetryService.get_resource_telemetry(db, resource_id=finding.resource_id, days=days)
+
+
+@router.get("/findings/{finding_id}/investigation")
+def get_finding_investigation(
+    finding_id: uuid.UUID,
+    db: Session = Depends(get_sync_db),
+):
+    """
+    Deep investigation endpoint connecting the waste finding to resource metadata,
+    correlated recommendations, recent billing, and telemetry proof with anti-double-counting guarantees.
+    """
+    finding = db.query(WasteDetection).filter(WasteDetection.id == finding_id).first()
+    if not finding:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Waste finding with id '{finding_id}' not found",
+        )
+
+    correlations = CorrelationService.get_resource_correlations(db, resource_id=finding.resource_id)
+    return {
+        "finding": WasteFindingResponse.model_validate(finding),
+        "correlations": correlations,
+    }
+

@@ -1,5 +1,6 @@
 """API Routes Package."""
 from backend.app.api.routes import (
+    alerts,
     anomaly_detection,
     copilot,
     dashboard,
@@ -11,6 +12,7 @@ from backend.app.api.routes import (
 )
 
 __all__ = [
+    "alerts",
     "anomaly_detection",
     "copilot",
     "dashboard",

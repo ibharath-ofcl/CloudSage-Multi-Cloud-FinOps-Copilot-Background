@@ -56,6 +56,17 @@ class Settings(BaseSettings):
     # CORS
     BACKEND_CORS_ORIGINS: List[str] = ["http://localhost:3000", "http://localhost:5173"]
 
+    # Notifications & Alerts
+    SMTP_HOST: str = "localhost"
+    SMTP_PORT: int = 1025
+    SMTP_USER: str = ""
+    SMTP_PASSWORD: str = ""
+    SMTP_TLS: bool = False
+    EMAIL_FROM: str = "alerts@cloudsage.internal"
+    WEBHOOK_TIMEOUT_SECONDS: int = 10
+    WEBHOOK_MAX_RETRIES: int = 3
+    NOTIFICATION_SAFE_LOCAL_MODE: bool = True
+
     def get_async_database_url(self) -> str:
         if self.DATABASE_URL:
             return self.DATABASE_URL
