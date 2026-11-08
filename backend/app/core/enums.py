@@ -119,6 +119,7 @@ class RecommendationStatus(StrEnum):
     VERIFIED = "VERIFIED"
     DISMISSED = "DISMISSED"
     REJECTED = "REJECTED"
+    SNOOZED = "SNOOZED"
     EXPIRED = "EXPIRED"
     REOPENED = "REOPENED"
 

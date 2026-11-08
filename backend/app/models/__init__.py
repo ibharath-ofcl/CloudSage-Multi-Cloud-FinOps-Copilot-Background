@@ -31,6 +31,7 @@ from backend.app.models.recommendation import (
     RecommendationEvidence,
     RecommendationHistory,
     RecommendationRun,
+    RecommendationSavingsOverride,
 )
 from backend.app.models.resource import CloudResource, ResourceMetric
 from backend.app.models.user import User
@@ -47,6 +48,7 @@ __all__ = [
     "RecommendationEvidence",
     "RecommendationHistory",
     "RecommendationRun",
+    "RecommendationSavingsOverride",
     "CostAnomaly",
     "CostBaseline",
     "AnomalyDetectionRun",

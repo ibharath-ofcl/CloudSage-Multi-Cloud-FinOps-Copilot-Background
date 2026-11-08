@@ -31,6 +31,9 @@ from backend.app.inventory.service import InventoryService
 from backend.app.models.inventory import InventoryQualityReport, InventorySyncRun, ResourceRelationship
 from backend.app.models.resource import CloudResource
 
+from backend.app.services.correlation import CorrelationService
+from backend.app.services.telemetry import TelemetryService
+
 router = APIRouter(prefix="/inventory", tags=["Resource Inventory & Intelligence"])
 
 MAX_INVENTORY_FILE_SIZE = 50 * 1024 * 1024  # 50 MB
@@ -282,6 +285,32 @@ def get_resource_relationships(
     return InventoryService.get_resource_relationships(db=db, resource_id=resource_id)
 
 
+# Telemetry and Correlations MUST be declared BEFORE /resources/{resource_id:path}
+@router.get("/resources/{resource_id:path}/telemetry")
+def get_resource_telemetry_endpoint(
+    resource_id: str,
+    days: int = Query(14, ge=1, le=90),
+    db: Session = Depends(get_sync_db),
+):
+    """
+    Retrieves time-series metrics (CPU, Memory, Network, Disk) for a specific cloud resource.
+    Never fabricates telemetry; returns explicit empty status if unmonitored.
+    """
+    return TelemetryService.get_resource_telemetry(db, resource_id=resource_id, days=days)
+
+
+@router.get("/resources/{resource_id:path}/correlations")
+def get_resource_correlations_endpoint(
+    resource_id: str,
+    db: Session = Depends(get_sync_db),
+):
+    """
+    Retrieves unified entity correlation view linking the cloud resource to waste findings,
+    recommendations, anomalies, billing records, and telemetry with anti-double-counting guarantees.
+    """
+    return CorrelationService.get_resource_correlations(db, resource_id=resource_id)
+
+
 # 6. GET /api/v1/inventory/resources/{resource_id}
 @router.get(
     "/resources/{resource_id:path}",
@@ -336,3 +365,4 @@ def get_resource_detail(
         billing_records_count=corr["billing_record_count"] if corr else 0,
         latest_billing_period=corr["last_billed_at"] if corr else None,
     )
+

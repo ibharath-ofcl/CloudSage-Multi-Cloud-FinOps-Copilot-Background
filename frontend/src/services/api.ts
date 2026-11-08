@@ -146,3 +146,169 @@ export const CopilotService = {
     return res.data;
   },
 };
+
+export const WorkspaceService = {
+  // Recommendations
+  async listRecommendations(params?: {
+    provider?: string;
+    status?: string;
+    priority?: string;
+    risk_level?: string;
+    action_type?: string;
+    assigned_to?: string;
+    min_savings?: number;
+    search?: string;
+    sort_by?: string;
+    sort_order?: string;
+    skip?: number;
+    limit?: number;
+  }) {
+    const res = await apiClient.get('/recommendations', { params });
+    return res.data;
+  },
+
+  async getRecommendation(recId: string) {
+    const res = await apiClient.get(`/recommendations/${recId}`);
+    return res.data;
+  },
+
+  async updateRecommendationStatus(recId: string, payload: {
+    status: string;
+    actor_email: string;
+    reason?: string;
+    notes?: string;
+  }) {
+    const res = await apiClient.patch(`/recommendations/${recId}/status`, payload);
+    return res.data;
+  },
+
+  async batchReviewRecommendations(payload: {
+    recommendation_ids: string[];
+    action: string;
+    actor_email: string;
+    reason?: string;
+    snooze_days?: number;
+    assigned_to?: string;
+    external_ticket_ref?: string;
+  }) {
+    const res = await apiClient.post('/recommendations/batch', payload);
+    return res.data;
+  },
+
+  async proposeSavingsOverride(recId: string, payload: {
+    proposed_monthly_savings: number;
+    reason: string;
+    proposed_by: string;
+  }) {
+    const res = await apiClient.post(`/recommendations/${recId}/override`, payload);
+    return res.data;
+  },
+
+  async listSavingsOverrides(recId: string) {
+    const res = await apiClient.get(`/recommendations/${recId}/overrides`);
+    return res.data;
+  },
+
+  async approveSavingsOverride(recId: string, overrideId: string, payload: {
+    approved: boolean;
+    approved_by: string;
+    rejection_reason?: string;
+  }) {
+    const res = await apiClient.post(`/recommendations/${recId}/override/${overrideId}/approve`, payload);
+    return res.data;
+  },
+
+  async getRecommendationPlaybook(recId: string, format: string = 'markdown') {
+    const res = await apiClient.get(`/recommendations/${recId}/playbook`, { params: { format } });
+    return res.data;
+  },
+
+  getRecommendationPlaybookDownloadUrl(recId: string, format: string = 'markdown') {
+    return `${API_BASE}/recommendations/${recId}/playbook/download?format=${format}`;
+  },
+
+  async getRecommendationTelemetry(recId: string, days: number = 14) {
+    const res = await apiClient.get(`/recommendations/${recId}/telemetry`, { params: { days } });
+    return res.data;
+  },
+
+  async getRecommendationCorrelations(recId: string) {
+    const res = await apiClient.get(`/recommendations/${recId}/correlations`);
+    return res.data;
+  },
+
+  // Waste Findings
+  async listWasteFindings(params?: {
+    provider?: string;
+    account_id?: string;
+    waste_type?: string;
+    severity?: string;
+    status?: string;
+    min_savings?: number;
+    owner?: string;
+    environment?: string;
+    limit?: number;
+    offset?: number;
+  }) {
+    const res = await apiClient.get('/waste-detection/findings', { params });
+    return res.data;
+  },
+
+  async getWasteFinding(findingId: string) {
+    const res = await apiClient.get(`/waste-detection/findings/${findingId}`);
+    return res.data;
+  },
+
+  async performWasteAction(findingId: string, payload: {
+    action: string;
+    actor: string;
+    reason?: string;
+    snooze_days?: number;
+    assigned_to?: string;
+  }) {
+    const res = await apiClient.post(`/waste-detection/findings/${findingId}/action`, payload);
+    return res.data;
+  },
+
+  async batchWasteAction(payload: {
+    finding_ids: string[];
+    action: string;
+    actor: string;
+    reason?: string;
+    snooze_days?: number;
+    assigned_to?: string;
+  }) {
+    const res = await apiClient.post('/waste-detection/batch', payload);
+    return res.data;
+  },
+
+  async getFindingPlaybook(findingId: string, format: string = 'markdown') {
+    const res = await apiClient.get(`/waste-detection/findings/${findingId}/playbook`, { params: { format } });
+    return res.data;
+  },
+
+  getFindingPlaybookDownloadUrl(findingId: string, format: string = 'markdown') {
+    return `${API_BASE}/waste-detection/findings/${findingId}/playbook/download?format=${format}`;
+  },
+
+  async getFindingTelemetry(findingId: string, days: number = 14) {
+    const res = await apiClient.get(`/waste-detection/findings/${findingId}/telemetry`, { params: { days } });
+    return res.data;
+  },
+
+  async getFindingInvestigation(findingId: string) {
+    const res = await apiClient.get(`/waste-detection/findings/${findingId}/investigation`);
+    return res.data;
+  },
+
+  // General Inventory Resource Telemetry & Correlations
+  async getResourceTelemetry(resourceId: string, days: number = 14) {
+    const res = await apiClient.get(`/inventory/resources/${encodeURIComponent(resourceId)}/telemetry`, { params: { days } });
+    return res.data;
+  },
+
+  async getResourceCorrelations(resourceId: string) {
+    const res = await apiClient.get(`/inventory/resources/${encodeURIComponent(resourceId)}/correlations`);
+    return res.data;
+  },
+};

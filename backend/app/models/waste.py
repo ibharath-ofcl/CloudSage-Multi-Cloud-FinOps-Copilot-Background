@@ -174,6 +174,37 @@ class WasteDetection(Base):
         nullable=True,
         doc="Expiry timestamp if snoozed",
     )
+    assigned_to = Column(
+        String(128),
+        nullable=True,
+        index=True,
+        doc="Assigned engineer or FinOps analyst",
+    )
+    resolved_by = Column(
+        String(128),
+        nullable=True,
+        doc="Identity of user who resolved finding",
+    )
+    resolved_at = Column(
+        DateTime(timezone=True),
+        nullable=True,
+        doc="Resolution timestamp",
+    )
+    reopened_by = Column(
+        String(128),
+        nullable=True,
+        doc="Identity of user who reopened finding",
+    )
+    reopened_at = Column(
+        DateTime(timezone=True),
+        nullable=True,
+        doc="Reopen timestamp",
+    )
+    action_notes = Column(
+        Text,
+        nullable=True,
+        doc="Operational triage notes or justification",
+    )
     first_detected_at = Column(
         DateTime(timezone=True),
         nullable=False,

@@ -133,6 +133,11 @@ class RecommendationResponse(RecommendationBase):
     accepted_at: Optional[datetime] = None
     verified_at: Optional[datetime] = None
     expiry_at: Optional[datetime] = None
+    snooze_until: Optional[datetime] = None
+    assigned_to: Optional[str] = None
+    external_ticket_ref: Optional[str] = None
+    revised_monthly_savings: Optional[Decimal] = None
+    is_savings_overridden: Optional[bool] = False
     created_at: datetime
     updated_at: Optional[datetime] = None
 
@@ -227,3 +232,60 @@ class OwnerImpactResponse(BaseModel):
     total_monthly_savings: Decimal
     total_annual_savings: Decimal
     pending_approval_count: int
+
+
+class BatchRecommendationReviewRequest(BaseModel):
+    recommendation_ids: List[UUID] = Field(..., min_length=1)
+    action: str = Field(..., description="Action: APPROVE, REJECT, DISMISS, SNOOZE, ENDORSE")
+    actor_email: str = Field(..., max_length=128)
+    reason: Optional[str] = None
+    snooze_days: Optional[int] = Field(None, ge=1, le=365)
+    assigned_to: Optional[str] = None
+    external_ticket_ref: Optional[str] = None
+
+
+class BatchRecommendationReviewResponse(BaseModel):
+    total_requested: int
+    total_successful: int
+    total_failed: int
+    successful: List[Dict[str, Any]]
+    failed: List[Dict[str, Any]]
+
+
+class SavingsOverrideProposeRequest(BaseModel):
+    proposed_monthly_savings: Decimal = Field(..., ge=0, description="Proposed revised monthly savings in USD")
+    reason: str = Field(..., min_length=3, description="FinOps justification for override")
+    proposed_by: str = Field(..., max_length=128)
+
+
+class SavingsOverrideApproveRequest(BaseModel):
+    approved: bool = Field(..., description="True to approve, False to reject")
+    approved_by: str = Field(..., max_length=128)
+    rejection_reason: Optional[str] = None
+
+
+class SavingsOverrideResponse(BaseModel):
+    id: UUID
+    recommendation_id: UUID
+    original_monthly_savings: Decimal
+    proposed_monthly_savings: Decimal
+    reason: str
+    proposed_by: str
+    approved_by: Optional[str] = None
+    status: str
+    rejection_reason: Optional[str] = None
+    created_at: datetime
+    reviewed_at: Optional[datetime] = None
+
+    model_config = ConfigDict(from_attributes=True)
+
+
+class RemediationPlaybookResponse(BaseModel):
+    format: str
+    content: str
+    filename: str
+    mime_type: str
+    provider: str
+    action_type: str
+    estimated_monthly_savings: str
+

@@ -39,6 +39,12 @@ class WasteFindingResponse(BaseModel):
     dismissal_reason: Optional[str] = None
     dismissed_by: Optional[str] = None
     snooze_until: Optional[datetime] = None
+    assigned_to: Optional[str] = None
+    resolved_by: Optional[str] = None
+    resolved_at: Optional[datetime] = None
+    reopened_by: Optional[str] = None
+    reopened_at: Optional[datetime] = None
+    action_notes: Optional[str] = None
 
     model_config = ConfigDict(from_attributes=True)
 
@@ -105,3 +111,28 @@ class DetectorInfoResponse(BaseModel):
     description: str
     supported_providers: List[str]
     default_thresholds: Dict[str, Any]
+
+
+class WasteActionRequest(BaseModel):
+    action: str = Field(..., description="Action: ACKNOWLEDGE, ASSIGN, SNOOZE, DISMISS, RESOLVE, REOPEN")
+    actor: str = Field(..., max_length=128)
+    reason: Optional[str] = None
+    snooze_days: Optional[int] = Field(None, ge=1, le=365)
+    assigned_to: Optional[str] = None
+
+
+class BatchWasteActionRequest(BaseModel):
+    finding_ids: List[uuid.UUID] = Field(..., min_length=1)
+    action: str = Field(..., description="Action: ACKNOWLEDGE, ASSIGN, SNOOZE, DISMISS, RESOLVE, REOPEN")
+    actor: str = Field(..., max_length=128)
+    reason: Optional[str] = None
+    snooze_days: Optional[int] = Field(None, ge=1, le=365)
+    assigned_to: Optional[str] = None
+
+
+class BatchWasteActionResponse(BaseModel):
+    total_requested: int
+    total_successful: int
+    total_failed: int
+    successful: List[Dict[str, Any]]
+    failed: List[Dict[str, Any]]
