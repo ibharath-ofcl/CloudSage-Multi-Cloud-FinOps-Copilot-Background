@@ -439,3 +439,4 @@ def get_llm_provider(model_override: Optional[str] = None) -> BaseLLMProvider:
         endpoint=settings.COPILOT_API_ENDPOINT,
         model=model_name,
     )
+

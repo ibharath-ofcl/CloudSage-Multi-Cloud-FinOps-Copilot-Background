@@ -92,3 +92,4 @@ COPILOT_MODEL_NAME=meta-llama/Meta-Llama-3-70B-Instruct
 COPILOT_API_KEY=dummy-token-for-local-vllm
 COPILOT_API_ENDPOINT=http://vllm-service.internal.net:8000/v1/chat/completions
 ```
+

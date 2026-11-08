@@ -76,3 +76,4 @@ def test_query_plan_to_schema():
     assert schema.intent == CopilotIntent.SERVICE_COST_BREAKDOWN.value
     assert schema.target_dataset == "billing_records"
     assert "service_name" in schema.group_by
+

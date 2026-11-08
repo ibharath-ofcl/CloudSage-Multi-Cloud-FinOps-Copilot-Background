@@ -73,3 +73,4 @@ The entity extraction engine extracts 5 core FinOps dimensions:
 - Extracts owner and cost-center key-value pairs:
   - `owner: data_engineering` $\rightarrow$ `{"owner": "data_engineering"}`
   - `cost-center: CC-9988` $\rightarrow$ `{"cost_center": "CC-9988"}`
+

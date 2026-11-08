@@ -74,3 +74,4 @@ In compliance with CloudSage FinOps engineering standards:
 - **Zero Float Rule**: All aggregations use PostgreSQL `Numeric(18, 4)` and Python `Decimal`. Floating-point arithmetic (`float`) is strictly prohibited in monetary pipelines.
 - **Limit Caps**: Query plans enforce deterministic pagination and limit thresholds (e.g. `limit=10` or `limit=30`) to avoid excessive memory consumption.
 - **Parameterized Filters**: All filters are passed as bound parameters to SQLAlchemy ORM models, eliminating SQL injection.
+

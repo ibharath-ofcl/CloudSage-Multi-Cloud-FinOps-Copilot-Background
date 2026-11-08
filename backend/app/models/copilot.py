@@ -298,3 +298,4 @@ class CopilotUsageLog(Base):
         Index("idx_copilot_usage_created", "created_at"),
         Index("idx_copilot_usage_model", "model_name"),
     )
+

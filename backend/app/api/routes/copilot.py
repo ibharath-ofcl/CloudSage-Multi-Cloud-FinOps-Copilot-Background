@@ -191,3 +191,4 @@ def explain_finding(
     """
     engine = get_copilot_engine()
     return engine.explain_entity(db, payload)
+

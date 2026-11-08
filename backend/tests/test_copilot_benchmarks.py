@@ -42,3 +42,4 @@ def test_run_benchmark_evaluation(db_session):
         assert detail["has_advisory_disclaimer"] is True, (
             f"Benchmark {detail['id']} missing required advisory disclaimer!"
         )
+

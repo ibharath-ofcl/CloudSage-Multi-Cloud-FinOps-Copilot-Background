@@ -156,3 +156,4 @@ def test_record_usage_log(db_session):
     assert log.id is not None
     assert log.total_tokens == 225
     assert log.status == "success"
+

@@ -89,3 +89,4 @@ New conversation threads are created with a placeholder title (`"FinOps Analysis
 
 - **Rating System**: Users can submit binary feedback (`+1` for helpful, `-1` for unhelpful/incorrect) alongside qualitative commentary via `POST /api/v1/copilot/feedback`.
 - **Telemetry Audit**: Every chat turn, whether completed successfully or blocked by safety guardrails, is recorded in `copilot_usage_logs` with prompt tokens, completion tokens, roundtrip latency, and status.
+

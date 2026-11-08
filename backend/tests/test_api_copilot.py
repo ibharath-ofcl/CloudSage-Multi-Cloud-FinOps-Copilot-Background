@@ -245,3 +245,4 @@ def test_api_copilot_usage(client):
     assert data["total_tokens"] >= 1
     assert data["average_latency_ms"] >= 0.0
     assert len(data["provider_breakdown"]) >= 1
+
