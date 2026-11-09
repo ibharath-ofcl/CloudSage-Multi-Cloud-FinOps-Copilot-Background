@@ -15,6 +15,9 @@ import {
   Bell,
   Send,
   FileSearch,
+  Users,
+  Key,
+  Lock,
 } from 'lucide-react';
 
 export const Sidebar: React.FC = () => {
@@ -34,6 +37,12 @@ export const Sidebar: React.FC = () => {
     { label: 'Ingestion & Quality', path: '/quality', icon: ShieldCheck },
   ];
 
+  const adminNavItems = [
+    { label: 'User Governance', path: '/admin/users', icon: Users },
+    { label: 'Roles & Permissions', path: '/admin/roles', icon: Key },
+    { label: 'Security & Audit Hub', path: '/admin/security', icon: Lock },
+  ];
+
   return (
     <aside className="w-64 bg-slate-900 text-slate-300 flex flex-col shrink-0 min-h-screen border-r border-slate-800">
       <div className="p-5 border-b border-slate-800">
@@ -43,34 +52,65 @@ export const Sidebar: React.FC = () => {
           </div>
           <div>
             <div className="text-sm font-bold text-white tracking-wide">CloudSage FinOps</div>
-            <div className="text-[10px] text-slate-400">Enterprise Edition v0.13.0</div>
+            <div className="text-[10px] text-slate-400">Enterprise Edition v0.14.0</div>
           </div>
         </div>
       </div>
 
-      <nav className="p-3 flex-1 space-y-1">
-        <div className="px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-slate-500">
-          Navigation
+      <nav className="p-3 flex-1 space-y-4 overflow-y-auto">
+        <div>
+          <div className="px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-slate-500">
+            Navigation
+          </div>
+          <div className="space-y-1">
+            {navItems.map((item) => {
+              const Icon = item.icon;
+              return (
+                <NavLink
+                  key={item.path}
+                  to={item.path}
+                  className={({ isActive }) =>
+                    `flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-medium transition ${
+                      isActive
+                        ? 'bg-blue-600/20 text-blue-400 border border-blue-500/30'
+                        : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
+                    }`
+                  }
+                >
+                  <Icon className="w-4 h-4 shrink-0" />
+                  <span>{item.label}</span>
+                </NavLink>
+              );
+            })}
+          </div>
         </div>
-        {navItems.map((item) => {
-          const Icon = item.icon;
-          return (
-            <NavLink
-              key={item.path}
-              to={item.path}
-              className={({ isActive }) =>
-                `flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-medium transition ${
-                  isActive
-                    ? 'bg-blue-600/20 text-blue-400 border border-blue-500/30'
-                    : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
-                }`
-              }
-            >
-              <Icon className="w-4 h-4 shrink-0" />
-              <span>{item.label}</span>
-            </NavLink>
-          );
-        })}
+
+        <div>
+          <div className="px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-slate-500">
+            Enterprise RBAC & Security
+          </div>
+          <div className="space-y-1">
+            {adminNavItems.map((item) => {
+              const Icon = item.icon;
+              return (
+                <NavLink
+                  key={item.path}
+                  to={item.path}
+                  className={({ isActive }) =>
+                    `flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-medium transition ${
+                      isActive
+                        ? 'bg-indigo-600/20 text-indigo-400 border border-indigo-500/30'
+                        : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
+                    }`
+                  }
+                >
+                  <Icon className="w-4 h-4 shrink-0" />
+                  <span>{item.label}</span>
+                </NavLink>
+              );
+            })}
+          </div>
+        </div>
       </nav>
 
       <div className="p-4 border-t border-slate-800/80 space-y-2">

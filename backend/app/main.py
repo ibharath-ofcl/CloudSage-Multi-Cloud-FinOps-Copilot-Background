@@ -9,6 +9,7 @@ from fastapi.responses import RedirectResponse
 from backend.app.api.routes import (
     alerts,
     anomaly_detection,
+    auth,
     copilot,
     dashboard,
     ingestion,
@@ -16,6 +17,9 @@ from backend.app.api.routes import (
     investigations,
     normalization,
     recommendations,
+    roles,
+    security,
+    users,
     waste_detection,
 )
 from backend.app.core.config import settings
@@ -23,7 +27,7 @@ from backend.app.core.config import settings
 app = FastAPI(
     title=settings.PROJECT_NAME,
     description="Enterprise Multi-Cloud FinOps Copilot Platform Backend API.",
-    version="0.13.0",
+    version="0.14.0",
     docs_url="/docs",
     redoc_url="/redoc",
     openapi_url=f"{settings.API_V1_STR}/openapi.json",
@@ -39,6 +43,10 @@ app.add_middleware(
 )
 
 # Register API Sub-Routers
+app.include_router(auth.router, prefix=settings.API_V1_STR)
+app.include_router(users.router, prefix=settings.API_V1_STR)
+app.include_router(roles.router, prefix=settings.API_V1_STR)
+app.include_router(security.router, prefix=settings.API_V1_STR)
 app.include_router(ingestion.router, prefix=settings.API_V1_STR)
 app.include_router(normalization.router, prefix=settings.API_V1_STR)
 app.include_router(inventory.router, prefix=settings.API_V1_STR)

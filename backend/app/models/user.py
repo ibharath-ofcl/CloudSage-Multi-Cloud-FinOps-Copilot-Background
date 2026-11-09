@@ -10,7 +10,9 @@ from sqlalchemy import (
     Boolean,
     Column,
     DateTime,
+    ForeignKey,
     Index,
+    Integer,
     String,
     Uuid,
 )
@@ -27,6 +29,13 @@ class User(Base):
         primary_key=True,
         default=uuid.uuid4,
         nullable=False
+    )
+    tenant_id = Column(
+        Uuid(as_uuid=True),
+        ForeignKey("tenants.id", ondelete="SET NULL"),
+        nullable=True,
+        index=True,
+        doc="Assigned enterprise organization / tenant ID"
     )
     email = Column(
         String(256),
@@ -50,7 +59,7 @@ class User(Base):
         nullable=False,
         default=UserRole.FINANCE_ANALYST.value,
         index=True,
-        doc="Assigned RBAC role"
+        doc="Assigned primary RBAC role"
     )
     department = Column(
         String(64),
@@ -64,11 +73,40 @@ class User(Base):
         default=True,
         doc="Active status indicator"
     )
+    failed_login_attempts = Column(
+        Integer,
+        nullable=False,
+        default=0,
+        doc="Counter for consecutive failed password authentications"
+    )
+    is_locked = Column(
+        Boolean,
+        nullable=False,
+        default=False,
+        doc="Whether account is temporarily locked due to brute force"
+    )
+    locked_until = Column(
+        DateTime(timezone=True),
+        nullable=True,
+        doc="Timestamp until which account is locked"
+    )
+    last_login_at = Column(
+        DateTime(timezone=True),
+        nullable=True,
+        doc="Timestamp of most recent successful authentication"
+    )
     created_at = Column(
         DateTime(timezone=True),
         nullable=False,
         default=lambda: datetime.now(timezone.utc),
         doc="Account provisioning timestamp"
+    )
+    updated_at = Column(
+        DateTime(timezone=True),
+        nullable=False,
+        default=lambda: datetime.now(timezone.utc),
+        onupdate=lambda: datetime.now(timezone.utc),
+        doc="Account profile update timestamp"
     )
 
     def __repr__(self) -> str:
