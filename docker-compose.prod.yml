@@ -1,0 +1,191 @@
+# ==============================================================================
+# CloudSage Multi-Cloud FinOps Copilot - Production Orchestration
+# Hardened Multi-Tier Deployment:
+#   - Ingress: Nginx Reverse Proxy (SSL, Rate-Limiting, Security Headers)
+#   - Frontend: React / Nginx Static Container (Non-root)
+#   - Backend: FastAPI / Gunicorn ASGI Workers (Non-root, Strict Zero-Float, Observability)
+#   - Database: PostgreSQL 16 Enterprise (Isolated Internal Network, Persistent Volume)
+#   - Cache / Broker: Redis 7 Enterprise (Protected Mode, Internal Network)
+# ==============================================================================
+
+version: "3.8"
+
+services:
+  ingress:
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    container_name: cloudsage-ingress-prod
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      backend:
+        condition: service_healthy
+      frontend:
+        condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          cpus: "1.00"
+          memory: 256M
+        reservations:
+          cpus: "0.25"
+          memory: 64M
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+        max-file: "5"
+    networks:
+      - cloudsage-public-net
+    restart: always
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+      target: production
+    container_name: cloudsage-backend-prod
+    environment:
+      - ENVIRONMENT=production
+      - PORT=8000
+      - POSTGRES_SERVER=postgres
+      - POSTGRES_PORT=5432
+      - POSTGRES_USER=${POSTGRES_USER:-cloudsage_app}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB:-cloudsage_prod}
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - SECRET_KEY=${SECRET_KEY}
+      - ALLOW_DEV_AUTH_HEADERS=false
+      - NOTIFICATION_SAFE_LOCAL_MODE=${NOTIFICATION_SAFE_LOCAL_MODE:-false}
+      - LOG_FORMAT=json
+      - LOG_LEVEL=INFO
+      - GUNICORN_WORKERS=4
+      - GUNICORN_TIMEOUT=120
+      - RUN_MIGRATIONS=true
+    volumes:
+      - cloudsage_backups:/backups
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          cpus: "2.00"
+          memory: 2048M
+        reservations:
+          cpus: "0.50"
+          memory: 512M
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "100m"
+        max-file: "5"
+    networks:
+      - cloudsage-public-net
+      - cloudsage-internal-net
+    restart: always
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      target: production
+    container_name: cloudsage-frontend-prod
+    deploy:
+      resources:
+        limits:
+          cpus: "1.00"
+          memory: 512M
+        reservations:
+          cpus: "0.20"
+          memory: 128M
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "20m"
+        max-file: "3"
+    networks:
+      - cloudsage-public-net
+    restart: always
+
+  postgres:
+    image: postgres:16-alpine
+    container_name: cloudsage-postgres-prod
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-cloudsage_app}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB:-cloudsage_prod}
+    volumes:
+      - postgres_prod_data:/var/lib/postgresql/data
+      - cloudsage_backups:/backups
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-cloudsage_app} -d ${POSTGRES_DB:-cloudsage_prod}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+    deploy:
+      resources:
+        limits:
+          cpus: "2.00"
+          memory: 4096M
+        reservations:
+          cpus: "1.00"
+          memory: 1024M
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "100m"
+        max-file: "5"
+    networks:
+      - cloudsage-internal-net
+    restart: always
+
+  redis:
+    image: redis:7-alpine
+    container_name: cloudsage-redis-prod
+    command: ["redis-server", "--appendonly", "yes", "--requirepass", "${REDIS_PASSWORD:-}"]
+    volumes:
+      - redis_prod_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
+    deploy:
+      resources:
+        limits:
+          cpus: "1.00"
+          memory: 1024M
+        reservations:
+          cpus: "0.20"
+          memory: 128M
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "20m"
+        max-file: "3"
+    networks:
+      - cloudsage-internal-net
+    restart: always
+
+networks:
+  cloudsage-public-net:
+    driver: bridge
+  cloudsage-internal-net:
+    driver: bridge
+    internal: true
+
+volumes:
+  postgres_prod_data:
+    name: cloudsage_postgres_prod_data
+  redis_prod_data:
+    name: cloudsage_redis_prod_data
+  cloudsage_backups:
+    name: cloudsage_prod_backups

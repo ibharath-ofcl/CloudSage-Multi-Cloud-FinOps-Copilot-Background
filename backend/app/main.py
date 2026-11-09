@@ -3,9 +3,9 @@ CloudSage Backend FastAPI Application.
 Initializes REST API routes, middleware, OpenAPI documentation, and health endpoints.
 """
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Depends, Response
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import RedirectResponse
+from fastapi.responses import RedirectResponse, PlainTextResponse
 from backend.app.api.routes import (
     alerts,
     anomaly_detection,
@@ -23,15 +23,27 @@ from backend.app.api.routes import (
     waste_detection,
 )
 from backend.app.core.config import settings
+from backend.app.core.observability import (
+    RequestCorrelationMiddleware,
+    check_dependency_health,
+    get_prometheus_metrics,
+    setup_structured_logging,
+)
+
+# Initialize structured JSON logging
+setup_structured_logging(log_level=settings.LOG_LEVEL, log_format=settings.LOG_FORMAT)
 
 app = FastAPI(
     title=settings.PROJECT_NAME,
     description="Enterprise Multi-Cloud FinOps Copilot Platform Backend API.",
-    version="0.14.0",
+    version=settings.VERSION,
     docs_url="/docs",
     redoc_url="/redoc",
     openapi_url=f"{settings.API_V1_STR}/openapi.json",
 )
+
+# Request Correlation & Observability Middleware
+app.add_middleware(RequestCorrelationMiddleware)
 
 # CORS Middleware
 app.add_middleware(
@@ -70,7 +82,7 @@ def root():
     return {
         "project": settings.PROJECT_NAME,
         "status": "online",
-        "version": "0.10.0",
+        "version": settings.VERSION,
         "documentation": "/docs",
         "dashboard": "/dashboard",
     }
@@ -79,10 +91,32 @@ def root():
 @app.get("/health/liveness", tags=["Health"])
 def liveness_probe():
     """Liveness probe confirming service process is active."""
-    return {"status": "healthy"}
+    return {
+        "status": "healthy",
+        "service": "cloudsage-backend",
+        "version": settings.VERSION,
+    }
 
 
 @app.get("/health/readiness", tags=["Health"])
 def readiness_probe():
-    """Readiness probe confirming database and dependency connectivity."""
-    return {"status": "ready"}
+    """Readiness probe confirming database and core dependency readiness."""
+    health = check_dependency_health()
+    is_ready = health["status"] in ("healthy", "degraded")
+    return {
+        "status": "ready" if is_ready else "unready",
+        "database": health["dependencies"].get("database", {}).get("status", "unknown"),
+        "version": settings.VERSION,
+    }
+
+
+@app.get("/health/dependencies", tags=["Health"])
+def dependency_health_probe():
+    """Deep dependency health check for DB, cache, and filesystem storage."""
+    return check_dependency_health()
+
+
+@app.get("/metrics", tags=["Observability"], response_class=PlainTextResponse)
+def prometheus_metrics():
+    """Exposes Prometheus exposition format metrics for scrapers."""
+    return PlainTextResponse(get_prometheus_metrics(), media_type="text/plain; version=0.0.4; charset=utf-8")

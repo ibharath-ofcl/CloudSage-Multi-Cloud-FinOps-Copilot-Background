@@ -49,6 +49,12 @@ def get_sync_engine() -> Engine:
     return _sync_engine
 
 
+def SessionLocal():
+    """Returns a new synchronous session instance."""
+    get_sync_engine()
+    return _sync_session_factory()
+
+
 def get_sync_db() -> Generator:
     """Dependency for yielding a synchronous database session."""
     get_sync_engine()

@@ -3,7 +3,8 @@
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
 [![Architecture](https://img.shields.io/badge/Architecture-FOCUS%201.0%20Compliant-green.svg)](docs/FUNCTIONAL_REQUIREMENTS.md)
 [![Safety](https://img.shields.io/badge/Safety-Advisory%20Only-orange.svg)](docs/BUSINESS_REQUIREMENTS.md)
-[![Status](https://img.shields.io/badge/Status-Stage%2014%20Complete-brightgreen.svg)](docs/DEVELOPMENT_ROADMAP.md)
+[![Status](https://img.shields.io/badge/Status-Stage%2015%20Complete%20%7C%20Production%20Ready-brightgreen.svg)](docs/DEVELOPMENT_ROADMAP.md)
+[![Tests](https://img.shields.io/badge/Tests-567%20Passed-brightgreen.svg)](docs/STAGE_15_TEST_REPORT.md)
 
 > **CloudSage** is an enterprise-grade, AI-powered Multi-Cloud Financial Operations (FinOps) platform engineered to unify fragmented cloud billing data, detect unnecessary expenditure, identify cost anomalies, and generate prioritized, evidence-backed savings recommendations across **Amazon Web Services (AWS)**, **Microsoft Azure**, and **Google Cloud Platform (GCP)**.
 
@@ -49,6 +50,7 @@ CloudSage bridges the gap between infrastructure engineering, financial operatio
 | **Alerts & Notification Hub** | Multi-dimensional alert rules, dry-run simulation, deterministic deduplication keying, transactional outbox dispatch, and multi-channel alerting (In-App, Slack, Teams, Email, Webhooks). |
 | **Anomaly Investigation & RCA Workspace** | 10-dimensional FOCUS decomposition, Pareto 80/20 cost driver curves, economic growth accounting ($\Delta Q \cdot P_0 + \Delta P \cdot Q_0 + \Delta Q \cdot \Delta P$), rolling 7-day moving averages, resource topology & telemetry correlation, cross-signal linking, and collaborative case management. |
 | **Enterprise RBAC & Security Hardening** | 7 canonical enterprise roles, fine-grained `resource:action` taxonomy, cryptographic JWT (HS256) auth, bcrypt (12 rounds) storage, multi-tenant boundary isolation, separation of duties dual approvals (`requester != approver`), real-time threat detection (brute-force lockout), and tamper-evident SHA-256 hash-chained audit logging. |
+| **Production Containerization & CI/CD** | Multi-stage Docker builds (Backend, Frontend, Ingress), Compose orchestration (Dev/Prod), Prometheus metrics (`/metrics`), structured JSON logs, health probes (`/health/*`), backup & disaster recovery scripts, and 6-gate GitHub Actions CI/CD. |
 
 ---
 
@@ -195,6 +197,33 @@ The development of CloudSage is structured across 15 disciplined stages:
 ---
 
 ## 8. Multi-Cloud Recommendation & Ingestion Quickstart
+
+### Production & Local Container Deployment Quickstart
+
+Launch the complete CloudSage stack (Backend, Frontend, Postgres, Redis, Ingress) with one command:
+
+```bash
+# 1. Clone repository
+git clone https://github.com/ibharath-ofcl/CloudSage-Multi-Cloud-FinOps-Copilot-Background.git
+cd CloudSage-Multi-Cloud-FinOps-Copilot-Background
+
+# 2. Configure local development environment
+cp .env.example .env
+
+# 3. Launch full-stack environment with Docker Compose
+docker compose up -d --build
+
+# 4. Verify deployment health probes
+curl http://localhost:8000/health/liveness
+curl http://localhost:8000/health/readiness
+curl http://localhost:8000/health/dependencies
+
+# 5. Scrape Prometheus metrics
+curl http://localhost:8000/metrics
+
+# 6. Access Interactive Command Center
+# Open http://localhost:3000 in your browser
+```
 
 ### Recommendation Engine REST API Quickstart
 ```bash
@@ -375,6 +404,15 @@ Detailed architectural and functional specifications are located in the [`docs/`
 - [Tamper-Evident Audit Logging & Governance](docs/AUDIT_LOGGING_GOVERNANCE.md)
 - [Security Monitoring & Threat Detection](docs/SECURITY_MONITORING.md)
 - [Stage 14 QA Test and Verification Report](docs/STAGE_14_TEST_REPORT.md)
+- [Stage 15 Implementation Guide](docs/STAGE_15_IMPLEMENTATION.md)
+- [Container Architecture & Multi-Stage Builds](docs/DOCKER_ARCHITECTURE.md)
+- [Local Deployment Guide](docs/LOCAL_DEPLOYMENT.md)
+- [Production Deployment Guide](docs/PRODUCTION_DEPLOYMENT.md)
+- [CI/CD Pipeline Specification](docs/CI_CD_PIPELINE.md)
+- [Environment Configuration & Secrets Reference](docs/ENVIRONMENT_CONFIGURATION.md)
+- [Production Observability & Telemetry](docs/OBSERVABILITY.md)
+- [Database Backup & Disaster Recovery](docs/BACKUP_AND_DISASTER_RECOVERY.md)
+- [Stage 15 QA Test and Verification Report](docs/STAGE_15_TEST_REPORT.md)
 - [15-Stage Enterprise Development Roadmap](docs/DEVELOPMENT_ROADMAP.md)
 
 ---

@@ -1,0 +1,99 @@
+# ==============================================================================
+# CloudSage Multi-Cloud FinOps Copilot - Local Development Docker Compose
+# Architecture: Backend (FastAPI), Frontend (React/Nginx), PostgreSQL 16, Redis 7
+# ==============================================================================
+
+version: "3.8"
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+      target: production
+    container_name: cloudsage-backend-dev
+    environment:
+      - ENVIRONMENT=development
+      - PORT=8000
+      - POSTGRES_SERVER=postgres
+      - POSTGRES_PORT=5432
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=cloudsage
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - SECRET_KEY=development-secret-key-change-in-production-stage
+      - ALLOW_DEV_AUTH_HEADERS=true
+      - NOTIFICATION_SAFE_LOCAL_MODE=true
+      - LOG_FORMAT=text
+      - LOG_LEVEL=INFO
+    ports:
+      - "8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - cloudsage-network
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      target: production
+    container_name: cloudsage-frontend-dev
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    networks:
+      - cloudsage-network
+    restart: unless-stopped
+
+  postgres:
+    image: postgres:16-alpine
+    container_name: cloudsage-postgres-dev
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: cloudsage
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d cloudsage"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    networks:
+      - cloudsage-network
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    container_name: cloudsage-redis-dev
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
+    networks:
+      - cloudsage-network
+    restart: unless-stopped
+
+networks:
+  cloudsage-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+  redis_data:

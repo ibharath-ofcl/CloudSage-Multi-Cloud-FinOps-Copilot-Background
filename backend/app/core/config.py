@@ -4,6 +4,7 @@ Manages application settings, database connection URLs, and runtime parameters.
 """
 
 from typing import List
+from pydantic import model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -17,6 +18,8 @@ class Settings(BaseSettings):
     PROJECT_NAME: str = "CloudSage - Multi-Cloud FinOps Copilot"
     API_V1_STR: str = "/api/v1"
     ENVIRONMENT: str = "development"
+    VERSION: str = "0.15.0"
+    APP_VERSION: str = "0.15.0"
 
     # PostgreSQL Connection Parameters
     POSTGRES_SERVER: str = "localhost"
@@ -67,6 +70,16 @@ class Settings(BaseSettings):
     # CORS
     BACKEND_CORS_ORIGINS: List[str] = ["http://localhost:3000", "http://localhost:5173"]
 
+    # Observability & Production Runtime
+    METRICS_ENABLED: bool = True
+    METRICS_PATH: str = "/metrics"
+    LOG_FORMAT: str = "json"  # json or text
+    LOG_LEVEL: str = "INFO"
+    REQUEST_ID_HEADER: str = "X-Request-ID"
+    GUNICORN_WORKERS: int = 4
+    GUNICORN_TIMEOUT: int = 120
+    HEALTHCHECK_TIMEOUT_SECONDS: float = 3.0
+
     # Notifications & Alerts
     SMTP_HOST: str = "localhost"
     SMTP_PORT: int = 1025
@@ -77,6 +90,28 @@ class Settings(BaseSettings):
     WEBHOOK_TIMEOUT_SECONDS: int = 10
     WEBHOOK_MAX_RETRIES: int = 3
     NOTIFICATION_SAFE_LOCAL_MODE: bool = True
+
+    @model_validator(mode="after")
+    def validate_production_security(self):
+        """Enforces security hardening rules when running in production environment."""
+        env = (self.ENVIRONMENT or "").strip().lower()
+        if env == "production":
+            if self.SECRET_KEY == "development-secret-key-change-in-production-stage" or len(self.SECRET_KEY) < 32:
+                raise ValueError("Production environment requires a secure, non-default SECRET_KEY with at least 32 characters.")
+            if self.ALLOW_DEV_AUTH_HEADERS:
+                raise ValueError("ALLOW_DEV_AUTH_HEADERS must be False in production environment.")
+            if self.POSTGRES_PASSWORD == "postgres" and not self.DATABASE_URL:
+                raise ValueError("Production environment cannot use default PostgreSQL password ('postgres').")
+        return self
+
+    def is_production(self) -> bool:
+        return (self.ENVIRONMENT or "").strip().lower() == "production"
+
+    def is_development(self) -> bool:
+        return (self.ENVIRONMENT or "").strip().lower() == "development"
+
+    def is_testing(self) -> bool:
+        return (self.ENVIRONMENT or "").strip().lower() in ("test", "testing")
 
     def get_async_database_url(self) -> str:
         if self.DATABASE_URL:
