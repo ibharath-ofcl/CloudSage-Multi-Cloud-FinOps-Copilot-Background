@@ -123,7 +123,11 @@ def require_admin_or_finops_role(
     """Enforces that the caller possesses administrative or FinOps engineering privileges."""
     allowed = {
         UserRole.SUPER_ADMIN.value,
+        UserRole.ORGANIZATION_ADMIN.value,
+        UserRole.FINOPS_MANAGER.value,
         UserRole.FINOPS_ENGINEER.value,
+        UserRole.FINOPS_ANALYST.value,
+        UserRole.CLOUD_ENGINEER.value,
         "ADMIN",
         "FINOPS_ADMIN",
     }

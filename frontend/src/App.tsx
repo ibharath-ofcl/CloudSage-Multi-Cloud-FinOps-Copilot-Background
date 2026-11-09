@@ -20,6 +20,10 @@ import { DeliveryStatusPanel } from './pages/DeliveryStatusPanel';
 import { NotificationPreferencesPage } from './pages/NotificationPreferencesPage';
 import { InvestigationListPage } from './pages/InvestigationListPage';
 import { InvestigationDetailPage } from './pages/InvestigationDetailPage';
+import { UserManagementPage } from './pages/UserManagementPage';
+import { RoleManagementPage } from './pages/RoleManagementPage';
+import { SecurityMonitoringPage } from './pages/SecurityMonitoringPage';
+import { LoginPage } from './pages/LoginPage';
 
 export const App: React.FC = () => {
   const [isCopilotOpen, setIsCopilotOpen] = useState(false);
@@ -60,6 +64,10 @@ export const App: React.FC = () => {
               <Route path="/notifications" element={<NotificationCenter key={refreshTrigger} />} />
               <Route path="/notification-deliveries" element={<DeliveryStatusPanel key={refreshTrigger} />} />
               <Route path="/notification-preferences" element={<NotificationPreferencesPage key={refreshTrigger} />} />
+              <Route path="/login" element={<LoginPage />} />
+              <Route path="/admin/users" element={<UserManagementPage key={refreshTrigger} />} />
+              <Route path="/admin/roles" element={<RoleManagementPage key={refreshTrigger} />} />
+              <Route path="/admin/security" element={<SecurityMonitoringPage key={refreshTrigger} />} />
             </Routes>
           </main>
         </div>

@@ -45,6 +45,13 @@ class AuditLog(Base):
         index=True,
         doc="User ID if authenticated"
     )
+    tenant_id = Column(
+        Uuid(as_uuid=True),
+        ForeignKey("tenants.id", ondelete="SET NULL"),
+        nullable=True,
+        index=True,
+        doc="Tenant / Organization ID"
+    )
     user_email = Column(
         String(256),
         nullable=True,
@@ -89,6 +96,17 @@ class AuditLog(Base):
         nullable=False,
         default="SUCCESS",
         doc="Outcome status (SUCCESS, FAILURE)"
+    )
+    previous_hash = Column(
+        String(64),
+        nullable=True,
+        doc="SHA-256 hash of previous audit record in chain"
+    )
+    record_hash = Column(
+        String(64),
+        nullable=True,
+        index=True,
+        doc="SHA-256 cryptographic hash of this record including previous_hash"
     )
 
     __table_args__ = (

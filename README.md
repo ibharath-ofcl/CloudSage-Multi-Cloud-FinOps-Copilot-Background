@@ -3,7 +3,7 @@
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
 [![Architecture](https://img.shields.io/badge/Architecture-FOCUS%201.0%20Compliant-green.svg)](docs/FUNCTIONAL_REQUIREMENTS.md)
 [![Safety](https://img.shields.io/badge/Safety-Advisory%20Only-orange.svg)](docs/BUSINESS_REQUIREMENTS.md)
-[![Status](https://img.shields.io/badge/Status-Stage%2013%20Complete-brightgreen.svg)](docs/DEVELOPMENT_ROADMAP.md)
+[![Status](https://img.shields.io/badge/Status-Stage%2014%20Complete-brightgreen.svg)](docs/DEVELOPMENT_ROADMAP.md)
 
 > **CloudSage** is an enterprise-grade, AI-powered Multi-Cloud Financial Operations (FinOps) platform engineered to unify fragmented cloud billing data, detect unnecessary expenditure, identify cost anomalies, and generate prioritized, evidence-backed savings recommendations across **Amazon Web Services (AWS)**, **Microsoft Azure**, and **Google Cloud Platform (GCP)**.
 
@@ -48,7 +48,7 @@ CloudSage bridges the gap between infrastructure engineering, financial operatio
 | **Enterprise Workspace & Playbooks** | Interactive recommendation & waste triage workbench, time-series telemetry charts, 7-format advisory IaC/CLI playbook generation, and two-phase savings override governance. |
 | **Alerts & Notification Hub** | Multi-dimensional alert rules, dry-run simulation, deterministic deduplication keying, transactional outbox dispatch, and multi-channel alerting (In-App, Slack, Teams, Email, Webhooks). |
 | **Anomaly Investigation & RCA Workspace** | 10-dimensional FOCUS decomposition, Pareto 80/20 cost driver curves, economic growth accounting ($\Delta Q \cdot P_0 + \Delta P \cdot Q_0 + \Delta Q \cdot \Delta P$), rolling 7-day moving averages, resource topology & telemetry correlation, cross-signal linking, and collaborative case management. |
-| **Enterprise RBAC & Audit** | 5 core persona roles (Super Admin, FinOps Engineer, Finance Analyst, Engineering Manager, Executive) with ABAC team scoping and an immutable audit ledger. |
+| **Enterprise RBAC & Security Hardening** | 7 canonical enterprise roles, fine-grained `resource:action` taxonomy, cryptographic JWT (HS256) auth, bcrypt (12 rounds) storage, multi-tenant boundary isolation, separation of duties dual approvals (`requester != approver`), real-time threat detection (brute-force lockout), and tamper-evident SHA-256 hash-chained audit logging. |
 
 ---
 
@@ -366,6 +366,15 @@ Detailed architectural and functional specifications are located in the [`docs/`
 - [Escalation Policies & Notification Preferences Guide](docs/ESCALATION_AND_NOTIFICATION_PREFERENCES.md)
 - [Notification Security, SSRF Defenses & Privacy](docs/NOTIFICATION_SECURITY_AND_PRIVACY.md)
 - [Stage 12 QA Test and Verification Report](docs/STAGE_12_TEST_REPORT.md)
+- [Stage 14 Security Vulnerability Audit](docs/STAGE_14_SECURITY_AUDIT.md)
+- [Stage 14 Implementation Guide](docs/STAGE_14_IMPLEMENTATION.md)
+- [Enterprise RBAC Architecture](docs/RBAC_ARCHITECTURE.md)
+- [Fine-Grained Permission Matrix](docs/PERMISSION_MATRIX.md)
+- [Multi-Tenant Data Isolation & IDOR Protection](docs/TENANT_ISOLATION.md)
+- [Authentication & Credential Security](docs/AUTHENTICATION_SECURITY.md)
+- [Tamper-Evident Audit Logging & Governance](docs/AUDIT_LOGGING_GOVERNANCE.md)
+- [Security Monitoring & Threat Detection](docs/SECURITY_MONITORING.md)
+- [Stage 14 QA Test and Verification Report](docs/STAGE_14_TEST_REPORT.md)
 - [15-Stage Enterprise Development Roadmap](docs/DEVELOPMENT_ROADMAP.md)
 
 ---

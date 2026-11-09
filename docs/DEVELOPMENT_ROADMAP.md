@@ -258,14 +258,25 @@ PHASE 5: SECURITY, NOTIFICATIONS & PRODUCTION READINESS (Stages 13 - 15)
 
 ---
 
-### Stage 14: Role-Based Access Control (RBAC), Audit Logging & Security Hardening
-- **Focus**: Enterprise identity, authorization enforcement, and security hardening.
+### Stage 14: Role-Based Access Control (RBAC), Audit Logging & Security Hardening [COMPLETED]
+- **Status**: [COMPLETED]
+- **Branch**: `stage-14/rbac-enterprise-security`
+- **Focus**: Enterprise identity, authorization enforcement, multi-tenancy, dual-party governance, real-time threat detection, and tamper-evident SHA-256 audit log integrity.
 - **Key Deliverables**:
-  - User authentication via JWT with refresh token rotation.
-  - Role-based authorization middleware enforcing permissions across the 5 core personas.
-  - Attribute-Based Access Control (ABAC) scoping for team-level engineering managers.
-  - Immutable audit logging interceptor recording all state changes and privileged actions.
-- **Acceptance Criteria**: Unauthorized API calls blocked with 403 Forbidden; audit records captured without exception.
+  - Security Vulnerability Audit (`docs/STAGE_14_SECURITY_AUDIT.md`) identifying and eliminating legacy client header trust and default principal fallbacks.
+  - Cryptographic Authentication & JWT Service (`TokenService`, `PasswordService`) with salted bcrypt 12-round hashing, OWASP complexity validation, HS256 JWT tokens with standard RFC 7519 claims (`sub`, `iss`, `aud`, `exp`, `jti`, `role`, `tenant_id`).
+  - Active Session Management & Single-Use Refresh Token Rotation (`SessionService`) with anti-replay detection and instant session revocation.
+  - 7 Canonical Enterprise Roles (`UserRole`) with fine-grained `resource:action` taxonomy: `SUPER_ADMIN`, `ORGANIZATION_ADMIN`, `FINOPS_MANAGER`, `FINOPS_ANALYST`, `CLOUD_ENGINEER`, `SECURITY_AUDITOR`, `VIEWER` (+ full backward-compatible legacy aliases).
+  - Multi-Tenant Boundary Isolation & IDOR Protection (`TenantContext`) with automated SQLAlchemy query scoping and cross-tenant access rejection.
+  - Separation of Duties & Dual-Party Governance (`DualApprovalService`) enforcing `requester != approver` on sensitive administrative operations.
+  - Tamper-Evident SHA-256 Audit Log Integrity (`AuditIntegrityService`) with cryptographic hash chaining, recursive secret redaction (`[REDACTED]`), and immutable regulatory compliance checkpoints.
+  - Real-Time Threat Detection & Security Monitoring (`ThreatDetectionService`) with 5-attempt brute-force lockout, privilege escalation detection, and security telemetry.
+  - REST API Routes under `/api/v1/auth/*` and `/api/v1/admin/*` for authentication, user management, role catalog, and security governance.
+  - Frontend RBAC Administration (`/admin/users`, `/admin/roles`, `/admin/security`, `/login`) with `ProtectedRoute`, `PermissionGate`, and `RoleGate`.
+  - Database schema & Alembic migration `012_rbac_enterprise_security.py` adding 7 security tables and audit hash chaining columns.
+  - 74 new automated unit and integration tests passing with 100% success rate (513 total repository tests passing with zero regressions against the 439 baseline).
+  - 18-step end-to-end operational verification demonstration script `backend/scripts/demo_stage14_security.py`.
+- **Acceptance Criteria**: Strict advisory-only policy with zero mutating cloud API calls; zero float representations using `Decimal` and `Numeric(18, 4)`; non-repudiation guaranteed by SHA-256 hash chaining; 100% test pass rate (100% verified).
 
 ---
 

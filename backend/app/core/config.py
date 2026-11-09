@@ -36,10 +36,21 @@ class Settings(BaseSettings):
     CELERY_BROKER_URL: str = "redis://localhost:6379/0"
     CELERY_RESULT_BACKEND: str = "redis://localhost:6379/1"
 
-    # Security
+    # Security & RBAC Hardening
     SECRET_KEY: str = "development-secret-key-change-in-production-stage"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 15
     REFRESH_TOKEN_EXPIRE_DAYS: int = 7
+    JWT_ALGORITHM: str = "HS256"
+    JWT_ISSUER: str = "cloudsage-auth"
+    JWT_AUDIENCE: str = "cloudsage-api"
+    ALLOW_DEV_AUTH_HEADERS: bool = True  # Allowed only when ENVIRONMENT=="development"
+    TRUSTED_PROXY_IPS: List[str] = ["127.0.0.1", "::1"]
+    PASSWORD_MIN_LENGTH: int = 12
+    LOGIN_MAX_FAILED_ATTEMPTS: int = 5
+    LOGIN_LOCKOUT_MINUTES: int = 15
+    RATE_LIMIT_LOGIN_PER_MINUTE: int = 10
+    SESSION_INACTIVITY_TIMEOUT_MINUTES: int = 60
+    REQUIRE_DUAL_APPROVAL_FOR_SUPER_ADMIN: bool = True
 
     # AI FinOps Copilot
     COPILOT_ENABLED: bool = True

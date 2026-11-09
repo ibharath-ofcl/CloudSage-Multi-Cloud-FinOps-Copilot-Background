@@ -50,6 +50,17 @@ from backend.app.models.recommendation import (
     RecommendationSavingsOverride,
 )
 from backend.app.models.resource import CloudResource, ResourceMetric
+from backend.app.models.security import (
+    ApprovalRequest,
+    AuditIntegrityCheckpoint,
+    Permission,
+    Role,
+    SecurityEvent,
+    Tenant,
+    UserRoleMapping,
+    UserSession,
+    role_permissions,
+)
 from backend.app.models.user import User
 from backend.app.models.waste import WasteDetection, WasteDetectionRun
 
@@ -95,4 +106,13 @@ __all__ = [
     "CopilotMessage",
     "CopilotFeedback",
     "CopilotUsageLog",
+    "Tenant",
+    "Role",
+    "Permission",
+    "role_permissions",
+    "UserRoleMapping",
+    "UserSession",
+    "ApprovalRequest",
+    "SecurityEvent",
+    "AuditIntegrityCheckpoint",
 ]

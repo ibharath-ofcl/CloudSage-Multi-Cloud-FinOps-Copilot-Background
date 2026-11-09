@@ -2,6 +2,7 @@
 from backend.app.api.routes import (
     alerts,
     anomaly_detection,
+    auth,
     copilot,
     dashboard,
     ingestion,
@@ -9,12 +10,16 @@ from backend.app.api.routes import (
     investigations,
     normalization,
     recommendations,
+    roles,
+    security,
+    users,
     waste_detection,
 )
 
 __all__ = [
     "alerts",
     "anomaly_detection",
+    "auth",
     "copilot",
     "dashboard",
     "ingestion",
@@ -22,5 +27,8 @@ __all__ = [
     "investigations",
     "normalization",
     "recommendations",
+    "roles",
+    "security",
+    "users",
     "waste_detection",
 ]
