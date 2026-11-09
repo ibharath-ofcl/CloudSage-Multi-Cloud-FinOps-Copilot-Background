@@ -80,3 +80,4 @@ Whenever a cross-tenant access attempt occurs, `ThreatDetectionService` records 
 
 ## 4. Super Admin Global Visibility Exception
 Only principals with the `SUPER_ADMIN` role (`is_super_admin=True`) possess platform-wide inspection rights. Super admins can query across all tenants or supply an explicit `tenant_id` query parameter to inspect specific organizations during support or onboarding workflows.
+

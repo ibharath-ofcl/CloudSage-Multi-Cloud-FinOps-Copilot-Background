@@ -78,3 +78,4 @@ For SOC 2 Type II, ISO 27001, and external financial audits:
   - `verified_by`: Identity of the auditor or service account.
   - `verified_at`: UTC timestamp of the seal.
 - Checkpoints provide frozen snapshots for external regulators proving no retrospective tampering has occurred.
+

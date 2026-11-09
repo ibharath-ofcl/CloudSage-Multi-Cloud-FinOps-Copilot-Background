@@ -256,3 +256,4 @@ def test_verify_chain_on_empty_ledger(db_session: Session):
     assert is_valid is True
     assert count == 0
     assert err is None
+

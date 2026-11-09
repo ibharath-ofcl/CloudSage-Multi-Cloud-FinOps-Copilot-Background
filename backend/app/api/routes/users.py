@@ -328,3 +328,4 @@ def revoke_user_sessions(
     )
 
     return {"message": f"Successfully revoked {revoked_count} active session(s) for user {user.email}."}
+

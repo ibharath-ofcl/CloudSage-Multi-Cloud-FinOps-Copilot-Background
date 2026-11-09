@@ -83,3 +83,4 @@ def get_security_stats(
 ```
 
 Frontend gates (`PermissionGate`, `RoleGate`, `ProtectedRoute`) provide responsive user experiences by hiding unavailable UI controls, but are never relied upon for security boundaries.
+

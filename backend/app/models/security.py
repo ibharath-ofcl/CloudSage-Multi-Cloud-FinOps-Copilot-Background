@@ -544,3 +544,4 @@ class AuditIntegrityCheckpoint(Base):
 
     def __repr__(self) -> str:
         return f"<AuditIntegrityCheckpoint id={self.id} count={self.record_count} valid={self.is_valid}>"
+

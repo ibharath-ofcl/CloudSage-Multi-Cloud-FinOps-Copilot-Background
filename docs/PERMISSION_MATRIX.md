@@ -62,3 +62,4 @@ The CloudSage permission taxonomy follows the standardized `resource:action` for
 1. **SUPER_ADMIN Provisioning**: Even an `ORGANIZATION_ADMIN` cannot provision or assign a user to `SUPER_ADMIN`. Attempting to do so triggers a `PRIVILEGE_ESCALATION_ATTEMPT` security event.
 2. **Self-Deactivation Prevention**: An administrator cannot deactivate their own active user account.
 3. **Dual Approval Requirement**: Critical operations (such as security policy mutation or break-glass access) require two distinct individuals (`requester != approver`).
+

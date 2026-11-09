@@ -239,3 +239,4 @@ export const SecurityGovernanceService = {
     return res.data;
   },
 };
+
