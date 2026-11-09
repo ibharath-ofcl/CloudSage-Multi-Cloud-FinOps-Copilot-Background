@@ -13,6 +13,7 @@ from backend.app.api.routes import (
     dashboard,
     ingestion,
     inventory,
+    investigations,
     normalization,
     recommendations,
     waste_detection,
@@ -22,7 +23,7 @@ from backend.app.core.config import settings
 app = FastAPI(
     title=settings.PROJECT_NAME,
     description="Enterprise Multi-Cloud FinOps Copilot Platform Backend API.",
-    version="0.12.0",
+    version="0.13.0",
     docs_url="/docs",
     redoc_url="/redoc",
     openapi_url=f"{settings.API_V1_STR}/openapi.json",
@@ -47,6 +48,7 @@ app.include_router(recommendations.router, prefix=settings.API_V1_STR)
 app.include_router(copilot.router, prefix=settings.API_V1_STR)
 app.include_router(dashboard.router, prefix=settings.API_V1_STR)
 app.include_router(alerts.router, prefix=settings.API_V1_STR)
+app.include_router(investigations.router, prefix=settings.API_V1_STR)
 
 
 @app.get("/dashboard", tags=["FinOps Dashboards & Visualizations"], include_in_schema=False)

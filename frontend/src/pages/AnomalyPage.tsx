@@ -1,13 +1,28 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useFilters } from '../context/FilterContext';
-import { DashboardService } from '../services/api';
+import { DashboardService, InvestigationService } from '../services/api';
 import { AnomalySummaryResponse } from '../types/dashboard';
-import { AlertTriangle, ShieldAlert, ArrowUpRight, CheckCircle2 } from 'lucide-react';
+import { AlertTriangle, ShieldAlert, ArrowUpRight, CheckCircle2, FileSearch } from 'lucide-react';
 
 export const AnomalyPage: React.FC = () => {
+  const navigate = useNavigate();
   const { filters } = useFilters();
   const [data, setData] = useState<AnomalySummaryResponse | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
+  const [triggeringId, setTriggeringId] = useState<string | null>(null);
+
+  const handleInvestigate = async (anomalyId: string) => {
+    try {
+      setTriggeringId(anomalyId);
+      const caseDetail = await InvestigationService.investigateAnomaly(anomalyId);
+      navigate(`/investigations/${caseDetail.id}`);
+    } catch (err: any) {
+      alert(`Could not open investigation: ${err?.message || err}`);
+    } finally {
+      setTriggeringId(null);
+    }
+  };
 
   useEffect(() => {
     let isMounted = true;
@@ -98,6 +113,7 @@ export const AnomalyPage: React.FC = () => {
                 <th className="p-3">Deviation Score</th>
                 <th className="p-3">Status</th>
                 <th className="p-3">Explanation</th>
+                <th className="p-3 text-right">Investigation</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
@@ -129,6 +145,16 @@ export const AnomalyPage: React.FC = () => {
                   </td>
                   <td className="p-3 text-slate-600 max-w-xs truncate" title={a.explanation}>
                     {a.explanation}
+                  </td>
+                  <td className="p-3 text-right whitespace-nowrap">
+                    <button
+                      onClick={() => handleInvestigate(a.id)}
+                      disabled={triggeringId === a.id}
+                      className="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-blue-50 text-blue-700 hover:bg-blue-600 hover:text-white font-semibold transition text-xs border border-blue-200"
+                    >
+                      <FileSearch className="w-3.5 h-3.5" />
+                      {triggeringId === a.id ? 'Opening...' : 'Investigate'}
+                    </button>
                   </td>
                 </tr>
               ))}

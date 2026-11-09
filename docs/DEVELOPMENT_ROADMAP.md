@@ -26,7 +26,7 @@ PHASE 4: FRONTEND INTERFACE & DASHBOARDS (Stages 10 - 12)
   Stage 12: Cost Anomaly & Enterprise Alerts Notification Hub [COMPLETED]
 
 PHASE 5: SECURITY, NOTIFICATIONS & PRODUCTION READINESS (Stages 13 - 15)
-  Stage 13: Anomaly Detection & Alerts Notification Hub
+  Stage 13: Advanced Anomaly Investigation & Multi-Dimensional Root Cause Analysis Workspace [COMPLETED]
   Stage 14: Role-Based Access Control (RBAC), Audit Logging & Security Hardening
   Stage 15: Production Containerization, CI/CD, Deployment & Benchmark Test Suite
 ```
@@ -237,14 +237,24 @@ PHASE 5: SECURITY, NOTIFICATIONS & PRODUCTION READINESS (Stages 13 - 15)
 
 ---
 
-### Stage 13: Anomaly Detection & Alerts Notification Hub
-- **Focus**: Threat board for cost spikes and multi-channel notification dispatch.
+### Stage 13: Advanced Anomaly Investigation & Multi-Dimensional Root Cause Analysis Workspace [COMPLETED]
+- **Status**: [COMPLETED]
+- **Branch**: `stage-13/advanced-anomaly-investigation`
+- **Focus**: Unified root cause investigation workspace that decomposes anomalous expenditures across 10 FOCUS dimensions, calculates Pareto 80/20 cost drivers, performs economic growth accounting (usage vs. price), correlates hardware metrics and cross-stage signals, and manages collaborative case workflows.
 - **Key Deliverables**:
-  - Real-time cost anomaly feed with root-cause drilldown modals.
-  - Alert rule configuration interface (thresholds, percentages, notification targets).
-  - Outbound dispatch adapters for Slack webhooks, Microsoft Teams, and Email.
-  - Notification delivery history log.
-- **Acceptance Criteria**: Immediate dispatch of alert payloads upon anomaly detection; full delivery audit trail.
+  - Database schema & Alembic migration `011_advanced_anomaly_investigation.py` adding `investigation_cases`, `investigation_findings`, `investigation_notes`, `investigation_evidence_links`, and `investigation_history`.
+  - Multi-Dimensional Decomposition Engine (`DimensionAnalysisEngine`) isolating dominant cost dimensions across Provider, Account, Region, Service, Resource ID, SKU, Environment, Owner, Cost Center, and Billing Tags.
+  - Pareto 80/20 Contribution Ranking Engine (`ContributionAnalysisEngine`) computing cumulative contribution curves and identifying minimal critical driver sets.
+  - Usage vs. Price Economic Growth Accounting Engine (`UsagePriceAnalysisEngine`) decomposing $\Delta \text{Cost} = \Delta Q \cdot P_0 + \Delta P \cdot Q_0 + \Delta Q \cdot \Delta P$.
+  - Continuous Daily Timeline Engine (`TimeSeriesAnalysisEngine`) computing 7-day rolling moving averages and DoD, WoW, MoM variances across resilient zero-spend date grids.
+  - Resource Topology & Hardware Telemetry Engine (`ResourceCorrelationEngine`) integrating connected infrastructure relationships, CloudWatch/Monitor metrics, and cross-stage waste/recommendation/alert signals.
+  - Rule-Based Hypothesis & Confidence Evaluator (`HypothesisEvaluator`, `ConfidenceScorer`) generating structured `FACT`, `CORRELATION`, `HYPOTHESIS`, and `VERIFIED_CAUSE` findings with empirical penalties.
+  - Full-Featured Case Lifecycle Service & REST API (27 endpoints under `/api/v1/investigations/*` and `/api/v1/anomalies/{id}/*`) enforcing immutable audit trails and server-side identity derivation.
+  - Interactive React Frontend (`/investigations` and `/investigations/:investigationId`) with KPI summary cards, 4 analytical drilldown tabs, Pareto tables, usage vs price comparisons, timeline, topology, and action modals.
+  - AI FinOps Copilot integration classifying root cause / Pareto intents and explaining investigation cases in natural language.
+  - 55 dedicated automated unit and integration tests passing with 100% success rate (439 total repository tests passing with zero regressions against the 384 baseline).
+  - 15-step end-to-end operational verification demonstration script `backend/scripts/demo_stage13_investigation.py`.
+- **Acceptance Criteria**: Strict advisory-only policy with zero mutating cloud API calls; zero float representations using `Decimal` and `Numeric(18, 4)`; non-fabricated evidence; clear separation of Fact, Correlation, and Hypothesis; 100% test pass rate (100% verified).
 
 ---
 

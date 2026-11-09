@@ -14,6 +14,7 @@ import {
   Sliders,
   Bell,
   Send,
+  FileSearch,
 } from 'lucide-react';
 
 export const Sidebar: React.FC = () => {
@@ -21,6 +22,7 @@ export const Sidebar: React.FC = () => {
     { label: 'Executive Overview', path: '/', icon: LayoutDashboard },
     { label: 'Cost Analytics & Trends', path: '/costs', icon: BarChart3 },
     { label: 'Cost Anomalies', path: '/anomalies', icon: AlertTriangle },
+    { label: 'Investigation Workspace', path: '/investigations', icon: FileSearch },
     { label: 'Alerts & Triage Hub', path: '/alerts', icon: ShieldAlert },
     { label: 'Alert Rules Governance', path: '/alert-rules', icon: Sliders },
     { label: 'Notification Center', path: '/notifications', icon: Bell },
@@ -41,7 +43,7 @@ export const Sidebar: React.FC = () => {
           </div>
           <div>
             <div className="text-sm font-bold text-white tracking-wide">CloudSage FinOps</div>
-            <div className="text-[10px] text-slate-400">Enterprise Edition v0.12.0</div>
+            <div className="text-[10px] text-slate-400">Enterprise Edition v0.13.0</div>
           </div>
         </div>
       </div>

@@ -18,6 +18,8 @@ import { AlertRuleManagementPage } from './pages/AlertRuleManagementPage';
 import { NotificationCenter } from './pages/NotificationCenter';
 import { DeliveryStatusPanel } from './pages/DeliveryStatusPanel';
 import { NotificationPreferencesPage } from './pages/NotificationPreferencesPage';
+import { InvestigationListPage } from './pages/InvestigationListPage';
+import { InvestigationDetailPage } from './pages/InvestigationDetailPage';
 
 export const App: React.FC = () => {
   const [isCopilotOpen, setIsCopilotOpen] = useState(false);
@@ -45,6 +47,8 @@ export const App: React.FC = () => {
               <Route path="/" element={<OverviewPage key={refreshTrigger} />} />
               <Route path="/costs" element={<CostAnalyticsPage key={refreshTrigger} />} />
               <Route path="/anomalies" element={<AnomalyPage key={refreshTrigger} />} />
+              <Route path="/investigations" element={<InvestigationListPage key={refreshTrigger} />} />
+              <Route path="/investigations/:investigationId" element={<InvestigationDetailPage key={refreshTrigger} />} />
               <Route path="/waste" element={<WastePage key={refreshTrigger} />} />
               <Route path="/recommendations" element={<RecommendationsPage key={refreshTrigger} />} />
               <Route path="/savings" element={<SavingsPage key={refreshTrigger} />} />

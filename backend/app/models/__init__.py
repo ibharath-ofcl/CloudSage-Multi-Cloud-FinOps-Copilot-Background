@@ -29,6 +29,13 @@ from backend.app.models.inventory import (
     InventorySyncRun,
     ResourceRelationship,
 )
+from backend.app.models.investigation import (
+    InvestigationCase,
+    InvestigationEvidenceLink,
+    InvestigationFinding,
+    InvestigationHistory,
+    InvestigationNote,
+)
 from backend.app.models.normalization import (
     DataQualityReport,
     ExchangeRate,
@@ -79,6 +86,11 @@ __all__ = [
     "ResourceRelationship",
     "InventorySyncRun",
     "InventoryQualityReport",
+    "InvestigationCase",
+    "InvestigationFinding",
+    "InvestigationNote",
+    "InvestigationEvidenceLink",
+    "InvestigationHistory",
     "CopilotConversation",
     "CopilotMessage",
     "CopilotFeedback",

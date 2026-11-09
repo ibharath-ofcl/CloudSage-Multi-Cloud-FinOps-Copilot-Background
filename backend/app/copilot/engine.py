@@ -48,6 +48,10 @@ from backend.app.models.copilot import (
     CopilotMessage,
     CopilotUsageLog,
 )
+from backend.app.models.investigation import (
+    InvestigationCase,
+    InvestigationFinding,
+)
 from backend.app.models.recommendation import Recommendation
 from backend.app.models.resource import CloudResource
 from backend.app.models.waste import WasteDetection
@@ -370,6 +374,72 @@ class CopilotEngine:
                 )
             else:
                 explanation_lines.append(f"No recommendation record found matching identifier '{t_id}'.")
+
+        elif t_type in ["investigation", "case"]:
+            case = None
+            try:
+                target_uuid = uuid.UUID(t_id)
+                case = db.execute(
+                    select(InvestigationCase).where(InvestigationCase.id == target_uuid)
+                ).scalar_one_or_none()
+            except Exception:
+                pass
+
+            if not case:
+                case = db.execute(
+                    select(InvestigationCase).where(InvestigationCase.case_number == t_id)
+                ).scalar_one_or_none()
+
+            if case:
+                title = f"Investigation Case {case.case_number}: {case.title}"
+                excess = Decimal(str(case.excess_cost)).quantize(Decimal("0.0001"))
+                financial_impact = {
+                    "excess_cost": str(excess),
+                    "actual_cost": str(case.actual_cost),
+                    "expected_cost": str(case.expected_cost),
+                    "status": str(case.status),
+                    "priority": str(case.priority),
+                    "assigned_to": case.assigned_to or "unassigned",
+                }
+                explanation_lines.append("### Root Cause Investigation Summary")
+                explanation_lines.append(
+                    f"**Case Number**: `{case.case_number}` | **Status**: `{case.status}` | **Priority**: `{case.priority}`\n"
+                    f"**Scope**: {case.provider} {case.service_name} ({case.region or 'Global'})\n"
+                    f"**Excess Spend**: **${excess:,.4f} USD** (Actual: ${case.actual_cost:,.4f} vs Expected: ${case.expected_cost:,.4f})"
+                )
+                if case.verified_root_cause:
+                    explanation_lines.append(f"**Verified Root Cause**: {case.verified_root_cause}")
+                elif case.root_cause_summary:
+                    explanation_lines.append(f"**Diagnostic Summary**: {case.root_cause_summary}")
+
+                # Fetch findings
+                findings = db.execute(
+                    select(InvestigationFinding)
+                    .where(InvestigationFinding.investigation_id == case.id)
+                    .order_by(InvestigationFinding.financial_impact.desc())
+                    .limit(5)
+                ).scalars().all()
+
+                if findings:
+                    explanation_lines.append("\n### Key Evidence & Findings")
+                    for f in findings:
+                        explanation_lines.append(f"- **[{f.finding_type}]** {f.title} (${f.financial_impact:,.2f} / {f.contribution_percentage:.1f}%)")
+
+                advisory_rec = (
+                    case.resolution_notes or
+                    "Review findings in the Investigation Workspace, verify root cause hypotheses, and apply appropriate remediation."
+                )
+                citations.append(
+                    EvidenceCitationSchema(
+                        source_table="investigation_cases",
+                        record_id=str(case.id),
+                        description=f"Investigation Case {case.case_number} ({case.status})",
+                        metric_value=f"${excess} excess",
+                        confidence=1.0 if case.verified_root_cause else 0.85,
+                    )
+                )
+            else:
+                explanation_lines.append(f"No investigation case record found matching identifier '{t_id}'.")
 
         else:
             explanation_lines.append(f"Entity type '{t_type}' explanation is not currently supported.")
