@@ -308,3 +308,4 @@ def test_api_list_permissions_catalog(db_session: Session):
     assert "audit:read" in perms
 
     app.dependency_overrides.clear()
+

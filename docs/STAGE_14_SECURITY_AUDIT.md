@@ -126,3 +126,4 @@ To eliminate all identified vulnerabilities, Stage 14 will implement:
    - `/admin/roles`: Role list and granular permission matrix.
    - `/admin/security`: Threat detection dashboard, security events timeline, audit integrity validator, pending dual-approval requests.
    - `PermissionGate` and `RoleGate` components in React.
+

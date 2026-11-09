@@ -186,3 +186,4 @@ export interface AuditCheckpoint {
   notes?: string | null;
   created_at: string;
 }
+

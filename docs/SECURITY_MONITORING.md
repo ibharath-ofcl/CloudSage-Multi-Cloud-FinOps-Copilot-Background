@@ -47,3 +47,4 @@ The `/api/v1/admin/security/stats` endpoint and `/admin/security` frontend page 
          │
          └── MEDIUM (Auth Failure) ───> Log Telemetry & Return 403
 ```
+

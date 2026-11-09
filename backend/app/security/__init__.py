@@ -46,3 +46,4 @@ __all__ = [
     "require_role",
     "require_super_admin",
 ]
+

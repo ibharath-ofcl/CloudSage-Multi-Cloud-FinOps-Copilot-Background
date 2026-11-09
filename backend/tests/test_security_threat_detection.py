@@ -247,3 +247,4 @@ def test_empty_security_stats_returns_zeroes(db_session: Session):
     assert stats["total_security_events"] == 0
     assert stats["critical_events"] == 0
     assert stats["account_lockouts"] == 0
+

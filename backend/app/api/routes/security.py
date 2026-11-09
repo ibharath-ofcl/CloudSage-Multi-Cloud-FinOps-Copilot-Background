@@ -229,3 +229,4 @@ def create_audit_checkpoint(
         "is_valid": checkpoint.is_valid,
         "verified_at": checkpoint.verified_at,
     }
+

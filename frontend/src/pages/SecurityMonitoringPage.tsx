@@ -651,3 +651,4 @@ export const SecurityMonitoringPage: React.FC = () => {
     </div>
   );
 };
+

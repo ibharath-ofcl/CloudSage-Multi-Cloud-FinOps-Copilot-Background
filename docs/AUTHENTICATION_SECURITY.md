@@ -76,3 +76,4 @@ CloudSage prevents credential stuffing and brute-force guessing attacks:
 ## 6. Development vs. Production Header Rules
 - In **Production** (`ENVIRONMENT=production`): Client headers such as `X-User-Email` and `X-User-Role` are strictly ignored. Missing or invalid Bearer JWT tokens always return `HTTP 401 Unauthorized`.
 - In **Development** (`ENVIRONMENT=development` and `ALLOW_DEV_AUTH_HEADERS=true`): Controlled developer headers are accepted solely to enable automated integration test harnesses and local mocking without requiring manual JWT generation.
+

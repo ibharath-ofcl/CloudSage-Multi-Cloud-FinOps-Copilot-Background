@@ -60,3 +60,4 @@ class AuthenticatedPrincipal:
         if not target_tenant_id:
             return True
         return str(self.tenant_id) == str(target_tenant_id)
+

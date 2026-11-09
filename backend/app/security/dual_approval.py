@@ -148,3 +148,4 @@ class DualApprovalService:
         if status_filter:
             query = query.filter(ApprovalRequest.status == status_filter.upper())
         return query.order_by(ApprovalRequest.created_at.desc()).all()
+
