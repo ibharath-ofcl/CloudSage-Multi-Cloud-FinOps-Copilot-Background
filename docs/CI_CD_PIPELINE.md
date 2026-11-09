@@ -57,3 +57,4 @@ The CD workflow triggers on semantic version tags (`v*.*.*`) or manual `workflow
    - **Step 3C:** Performs rolling container upgrade.
    - **Step 3D:** Deep health probe verification.
    - **Step 3E (Emergency Rollback):** If healthchecks fail within the verification window, the workflow triggers an automated rollback to the prior release tag.
+

@@ -47,3 +47,4 @@ When `ENVIRONMENT=production`, the application applies automated validators:
 2. **Secret Length Requirement:** Fails immediately if `len(SECRET_KEY) < 32`.
 3. **RBAC Bypass Prohibition:** Fails immediately if `ALLOW_DEV_AUTH_HEADERS` is set to `True`.
 4. **Default Database Password Rejection:** Fails immediately if `POSTGRES_PASSWORD` is left as `"postgres"`.
+

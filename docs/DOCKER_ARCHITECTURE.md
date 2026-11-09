@@ -86,3 +86,4 @@ The root reverse proxy unifies access behind a single endpoint:
 - `/health`, `/metrics`, `/dashboard` mapped to backend.
 - `/` mapped to frontend static assets.
 - Logging formatted as structured JSON for log collection agents (Fluentd, Vector, Datadog).
+

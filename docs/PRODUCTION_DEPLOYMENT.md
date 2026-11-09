@@ -99,3 +99,4 @@ For Kubernetes environments (EKS, GKE, AKS):
    Deploy new container images sequentially using rolling updates.
 3. **Automated Rollback:**
    If post-deployment health probes (`/health/dependencies`) report degradation or failure, the automated CD workflow rolls back the image tags and preserves the snapshot.
+

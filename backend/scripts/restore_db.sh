@@ -87,3 +87,4 @@ echo " Restore Completed Successfully in ${DURATION}s"
 echo " Database '${PG_DB}' is restored and ready."
 echo "=========================================================="
 exit 0
+

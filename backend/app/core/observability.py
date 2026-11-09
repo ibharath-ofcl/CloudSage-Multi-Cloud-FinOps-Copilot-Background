@@ -269,3 +269,4 @@ def check_dependency_health(db_session=None) -> Dict[str, Any]:
         "total_latency_ms": total_latency,
         "dependencies": dependencies,
     }
+

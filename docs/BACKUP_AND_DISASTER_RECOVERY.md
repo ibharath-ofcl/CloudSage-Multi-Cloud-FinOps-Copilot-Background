@@ -54,3 +54,4 @@ bash backend/scripts/restore_db.sh /backups/cloudsage_backup_20261109_140000.sql
 3. Initialize PostgreSQL container with persistent volume.
 4. Execute `restore_db.sh <backup_file> --force`.
 5. Point DNS / Ingress to the restored regional cluster.
+

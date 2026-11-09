@@ -97,3 +97,4 @@ When `LOG_FORMAT=json`, the system serializes all application and access logs in
   "path": "/api/v1/recommendations"
 }
 ```
+

@@ -75,3 +75,4 @@ fi
 # 3. Hand-off execution to application server
 echo "[Entrypoint] Handing off to application server: $@"
 exec "$@"
+
