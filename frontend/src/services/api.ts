@@ -39,6 +39,22 @@ import {
   NotificationHealth,
   NotificationPreference,
 } from '../types/alerts';
+import {
+  InvestigationCase,
+  InvestigationCaseDetail,
+  InvestigationCaseListResponse,
+  InvestigationFinding,
+  InvestigationNote,
+  InvestigationEvidenceLink,
+  InvestigationHistory,
+  InvestigationStats,
+  MultiDimensionalAnalysis,
+  ContributionRankingResponse,
+  UsagePriceAnalysis,
+  TimelineAnalysis,
+  ResourceInvestigationResponse,
+  CrossSignalCorrelation,
+} from '../types/investigation';
 
 const API_BASE = '/api/v1';
 
@@ -488,6 +504,165 @@ export const NotificationService = {
 
   async updatePreferences(pref: Partial<NotificationPreference>): Promise<NotificationPreference> {
     const res = await apiClient.put<NotificationPreference>('/notification-preferences/me', pref);
+    return res.data;
+  },
+};
+
+export const InvestigationService = {
+  async getStats(): Promise<InvestigationStats> {
+    const res = await apiClient.get<InvestigationStats>('/investigations/stats');
+    return res.data;
+  },
+
+  async listInvestigations(params?: {
+    provider?: string;
+    status?: string;
+    priority?: string;
+    assigned_to?: string;
+    service_name?: string;
+    search?: string;
+    limit?: number;
+    offset?: number;
+  }): Promise<InvestigationCaseListResponse> {
+    const res = await apiClient.get<InvestigationCaseListResponse>('/investigations', { params });
+    return res.data;
+  },
+
+  async createInvestigation(payload: {
+    anomaly_id: string;
+    alert_instance_id?: string;
+    title?: string;
+    priority?: string;
+    assigned_to?: string;
+    initial_notes?: string;
+  }): Promise<InvestigationCaseDetail> {
+    const res = await apiClient.post<InvestigationCaseDetail>('/investigations', payload);
+    return res.data;
+  },
+
+  async getInvestigationDetail(investigationId: string): Promise<InvestigationCaseDetail> {
+    const res = await apiClient.get<InvestigationCaseDetail>(`/investigations/${investigationId}`);
+    return res.data;
+  },
+
+  async updateInvestigation(
+    investigationId: string,
+    payload: {
+      title?: string;
+      priority?: string;
+      assigned_to?: string;
+      root_cause_summary?: string;
+      verified_root_cause?: string;
+      suspected_category?: string;
+      resolution_notes?: string;
+    }
+  ): Promise<InvestigationCaseDetail> {
+    const res = await apiClient.put<InvestigationCaseDetail>(`/investigations/${investigationId}`, payload);
+    return res.data;
+  },
+
+  async assignCase(
+    investigationId: string,
+    assignedTo: string,
+    notes?: string
+  ): Promise<InvestigationCaseDetail> {
+    const res = await apiClient.post<InvestigationCaseDetail>(`/investigations/${investigationId}/assign`, {
+      assigned_to: assignedTo,
+      notes,
+    });
+    return res.data;
+  },
+
+  async transitionStatus(
+    investigationId: string,
+    targetStatus: string,
+    notes?: string,
+    verifiedRootCause?: string
+  ): Promise<InvestigationCaseDetail> {
+    const res = await apiClient.post<InvestigationCaseDetail>(`/investigations/${investigationId}/transition`, {
+      status: targetStatus,
+      notes,
+      verified_root_cause: verifiedRootCause,
+    });
+    return res.data;
+  },
+
+  async closeCase(investigationId: string, notes?: string): Promise<InvestigationCaseDetail> {
+    const res = await apiClient.post<InvestigationCaseDetail>(`/investigations/${investigationId}/close`, null, {
+      params: { notes },
+    });
+    return res.data;
+  },
+
+  async reopenCase(investigationId: string, notes?: string): Promise<InvestigationCaseDetail> {
+    const res = await apiClient.post<InvestigationCaseDetail>(`/investigations/${investigationId}/reopen`, null, {
+      params: { notes },
+    });
+    return res.data;
+  },
+
+  async getDimensions(investigationId: string): Promise<MultiDimensionalAnalysis> {
+    const res = await apiClient.get<MultiDimensionalAnalysis>(`/investigations/${investigationId}/dimensions`);
+    return res.data;
+  },
+
+  async getContributions(investigationId: string): Promise<ContributionRankingResponse> {
+    const res = await apiClient.get<ContributionRankingResponse>(`/investigations/${investigationId}/contributions`);
+    return res.data;
+  },
+
+  async getUsagePriceAnalysis(investigationId: string): Promise<UsagePriceAnalysis> {
+    const res = await apiClient.get<UsagePriceAnalysis>(`/investigations/${investigationId}/usage-price-analysis`);
+    return res.data;
+  },
+
+  async getTimeline(investigationId: string): Promise<TimelineAnalysis> {
+    const res = await apiClient.get<TimelineAnalysis>(`/investigations/${investigationId}/timeline`);
+    return res.data;
+  },
+
+  async getResources(investigationId: string): Promise<ResourceInvestigationResponse> {
+    const res = await apiClient.get<ResourceInvestigationResponse>(`/investigations/${investigationId}/resources`);
+    return res.data;
+  },
+
+  async getCorrelations(investigationId: string): Promise<CrossSignalCorrelation> {
+    const res = await apiClient.get<CrossSignalCorrelation>(`/investigations/${investigationId}/correlations`);
+    return res.data;
+  },
+
+  async getRootCauses(investigationId: string): Promise<InvestigationFinding[]> {
+    const res = await apiClient.get<InvestigationFinding[]>(`/investigations/${investigationId}/root-causes`);
+    return res.data;
+  },
+
+  async getEvidence(investigationId: string): Promise<InvestigationEvidenceLink[]> {
+    const res = await apiClient.get<InvestigationEvidenceLink[]>(`/investigations/${investigationId}/evidence`);
+    return res.data;
+  },
+
+  async addNote(investigationId: string, content: string): Promise<InvestigationNote> {
+    const res = await apiClient.post<InvestigationNote>(`/investigations/${investigationId}/notes`, { content });
+    return res.data;
+  },
+
+  async addFinding(investigationId: string, finding: Partial<InvestigationFinding>): Promise<InvestigationFinding> {
+    const res = await apiClient.post<InvestigationFinding>(`/investigations/${investigationId}/findings`, finding);
+    return res.data;
+  },
+
+  async getHistory(investigationId: string): Promise<InvestigationHistory[]> {
+    const res = await apiClient.get<InvestigationHistory[]>(`/investigations/${investigationId}/history`);
+    return res.data;
+  },
+
+  async investigateAnomaly(anomalyId: string): Promise<InvestigationCaseDetail> {
+    const res = await apiClient.post<InvestigationCaseDetail>(`/anomalies/${anomalyId}/investigate`);
+    return res.data;
+  },
+
+  async getAnomalySummary(anomalyId: string): Promise<any> {
+    const res = await apiClient.get(`/anomalies/${anomalyId}/investigation-summary`);
     return res.data;
   },
 };

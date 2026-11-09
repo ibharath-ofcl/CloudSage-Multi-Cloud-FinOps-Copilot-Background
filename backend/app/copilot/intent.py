@@ -60,9 +60,15 @@ INTENT_KEYWORDS = {
     CopilotIntent.COST_ANOMALY_EXPLANATION: [
         r"(cost\s+)?anomal(y|ies)",
         r"spike(s)?",
+        r"surge(s)?",
         r"unusual\s+(spend|spending|cost|increase)",
-        r"why\s+did\s+(our\s+)?(bill|cost|spend)\s+(increase|spike|jump)",
+        r"why\s+did\s+(this\s+|our\s+)?(bill|cost|spend|spending)?\s*(increase|spike|jump|surge)",
         r"unexpected\s+(cost|increase)",
+        r"investigat(e|ion)",
+        r"root\s+cause",
+        r"pareto",
+        r"what\s+caused\s+(the\s+)?(spike|anomaly|cost\s+increase|surge)",
+        r"inv-\d{4}-\d{4,6}",
     ],
     CopilotIntent.WASTE_DETECTION_ANALYSIS: [
         r"waste",
@@ -187,6 +193,7 @@ class IntentClassifier:
             "providers": [],
             "services": [],
             "resource_ids": [],
+            "case_numbers": [],
             "time_window": "last_30_days",
             "start_time": None,
             "end_time": None,
@@ -221,10 +228,14 @@ class IntentClassifier:
                     entities["services"].append(canonical)
                     break
 
-        # 3. Resource IDs
+        # 3. Resource IDs & Case Numbers
         res_matches = re.findall(r"\b(i-[a-z0-9]{8,17}|vol-[a-z0-9]{8,17}|snap-[a-z0-9]{8,17})\b", query, re.IGNORECASE)
         if res_matches:
             entities["resource_ids"].extend(res_matches)
+
+        case_matches = re.findall(r"\b(INV-\d{4}-\d{4,6})\b", query, re.IGNORECASE)
+        if case_matches:
+            entities["case_numbers"].extend(case_matches)
 
         # 4. Time Windows
         now = datetime.now(timezone.utc)
