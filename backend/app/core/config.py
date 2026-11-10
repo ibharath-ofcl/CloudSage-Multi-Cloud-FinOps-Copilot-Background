@@ -100,7 +100,7 @@ class Settings(BaseSettings):
                 raise ValueError("Production environment requires a secure, non-default SECRET_KEY with at least 32 characters.")
             if self.ALLOW_DEV_AUTH_HEADERS:
                 raise ValueError("ALLOW_DEV_AUTH_HEADERS must be False in production environment.")
-            if self.POSTGRES_PASSWORD == "postgres" and not self.DATABASE_URL:
+            if self.POSTGRES_PASSWORD == "postgres" and (not self.DATABASE_URL or "postgres:postgres@" in self.DATABASE_URL or "sqlite" in self.DATABASE_URL):
                 raise ValueError("Production environment cannot use default PostgreSQL password ('postgres').")
         return self
 
