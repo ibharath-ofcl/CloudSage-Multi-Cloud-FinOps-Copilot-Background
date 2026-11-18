@@ -244,28 +244,28 @@ def get_interactive_dashboard_ui():
       </div>
     </div>
     <nav class="flex-1 overflow-y-auto py-4 px-3 space-y-1">
-      <a href="#overview" onclick="switchTab('overview')" id="nav-overview" class="active-nav flex items-center px-3 py-2.5 text-sm font-medium rounded-lg text-slate-300 hover:bg-slate-800 transition">
+      <a href="#overview" onclick="switchTab('overview', event)" id="nav-overview" class="active-nav flex items-center px-3 py-2.5 text-sm font-medium rounded-lg text-slate-300 hover:bg-slate-800 transition">
         <i class="fa-solid fa-gauge w-5 text-slate-400"></i><span class="ml-3">Overview</span>
       </a>
-      <a href="#costs" onclick="switchTab('costs')" id="nav-costs" class="flex items-center px-3 py-2.5 text-sm font-medium rounded-lg text-slate-300 hover:bg-slate-800 transition">
+      <a href="#costs" onclick="switchTab('costs', event)" id="nav-costs" class="flex items-center px-3 py-2.5 text-sm font-medium rounded-lg text-slate-300 hover:bg-slate-800 transition">
         <i class="fa-solid fa-chart-pie w-5 text-slate-400"></i><span class="ml-3">Cloud Costs</span>
       </a>
-      <a href="#anomalies" onclick="switchTab('anomalies')" id="nav-anomalies" class="flex items-center px-3 py-2.5 text-sm font-medium rounded-lg text-slate-300 hover:bg-slate-800 transition">
+      <a href="#anomalies" onclick="switchTab('anomalies', event)" id="nav-anomalies" class="flex items-center px-3 py-2.5 text-sm font-medium rounded-lg text-slate-300 hover:bg-slate-800 transition">
         <i class="fa-solid fa-triangle-exclamation w-5 text-slate-400"></i><span class="ml-3">Cost Anomalies</span>
       </a>
-      <a href="#waste" onclick="switchTab('waste')" id="nav-waste" class="flex items-center px-3 py-2.5 text-sm font-medium rounded-lg text-slate-300 hover:bg-slate-800 transition">
+      <a href="#waste" onclick="switchTab('waste', event)" id="nav-waste" class="flex items-center px-3 py-2.5 text-sm font-medium rounded-lg text-slate-300 hover:bg-slate-800 transition">
         <i class="fa-solid fa-trash-can w-5 text-slate-400"></i><span class="ml-3">Waste Detection</span>
       </a>
-      <a href="#recommendations" onclick="switchTab('recommendations')" id="nav-recommendations" class="flex items-center px-3 py-2.5 text-sm font-medium rounded-lg text-slate-300 hover:bg-slate-800 transition">
+      <a href="#recommendations" onclick="switchTab('recommendations', event)" id="nav-recommendations" class="flex items-center px-3 py-2.5 text-sm font-medium rounded-lg text-slate-300 hover:bg-slate-800 transition">
         <i class="fa-solid fa-lightbulb w-5 text-slate-400"></i><span class="ml-3">Recommendations</span>
       </a>
-      <a href="#savings" onclick="switchTab('savings')" id="nav-savings" class="flex items-center px-3 py-2.5 text-sm font-medium rounded-lg text-slate-300 hover:bg-slate-800 transition">
+      <a href="#savings" onclick="switchTab('savings', event)" id="nav-savings" class="flex items-center px-3 py-2.5 text-sm font-medium rounded-lg text-slate-300 hover:bg-slate-800 transition">
         <i class="fa-solid fa-piggy-bank w-5 text-slate-400"></i><span class="ml-3">Savings & ROI</span>
       </a>
-      <a href="#inventory" onclick="switchTab('inventory')" id="nav-inventory" class="flex items-center px-3 py-2.5 text-sm font-medium rounded-lg text-slate-300 hover:bg-slate-800 transition">
+      <a href="#inventory" onclick="switchTab('inventory', event)" id="nav-inventory" class="flex items-center px-3 py-2.5 text-sm font-medium rounded-lg text-slate-300 hover:bg-slate-800 transition">
         <i class="fa-solid fa-server w-5 text-slate-400"></i><span class="ml-3">Resource Inventory</span>
       </a>
-      <a href="#quality" onclick="switchTab('quality')" id="nav-quality" class="flex items-center px-3 py-2.5 text-sm font-medium rounded-lg text-slate-300 hover:bg-slate-800 transition">
+      <a href="#quality" onclick="switchTab('quality', event)" id="nav-quality" class="flex items-center px-3 py-2.5 text-sm font-medium rounded-lg text-slate-300 hover:bg-slate-800 transition">
         <i class="fa-solid fa-check-double w-5 text-slate-400"></i><span class="ml-3">FOCUS Quality</span>
       </a>
       <a href="#copilot" onclick="toggleCopilot()" class="flex items-center px-3 py-2.5 text-sm font-medium rounded-lg text-purple-300 hover:bg-slate-800 transition mt-4 bg-purple-950/40 border border-purple-800/40">
@@ -429,7 +429,7 @@ def get_interactive_dashboard_ui():
             </div>
             <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
               <span>Advisory Only Policy Enforced</span>
-              <a href="#recommendations" onclick="switchTab('recommendations')" class="text-sky-600 font-semibold hover:underline">View All &rarr;</a>
+              <a href="#recommendations" onclick="switchTab('recommendations', event)" class="text-sky-600 font-semibold hover:underline">View All &rarr;</a>
             </div>
           </div>
         </div>
@@ -965,8 +965,46 @@ def get_interactive_dashboard_ui():
       refreshDashboard();
     }
 
+    function copyCode(btn) {
+      const container = btn.closest('.mt-4');
+      const codeEl = container ? container.querySelector('code') : null;
+      if (codeEl) {
+        const text = codeEl.innerText.trim();
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(text).then(() => {
+            const orig = btn.innerHTML;
+            btn.innerHTML = '<i class="fa-solid fa-check text-emerald-600 mr-1"></i>Copied!';
+            setTimeout(() => { btn.innerHTML = orig; }, 2000);
+          }).catch(() => fallbackCopy(text, btn));
+        } else {
+          fallbackCopy(text, btn);
+        }
+      }
+    }
+
+    function fallbackCopy(text, btn) {
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      try {
+        document.execCommand('copy');
+        const orig = btn.innerHTML;
+        btn.innerHTML = '<i class="fa-solid fa-check text-emerald-600 mr-1"></i>Copied!';
+        setTimeout(() => { btn.innerHTML = orig; }, 2000);
+      } catch (e) {
+        console.error('Fallback copy failed', e);
+      }
+      document.body.removeChild(ta);
+    }
+
     // Tab Navigation Controller
-    function switchTab(tab) {
+    function switchTab(tab, event) {
+      if (event && event.preventDefault) {
+        event.preventDefault();
+      }
       // 1. Update navigation active state
       document.querySelectorAll('aside nav a').forEach(a => a.classList.remove('active-nav'));
       const activeNav = document.getElementById(`nav-${tab}`);
@@ -1302,7 +1340,7 @@ def get_interactive_dashboard_ui():
                 <span class="mx-1">&bull;</span> Date: <strong>${a.anomaly_date}</strong>
                 <span class="mx-1">&bull;</span> Status: <span class="font-bold text-sky-700">${a.status}</span>
               </span>
-              <button onclick="askCopilot('Investigate anomaly: ${a.title}')" class="px-3 py-1 bg-purple-50 text-purple-700 hover:bg-purple-100 border border-purple-200 rounded font-semibold text-xs transition">
+              <button data-prompt="Investigate anomaly: ${(a.title || '').replace(/"/g, '&quot;')}" onclick="askCopilot(this.getAttribute('data-prompt'))" class="px-3 py-1 bg-purple-50 text-purple-700 hover:bg-purple-100 border border-purple-200 rounded font-semibold text-xs transition">
                 <i class="fa-solid fa-wand-magic-sparkles mr-1"></i> Investigate with Copilot
               </button>
             </div>
@@ -1397,7 +1435,7 @@ def get_interactive_dashboard_ui():
               <div class="mt-4">
                 <div class="flex justify-between items-center mb-1">
                   <span class="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Advisory Remediation Playbook CLI</span>
-                  <button onclick="navigator.clipboard.writeText('${r.remediation_guide.replace(/'/g, "\\\'")}')" class="text-xs text-sky-600 hover:underline">
+                  <button onclick="copyCode(this)" class="text-xs text-sky-600 hover:underline">
                     <i class="fa-regular fa-copy mr-1"></i>Copy
                   </button>
                 </div>
@@ -1446,10 +1484,6 @@ def get_interactive_dashboard_ui():
             <span class="font-bold text-slate-900">${formatMoney(amt, { suffix: '/mo' })}</span>
           </div>
         `).join('');
-      } catch (err) {
-        console.error('Failed loading savings:', err);
-      }
-    }
       } catch (err) {
         console.error('Failed loading savings:', err);
       }
@@ -1579,11 +1613,17 @@ def get_interactive_dashboard_ui():
     window.addEventListener('hashchange', handleHashRoute);
     window.addEventListener('popstate', handleHashRoute);
 
-    // Auto-initialize on DOM ready
-    window.addEventListener('DOMContentLoaded', () => {
+    function initDashboard() {
       handleHashRoute();
       refreshDashboard();
-    });
+    }
+
+    // Auto-initialize robustly across all ready states
+    if (document.readyState === 'loading') {
+      window.addEventListener('DOMContentLoaded', initDashboard);
+    } else {
+      initDashboard();
+    }
   </script>
 </body>
 </html>
