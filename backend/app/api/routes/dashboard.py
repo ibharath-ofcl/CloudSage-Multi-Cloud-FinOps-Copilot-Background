@@ -295,6 +295,15 @@ def get_interactive_dashboard_ui():
           <option value="GCP">Google Cloud Platform</option>
         </select>
 
+        <!-- Currency Selector (Rupees / Dollars) -->
+        <div class="flex items-center gap-1.5 bg-amber-50 border border-amber-300 rounded-lg px-2.5 py-1 shadow-sm">
+          <i class="fa-solid fa-coins text-amber-600 text-xs"></i>
+          <select id="filter-currency" onchange="changeCurrency(this.value)" class="text-sm bg-transparent font-bold text-amber-900 focus:outline-none cursor-pointer">
+            <option value="INR" selected>₹ INR (Rupees)</option>
+            <option value="USD">$ USD (Dollars)</option>
+          </select>
+        </div>
+
         <!-- Refresh Action -->
         <button onclick="refreshDashboard()" class="p-2 text-slate-600 hover:text-slate-900 bg-slate-50 border border-slate-300 rounded-lg hover:bg-slate-100 transition" title="Refresh Dashboard">
           <i class="fa-solid fa-arrows-rotate"></i>
@@ -326,8 +335,8 @@ def get_interactive_dashboard_ui():
               <span class="kpi-title">Total Cloud Spend</span>
               <i class="fa-solid fa-wallet text-sky-500 text-lg"></i>
             </div>
-            <div class="kpi-value mt-2" id="kpi-total-spend">$0.00</div>
-            <p class="text-xs text-slate-500 mt-1 font-medium" id="kpi-total-sub">FOCUS normalized</p>
+            <div class="kpi-value mt-2" id="kpi-total-spend">₹0.00</div>
+            <p class="text-xs text-slate-500 mt-1 font-medium" id="kpi-total-sub">FOCUS normalized (1 USD = ₹84.75)</p>
           </div>
 
           <div class="card p-5 border-l-4 border-l-indigo-500">
@@ -335,7 +344,7 @@ def get_interactive_dashboard_ui():
               <span class="kpi-title">Month-To-Date Spend</span>
               <i class="fa-solid fa-calendar-day text-indigo-500 text-lg"></i>
             </div>
-            <div class="kpi-value mt-2" id="kpi-mtd-spend">$0.00</div>
+            <div class="kpi-value mt-2" id="kpi-mtd-spend">₹0.00</div>
             <p class="text-xs mt-1 font-semibold" id="kpi-mom-change"><span class="text-slate-500">0.0% MoM</span></p>
           </div>
 
@@ -344,7 +353,7 @@ def get_interactive_dashboard_ui():
               <span class="kpi-title">Identified Waste</span>
               <i class="fa-solid fa-trash-arrow-up text-amber-500 text-lg"></i>
             </div>
-            <div class="kpi-value mt-2 text-amber-600" id="kpi-waste-sum">$0.00</div>
+            <div class="kpi-value mt-2 text-amber-600" id="kpi-waste-sum">₹0.00</div>
             <p class="text-xs text-slate-500 mt-1" id="kpi-waste-cnt">0 active waste items</p>
           </div>
 
@@ -353,8 +362,8 @@ def get_interactive_dashboard_ui():
               <span class="kpi-title">Potential Monthly Savings</span>
               <i class="fa-solid fa-piggy-bank text-emerald-500 text-lg"></i>
             </div>
-            <div class="kpi-value mt-2 text-emerald-600" id="kpi-savings-sum">$0.00</div>
-            <p class="text-xs text-slate-500 mt-1" id="kpi-savings-ann">$0.00/yr opportunity</p>
+            <div class="kpi-value mt-2 text-emerald-600" id="kpi-savings-sum">₹0.00</div>
+            <p class="text-xs text-slate-500 mt-1" id="kpi-savings-ann">₹0.00/yr opportunity</p>
           </div>
         </div>
 
@@ -396,7 +405,7 @@ def get_interactive_dashboard_ui():
                   <tr>
                     <th class="py-2.5 px-3">Service</th>
                     <th class="py-2.5 px-3">Provider</th>
-                    <th class="py-2.5 px-3 text-right">Cost (USD)</th>
+                    <th class="py-2.5 px-3 text-right">Cost (<span class="curr-unit">INR</span>)</th>
                     <th class="py-2.5 px-3 text-right">Share</th>
                   </tr>
                 </thead>
@@ -434,22 +443,22 @@ def get_interactive_dashboard_ui():
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
           <div class="card p-5 border-l-4 border-l-sky-500">
             <span class="kpi-title">Total Multi-Cloud Spend</span>
-            <div class="kpi-value mt-2" id="costs-total-spend">$0.00</div>
+            <div class="kpi-value mt-2" id="costs-total-spend">₹0.00</div>
             <p class="text-xs text-slate-500 mt-1">Aggregated across active clouds</p>
           </div>
           <div class="card p-5 border-l-4 border-l-orange-500">
             <span class="kpi-title">AWS Expenditure</span>
-            <div class="kpi-value mt-2 text-orange-600" id="costs-aws-spend">$0.00</div>
+            <div class="kpi-value mt-2 text-orange-600" id="costs-aws-spend">₹0.00</div>
             <p class="text-xs text-slate-500 mt-1" id="costs-aws-share">0.0% of total</p>
           </div>
           <div class="card p-5 border-l-4 border-l-sky-600">
             <span class="kpi-title">Azure Expenditure</span>
-            <div class="kpi-value mt-2 text-sky-700" id="costs-azure-spend">$0.00</div>
+            <div class="kpi-value mt-2 text-sky-700" id="costs-azure-spend">₹0.00</div>
             <p class="text-xs text-slate-500 mt-1" id="costs-azure-share">0.0% of total</p>
           </div>
           <div class="card p-5 border-l-4 border-l-yellow-500">
             <span class="kpi-title">GCP Expenditure</span>
-            <div class="kpi-value mt-2 text-yellow-600" id="costs-gcp-spend">$0.00</div>
+            <div class="kpi-value mt-2 text-yellow-600" id="costs-gcp-spend">₹0.00</div>
             <p class="text-xs text-slate-500 mt-1" id="costs-gcp-share">0.0% of total</p>
           </div>
         </div>
@@ -481,7 +490,7 @@ def get_interactive_dashboard_ui():
                   <th class="py-3 px-3">Service Name</th>
                   <th class="py-3 px-3">Provider</th>
                   <th class="py-3 px-3">Category</th>
-                  <th class="py-3 px-3 text-right">30-Day Cost (USD)</th>
+                  <th class="py-3 px-3 text-right">30-Day Cost (<span class="curr-unit">INR</span>)</th>
                   <th class="py-3 px-3 text-right">% Share</th>
                 </tr>
               </thead>
@@ -505,7 +514,7 @@ def get_interactive_dashboard_ui():
                   <th class="py-3 px-3">Service</th>
                   <th class="py-3 px-3">Region</th>
                   <th class="py-3 px-3">Status</th>
-                  <th class="py-3 px-3 text-right">Monthly Spend</th>
+                  <th class="py-3 px-3 text-right">Monthly Spend (<span class="curr-unit">INR</span>)</th>
                 </tr>
               </thead>
               <tbody id="costs-resources-table-body" class="divide-y divide-slate-100 text-slate-700">
@@ -539,7 +548,7 @@ def get_interactive_dashboard_ui():
           </div>
           <div class="card p-5 border-l-4 border-l-amber-500">
             <span class="kpi-title">Total Excess Cost</span>
-            <div class="kpi-value mt-2 text-amber-700" id="anom-excess-cost">$0.00</div>
+            <div class="kpi-value mt-2 text-amber-700" id="anom-excess-cost">₹0.00</div>
             <p class="text-xs text-slate-500 mt-1">Cumulative anomalous surge</p>
           </div>
         </div>
@@ -572,12 +581,12 @@ def get_interactive_dashboard_ui():
           </div>
           <div class="card p-5 border-l-4 border-l-orange-500">
             <span class="kpi-title">Monthly Avoidable Waste</span>
-            <div class="kpi-value mt-2 text-orange-600" id="waste-monthly-cost">$0.00</div>
+            <div class="kpi-value mt-2 text-orange-600" id="waste-monthly-cost">₹0.00</div>
             <p class="text-xs text-slate-500 mt-1">Direct monthly financial leakage</p>
           </div>
           <div class="card p-5 border-l-4 border-l-rose-500">
             <span class="kpi-title">Annualized Waste</span>
-            <div class="kpi-value mt-2 text-rose-600" id="waste-annual-cost">$0.00</div>
+            <div class="kpi-value mt-2 text-rose-600" id="waste-annual-cost">₹0.00</div>
             <p class="text-xs text-slate-500 mt-1">Projected 12-month drain</p>
           </div>
           <div class="card p-5 border-l-4 border-l-indigo-500">
@@ -604,7 +613,7 @@ def get_interactive_dashboard_ui():
                   <th class="py-3 px-3">Waste Type</th>
                   <th class="py-3 px-3">Provider</th>
                   <th class="py-3 px-3">Severity</th>
-                  <th class="py-3 px-3 text-right">Monthly Waste</th>
+                  <th class="py-3 px-3 text-right">Monthly Waste (<span class="curr-unit">INR</span>)</th>
                   <th class="py-3 px-3">Status</th>
                 </tr>
               </thead>
@@ -629,12 +638,12 @@ def get_interactive_dashboard_ui():
           </div>
           <div class="card p-5 border-l-4 border-l-teal-500">
             <span class="kpi-title">Potential Monthly Savings</span>
-            <div class="kpi-value mt-2 text-teal-600" id="rec-tab-monthly">$0.00</div>
+            <div class="kpi-value mt-2 text-teal-600" id="rec-tab-monthly">₹0.00</div>
             <p class="text-xs text-slate-500 mt-1">Net achievable monthly reduction</p>
           </div>
           <div class="card p-5 border-l-4 border-l-sky-500">
             <span class="kpi-title">Potential Annual Savings</span>
-            <div class="kpi-value mt-2 text-sky-600" id="rec-tab-annual">$0.00</div>
+            <div class="kpi-value mt-2 text-sky-600" id="rec-tab-annual">₹0.00</div>
             <p class="text-xs text-slate-500 mt-1">12-month run-rate opportunity</p>
           </div>
           <div class="card p-5 border-l-4 border-l-indigo-500">
@@ -667,17 +676,17 @@ def get_interactive_dashboard_ui():
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
           <div class="card p-5 border-l-4 border-l-emerald-500">
             <span class="kpi-title">Potential Monthly Savings</span>
-            <div class="kpi-value mt-2 text-emerald-600" id="sav-monthly-sum">$0.00</div>
+            <div class="kpi-value mt-2 text-emerald-600" id="sav-monthly-sum">₹0.00</div>
             <p class="text-xs text-slate-500 mt-1">Anti-double-counted net total</p>
           </div>
           <div class="card p-5 border-l-4 border-l-teal-500">
             <span class="kpi-title">Potential Annual Savings</span>
-            <div class="kpi-value mt-2 text-teal-600" id="sav-annual-sum">$0.00</div>
+            <div class="kpi-value mt-2 text-teal-600" id="sav-annual-sum">₹0.00</div>
             <p class="text-xs text-slate-500 mt-1">Annualized FinOps opportunity</p>
           </div>
           <div class="card p-5 border-l-4 border-l-amber-500">
             <span class="kpi-title">Identified Monthly Waste</span>
-            <div class="kpi-value mt-2 text-amber-600" id="sav-waste-sum">$0.00</div>
+            <div class="kpi-value mt-2 text-amber-600" id="sav-waste-sum">₹0.00</div>
             <p class="text-xs text-slate-500 mt-1">Sub-optimal cloud utilization</p>
           </div>
           <div class="card p-5 border-l-4 border-l-sky-500">
@@ -884,17 +893,17 @@ def get_interactive_dashboard_ui():
       </div>
       <div class="space-y-2">
         <p class="text-xs font-bold text-slate-500 uppercase tracking-wider">Suggested Questions</p>
-        <button onclick="askCopilot('Summarize our total cloud expenditure across all clouds.')" class="w-full text-left text-xs bg-slate-50 hover:bg-slate-100 border border-slate-200 p-2.5 rounded-lg text-slate-700 transition">
-          📊 Summarize total cloud expenditure
+        <button onclick="askCopilot('Summarize our total cloud expenditure in Indian Rupees (INR).')" class="w-full text-left text-xs bg-slate-50 hover:bg-slate-100 border border-slate-200 p-2.5 rounded-lg text-slate-700 transition">
+          📊 Summarize total expenditure (INR ₹)
         </button>
-        <button onclick="askCopilot('Compare our spending between AWS and Azure.')" class="w-full text-left text-xs bg-slate-50 hover:bg-slate-100 border border-slate-200 p-2.5 rounded-lg text-slate-700 transition">
-          ⚖️ Compare AWS vs Azure costs
+        <button onclick="askCopilot('Compare our spending between AWS and Azure in Indian Rupees.')" class="w-full text-left text-xs bg-slate-50 hover:bg-slate-100 border border-slate-200 p-2.5 rounded-lg text-slate-700 transition">
+          ⚖️ Compare AWS vs Azure costs (INR ₹)
         </button>
-        <button onclick="askCopilot('What are our top 5 most expensive cloud services?')" class="w-full text-left text-xs bg-slate-50 hover:bg-slate-100 border border-slate-200 p-2.5 rounded-lg text-slate-700 transition">
-          🔥 Top 5 most expensive services
+        <button onclick="askCopilot('What are our top 5 most expensive cloud services in Rupees?')" class="w-full text-left text-xs bg-slate-50 hover:bg-slate-100 border border-slate-200 p-2.5 rounded-lg text-slate-700 transition">
+          🔥 Top 5 most expensive services (INR ₹)
         </button>
-        <button onclick="askCopilot('What cloud waste was detected across accounts?')" class="w-full text-left text-xs bg-slate-50 hover:bg-slate-100 border border-slate-200 p-2.5 rounded-lg text-slate-700 transition">
-          🗑️ What cloud waste was detected?
+        <button onclick="askCopilot('What cloud waste was detected across accounts in Rupees?')" class="w-full text-left text-xs bg-slate-50 hover:bg-slate-100 border border-slate-200 p-2.5 rounded-lg text-slate-700 transition">
+          🗑️ What cloud waste was detected (INR ₹)?
         </button>
       </div>
     </div>
@@ -911,6 +920,50 @@ def get_interactive_dashboard_ui():
   <script>
     let trendChartInstance = null;
     let providerChartInstance = null;
+
+    // Currency Configuration (1 USD = ₹84.75 via FOCUS 1.0 reference rate)
+    const USD_TO_INR = 84.75;
+    let currentCurrency = 'INR'; // Defaults to Indian Rupees (₹)
+
+    function convertAmount(amountInUSD) {
+      const val = parseFloat(amountInUSD || 0);
+      return currentCurrency === 'INR' ? val * USD_TO_INR : val;
+    }
+
+    function formatMoney(amountInUSD, options = {}) {
+      const val = parseFloat(amountInUSD || 0);
+      const isNeg = val < 0;
+      const absVal = Math.abs(val);
+      const converted = currentCurrency === 'INR' ? absVal * USD_TO_INR : absVal;
+      const symbol = currentCurrency === 'INR' ? '₹' : '$';
+      const locale = currentCurrency === 'INR' ? 'en-IN' : 'en-US';
+      const decimals = options.decimals !== undefined ? options.decimals : 2;
+      
+      const formattedNum = converted.toLocaleString(locale, {
+        minimumFractionDigits: decimals,
+        maximumFractionDigits: decimals
+      });
+
+      let prefix = '';
+      if (options.forcePlus && val > 0) prefix = '+';
+      else if (isNeg) prefix = '-';
+
+      const suffix = options.suffix || '';
+      return `${prefix}${symbol}${formattedNum}${suffix}`;
+    }
+
+    function changeCurrency(newCurr) {
+      currentCurrency = newCurr;
+      // Update currency unit text across table headers
+      document.querySelectorAll('.curr-unit').forEach(el => {
+        el.innerText = currentCurrency;
+      });
+      const subEl = document.getElementById('kpi-total-sub');
+      if (subEl) {
+        subEl.innerText = currentCurrency === 'INR' ? 'FOCUS normalized (1 USD = ₹84.75)' : 'FOCUS normalized (USD)';
+      }
+      refreshDashboard();
+    }
 
     // Tab Navigation Controller
     function switchTab(tab) {
@@ -984,12 +1037,12 @@ def get_interactive_dashboard_ui():
     }
 
     function renderOverviewKpis(kpi) {
-      document.getElementById('kpi-total-spend').innerText = `$${parseFloat(kpi.total_spend).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
-      document.getElementById('kpi-mtd-spend').innerText = `$${parseFloat(kpi.mtd_spend).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
-      document.getElementById('kpi-waste-sum').innerText = `$${parseFloat(kpi.identified_monthly_waste).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+      document.getElementById('kpi-total-spend').innerText = formatMoney(kpi.total_spend);
+      document.getElementById('kpi-mtd-spend').innerText = formatMoney(kpi.mtd_spend);
+      document.getElementById('kpi-waste-sum').innerText = formatMoney(kpi.identified_monthly_waste);
       document.getElementById('kpi-waste-cnt').innerText = `${kpi.identified_waste_count} active waste items`;
-      document.getElementById('kpi-savings-sum').innerText = `$${parseFloat(kpi.potential_monthly_savings).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
-      document.getElementById('kpi-savings-ann').innerText = `$${parseFloat(kpi.potential_annual_savings).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}/yr opportunity`;
+      document.getElementById('kpi-savings-sum').innerText = formatMoney(kpi.potential_monthly_savings);
+      document.getElementById('kpi-savings-ann').innerText = formatMoney(kpi.potential_annual_savings, { suffix: '/yr opportunity' });
 
       const mom = parseFloat(kpi.mom_change_percentage);
       const momEl = document.getElementById('kpi-mom-change');
@@ -1008,10 +1061,11 @@ def get_interactive_dashboard_ui():
       if (trendChartInstance) trendChartInstance.destroy();
 
       const labels = trends.points.map(p => p.date);
-      const totals = trends.points.map(p => parseFloat(p.total_cost));
-      const aws = trends.points.map(p => parseFloat(p.aws_cost));
-      const azure = trends.points.map(p => parseFloat(p.azure_cost));
-      const gcp = trends.points.map(p => parseFloat(p.gcp_cost));
+      const totals = trends.points.map(p => convertAmount(p.total_cost));
+      const aws = trends.points.map(p => convertAmount(p.aws_cost));
+      const azure = trends.points.map(p => convertAmount(p.azure_cost));
+      const gcp = trends.points.map(p => convertAmount(p.gcp_cost));
+      const sym = currentCurrency === 'INR' ? '₹' : '$';
 
       trendChartInstance = new Chart(trendCtx, {
         type: 'line',
@@ -1027,9 +1081,22 @@ def get_interactive_dashboard_ui():
         options: {
           responsive: true,
           maintainAspectRatio: false,
-          plugins: { legend: { display: true, position: 'top', labels: { boxWidth: 12, font: { size: 11 } } } },
+          plugins: { 
+            legend: { display: true, position: 'top', labels: { boxWidth: 12, font: { size: 11 } } },
+            tooltip: {
+              callbacks: {
+                label: function(context) {
+                  return ` ${context.dataset.label}: ${sym}${context.parsed.y.toLocaleString(currentCurrency === 'INR' ? 'en-IN' : 'en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+                }
+              }
+            }
+          },
           scales: {
-            y: { beginAtZero: true, grid: { color: '#f1f5f9' }, ticks: { callback: v => '$' + v } },
+            y: { 
+              beginAtZero: true, 
+              grid: { color: '#f1f5f9' }, 
+              ticks: { callback: v => sym + (v >= 1000 ? (v >= 100000 ? (v/100000).toFixed(1) + 'L' : (v/1000).toFixed(0) + 'k') : v) } 
+            },
             x: { grid: { display: false } }
           }
         }
@@ -1040,7 +1107,7 @@ def get_interactive_dashboard_ui():
       if (providerChartInstance) providerChartInstance.destroy();
 
       const provLabels = providers.providers.map(p => p.provider);
-      const provCosts = providers.providers.map(p => parseFloat(p.cost));
+      const provCosts = providers.providers.map(p => convertAmount(p.cost));
       const colors = { 'AWS': '#f97316', 'AZURE': '#0ea5e9', 'GCP': '#eab308' };
       const bgColors = provLabels.map(p => colors[p] || '#94a3b8');
 
@@ -1054,7 +1121,17 @@ def get_interactive_dashboard_ui():
           responsive: true,
           maintainAspectRatio: false,
           cutout: '70%',
-          plugins: { legend: { display: false } }
+          plugins: { 
+            legend: { display: false },
+            tooltip: {
+              callbacks: {
+                label: function(context) {
+                  const val = context.parsed;
+                  return ` ${context.label}: ${sym}${val.toLocaleString(currentCurrency === 'INR' ? 'en-IN' : 'en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+                }
+              }
+            }
+          }
         }
       });
 
@@ -1065,7 +1142,7 @@ def get_interactive_dashboard_ui():
             <span class="w-2.5 h-2.5 rounded-full" style="background-color: ${colors[p.provider] || '#94a3b8'}"></span>
             ${p.provider}
           </span>
-          <span class="font-bold text-slate-800">$${parseFloat(p.cost).toLocaleString(undefined, {minimumFractionDigits: 2})} <span class="text-slate-400 font-normal">(${p.percentage}%)</span></span>
+          <span class="font-bold text-slate-800">${formatMoney(p.cost)} <span class="text-slate-400 font-normal">(${p.percentage}%)</span></span>
         </div>
       `).join('');
     }
@@ -1080,7 +1157,7 @@ def get_interactive_dashboard_ui():
         <tr class="hover:bg-slate-50 transition">
           <td class="py-2.5 px-3 font-semibold text-slate-800">${s.service_name}</td>
           <td class="py-2.5 px-3"><span class="badge badge-${s.provider.toLowerCase()}">${s.provider}</span></td>
-          <td class="py-2.5 px-3 text-right font-bold">$${parseFloat(s.cost).toLocaleString(undefined, {minimumFractionDigits: 2})}</td>
+          <td class="py-2.5 px-3 text-right font-bold">${formatMoney(s.cost)}</td>
           <td class="py-2.5 px-3 text-right text-slate-500">${s.percentage}%</td>
         </tr>
       `).join('');
@@ -1117,7 +1194,7 @@ def get_interactive_dashboard_ui():
         ]);
 
         const totalCost = parseFloat(servRes.total_spend || 0);
-        document.getElementById('costs-total-spend').innerText = `$${totalCost.toLocaleString(undefined, {minimumFractionDigits: 2})}`;
+        document.getElementById('costs-total-spend').innerText = formatMoney(totalCost);
 
         let awsCost = 0, azureCost = 0, gcpCost = 0;
         provRes.providers.forEach(p => {
@@ -1125,9 +1202,9 @@ def get_interactive_dashboard_ui():
           if (p.provider === 'AZURE') { azureCost = parseFloat(p.cost); document.getElementById('costs-azure-share').innerText = `${p.percentage}% of total`; }
           if (p.provider === 'GCP') { gcpCost = parseFloat(p.cost); document.getElementById('costs-gcp-share').innerText = `${p.percentage}% of total`; }
         });
-        document.getElementById('costs-aws-spend').innerText = `$${awsCost.toLocaleString(undefined, {minimumFractionDigits: 2})}`;
-        document.getElementById('costs-azure-spend').innerText = `$${azureCost.toLocaleString(undefined, {minimumFractionDigits: 2})}`;
-        document.getElementById('costs-gcp-spend').innerText = `$${gcpCost.toLocaleString(undefined, {minimumFractionDigits: 2})}`;
+        document.getElementById('costs-aws-spend').innerText = formatMoney(awsCost);
+        document.getElementById('costs-azure-spend').innerText = formatMoney(azureCost);
+        document.getElementById('costs-gcp-spend').innerText = formatMoney(gcpCost);
 
         // Category breakdown progress bars
         const catContainer = document.getElementById('costs-categories-container');
@@ -1142,7 +1219,7 @@ def get_interactive_dashboard_ui():
               <div>
                 <div class="flex justify-between items-center text-xs font-semibold mb-1">
                   <span class="text-slate-700">${cat}</span>
-                  <span class="text-slate-900">$${num.toLocaleString(undefined, {minimumFractionDigits: 2})} (${pct}%)</span>
+                  <span class="text-slate-900">${formatMoney(num)} (${pct}%)</span>
                 </div>
                 <div class="w-full bg-slate-100 rounded-full h-2">
                   <div class="bg-sky-500 h-2 rounded-full" style="width: ${pct}%"></div>
@@ -1159,7 +1236,7 @@ def get_interactive_dashboard_ui():
             <td class="py-3 px-3 font-semibold text-slate-800">${s.service_name}</td>
             <td class="py-3 px-3"><span class="badge badge-${s.provider.toLowerCase()}">${s.provider}</span></td>
             <td class="py-3 px-3 text-slate-600">${s.service_category}</td>
-            <td class="py-3 px-3 text-right font-bold text-slate-900">$${parseFloat(s.cost).toLocaleString(undefined, {minimumFractionDigits: 2})}</td>
+            <td class="py-3 px-3 text-right font-bold text-slate-900">${formatMoney(s.cost)}</td>
             <td class="py-3 px-3 text-right text-slate-500 font-medium">${s.percentage}%</td>
           </tr>
         `).join('');
@@ -1173,7 +1250,7 @@ def get_interactive_dashboard_ui():
             <td class="py-3 px-3 text-slate-600">${r.service_name}</td>
             <td class="py-3 px-3 text-slate-500 text-xs">${r.region}</td>
             <td class="py-3 px-3"><span class="px-2 py-0.5 rounded text-xs font-semibold bg-emerald-50 text-emerald-700">${r.status}</span></td>
-            <td class="py-3 px-3 text-right font-bold text-slate-900">$${parseFloat(r.monthly_cost).toLocaleString(undefined, {minimumFractionDigits: 2})}</td>
+            <td class="py-3 px-3 text-right font-bold text-slate-900">${formatMoney(r.monthly_cost)}</td>
           </tr>
         `).join('');
       } catch (err) {
@@ -1192,7 +1269,7 @@ def get_interactive_dashboard_ui():
         document.getElementById('anom-total-count').innerText = summary.total_active_anomalies || 0;
         document.getElementById('anom-critical-count').innerText = summary.critical_count || 0;
         document.getElementById('anom-high-count').innerText = summary.high_count || 0;
-        document.getElementById('anom-excess-cost').innerText = `$${parseFloat(summary.total_excess_cost || 0).toLocaleString(undefined, {minimumFractionDigits: 2})}`;
+        document.getElementById('anom-excess-cost').innerText = formatMoney(summary.total_excess_cost || 0);
 
         const container = document.getElementById('anomalies-list-container');
         const items = listRes.items || [];
@@ -1215,8 +1292,8 @@ def get_interactive_dashboard_ui():
               </div>
               <div class="text-right whitespace-nowrap">
                 <span class="text-xs text-slate-400 uppercase font-bold tracking-wider">Excess Surge</span>
-                <div class="text-lg font-bold text-rose-600">+$${parseFloat(a.estimated_excess_cost).toFixed(2)}</div>
-                <span class="text-[11px] text-slate-500">Actual: $${parseFloat(a.actual_cost).toFixed(2)} vs Exp: $${parseFloat(a.expected_cost).toFixed(2)}</span>
+                <div class="text-lg font-bold text-rose-600">${formatMoney(a.estimated_excess_cost, { forcePlus: true })}</div>
+                <span class="text-[11px] text-slate-500">Actual: ${formatMoney(a.actual_cost)} vs Exp: ${formatMoney(a.expected_cost)}</span>
               </div>
             </div>
             <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
@@ -1246,8 +1323,8 @@ def get_interactive_dashboard_ui():
 
         const monthly = parseFloat(summary.total_monthly_waste || 0);
         document.getElementById('waste-total-count').innerText = summary.total_active_waste_items || 0;
-        document.getElementById('waste-monthly-cost').innerText = `$${monthly.toLocaleString(undefined, {minimumFractionDigits: 2})}`;
-        document.getElementById('waste-annual-cost').innerText = `$${(monthly * 12).toLocaleString(undefined, {minimumFractionDigits: 2})}`;
+        document.getElementById('waste-monthly-cost').innerText = formatMoney(monthly);
+        document.getElementById('waste-annual-cost').innerText = formatMoney(monthly * 12);
         document.getElementById('waste-high-count').innerText = summary.severity_distribution?.HIGH || 0;
 
         const tbody = document.getElementById('waste-findings-table-body');
@@ -1266,7 +1343,7 @@ def get_interactive_dashboard_ui():
             <td class="py-3 px-3 font-semibold text-xs text-slate-700">${w.waste_type}</td>
             <td class="py-3 px-3"><span class="badge badge-${(w.provider || 'cloud').toLowerCase()}">${w.provider}</span></td>
             <td class="py-3 px-3"><span class="badge badge-${(w.severity || 'medium').toLowerCase()}">${w.severity}</span></td>
-            <td class="py-3 px-3 text-right font-bold text-amber-600">$${parseFloat(w.estimated_monthly_savings || 0).toFixed(2)}/mo</td>
+            <td class="py-3 px-3 text-right font-bold text-amber-600">${formatMoney(w.estimated_monthly_savings, { suffix: '/mo' })}</td>
             <td class="py-3 px-3"><span class="px-2 py-0.5 rounded text-xs font-semibold bg-emerald-50 text-emerald-700">${w.status}</span></td>
           </tr>
         `).join('');
@@ -1285,8 +1362,8 @@ def get_interactive_dashboard_ui():
 
         const monthly = parseFloat(summary.potential_monthly_savings || 0);
         document.getElementById('rec-tab-count').innerText = summary.total_open_recommendations || 0;
-        document.getElementById('rec-tab-monthly').innerText = `$${monthly.toLocaleString(undefined, {minimumFractionDigits: 2})}`;
-        document.getElementById('rec-tab-annual').innerText = `$${(monthly * 12).toLocaleString(undefined, {minimumFractionDigits: 2})}`;
+        document.getElementById('rec-tab-monthly').innerText = formatMoney(monthly);
+        document.getElementById('rec-tab-annual').innerText = formatMoney(monthly * 12);
         document.getElementById('rec-tab-p1').innerText = summary.priority_distribution?.P1 || 0;
 
         const container = document.getElementById('recommendations-full-list');
@@ -1312,8 +1389,8 @@ def get_interactive_dashboard_ui():
               </div>
               <div class="text-right whitespace-nowrap">
                 <span class="text-xs text-slate-400 uppercase font-bold tracking-wider">Estimated Savings</span>
-                <div class="text-xl font-bold text-emerald-600">+$${parseFloat(r.estimated_monthly_savings).toFixed(2)}/mo</div>
-                <span class="text-xs text-slate-500 font-medium">+$${parseFloat(r.estimated_annual_savings).toFixed(2)}/yr</span>
+                <div class="text-xl font-bold text-emerald-600">${formatMoney(r.estimated_monthly_savings, { forcePlus: true, suffix: '/mo' })}</div>
+                <span class="text-xs text-slate-500 font-medium">${formatMoney(r.estimated_annual_savings, { forcePlus: true, suffix: '/yr' })}</span>
               </div>
             </div>
             ${r.remediation_guide ? `
@@ -1341,12 +1418,12 @@ def get_interactive_dashboard_ui():
         if (!res.ok) return;
         const data = await res.json();
 
-        document.getElementById('sav-monthly-sum').innerText = `$${parseFloat(data.potential_monthly_savings || 0).toLocaleString(undefined, {minimumFractionDigits: 2})}`;
-        document.getElementById('sav-annual-sum').innerText = `$${parseFloat(data.potential_annual_savings || 0).toLocaleString(undefined, {minimumFractionDigits: 2})}`;
+        document.getElementById('sav-monthly-sum').innerText = formatMoney(data.potential_monthly_savings || 0);
+        document.getElementById('sav-annual-sum').innerText = formatMoney(data.potential_annual_savings || 0);
         
         // Fetch waste summary for comparative card
         const wasteRes = await fetch(`/api/v1/dashboard/waste-summary?provider=${provider}`).then(r => r.json());
-        document.getElementById('sav-waste-sum').innerText = `$${parseFloat(wasteRes.total_monthly_waste || 0).toLocaleString(undefined, {minimumFractionDigits: 2})}`;
+        document.getElementById('sav-waste-sum').innerText = formatMoney(wasteRes.total_monthly_waste || 0);
 
         // Providers
         const provContainer = document.getElementById('savings-provider-container');
@@ -1356,7 +1433,7 @@ def get_interactive_dashboard_ui():
             <span class="font-bold text-slate-700 flex items-center gap-2">
               <span class="badge badge-${p.toLowerCase()}">${p}</span>
             </span>
-            <span class="font-bold text-emerald-600">+$${parseFloat(amt).toFixed(2)}/mo</span>
+            <span class="font-bold text-emerald-600">${formatMoney(amt, { forcePlus: true, suffix: '/mo' })}</span>
           </div>
         `).join('');
 
@@ -1366,9 +1443,13 @@ def get_interactive_dashboard_ui():
         prioContainer.innerHTML = prioEntries.map(([tier, amt]) => `
           <div class="p-3 bg-slate-50 border border-slate-200 rounded-lg flex items-center justify-between">
             <span class="font-bold text-slate-800">${tier} Priority Tier</span>
-            <span class="font-bold text-slate-900">$${parseFloat(amt).toFixed(2)}/mo</span>
+            <span class="font-bold text-slate-900">${formatMoney(amt, { suffix: '/mo' })}</span>
           </div>
         `).join('');
+      } catch (err) {
+        console.error('Failed loading savings:', err);
+      }
+    }
       } catch (err) {
         console.error('Failed loading savings:', err);
       }
